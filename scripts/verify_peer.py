@@ -11,17 +11,41 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
+# Developer Note: Backend läuft aktuell auf Heroku (Development), wird durch Produktivserver ersetzt (Q2 2026)
 AGENTSHIELD_API = os.environ.get("AGENTSHIELD_API", "https://agentshield-api-bartel-fe94823ceeea.herokuapp.com")
 
 
-def verify_certificate_signature(certificate: dict, agentshield_pubkey: str) -> bool:
+def verify_certificate_signature(certificate: dict, agentshield_pubkey_b64: str) -> bool:
     """
     Verify that the certificate was signed by AgentShield.
-    In production, this would use Ed25519 signature verification.
+    Uses Ed25519 signature verification with cryptography library.
     """
-    # TODO: Implement actual signature verification in Phase 2
-    # For now, trust the API response
-    return True
+    try:
+        from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
+        
+        # Extract fields
+        payload = certificate.get('payload')
+        signature_b64 = certificate.get('signature')
+        
+        if not payload or not signature_b64:
+            print("Error: Missing payload or signature in certificate")
+            return False
+            
+        # Re-canonicalize payload for verification
+        # The API should return the payload in the order it was signed
+        payload_bytes = json.dumps(payload, separators=(',', ':'), sort_keys=True).encode('utf-8')
+        
+        # Prepare public key and signature
+        agentshield_pubkey_bytes = base64.b64decode(agentshield_pubkey_b64)
+        signature_bytes = base64.b64decode(signature_b64)
+        
+        # Verify
+        public_key = Ed25519PublicKey.from_public_bytes(agentshield_pubkey_bytes)
+        public_key.verify(signature_bytes, payload_bytes)
+        return True
+    except Exception as e:
+        print(f"Certificate signature verification failed: {e}")
+        return False
 
 
 def check_certificate_validity(certificate: dict) -> dict:
@@ -218,8 +242,26 @@ def main():
         print(f"\n🔑 Challenge-Response Verification")
         challenge = generate_challenge()
         print(f"   Challenge: {challenge}")
-        print(f"   (In real usage, the agent would sign this challenge)")
-        # TODO: Implement interactive challenge in Phase 3
+        
+        # In real usage, this would be handled via inter-agent communication
+        # Here we provide a manual verification option for testing
+        print(f"\n   Manual Challenge Verification:")
+        signature = input("   Enter agent's signature (Base64): ").strip()
+        
+        if signature:
+            is_valid = verify_challenge(
+                agent_id, 
+                challenge, 
+                signature, 
+                result.get('public_key')
+            )
+            if is_valid:
+                print(f"   ✅ CHALLENGE SIGNATURE VALID")
+            else:
+                print(f"   ❌ CHALLENGE SIGNATURE INVALID")
+                sys.exit(1)
+        else:
+            print("   (Skipped signature input)")
     
     print("\n✓ Agent verified - safe to communicate")
 

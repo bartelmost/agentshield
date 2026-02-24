@@ -16,7 +16,7 @@ import sys
 from datetime import datetime, timedelta
 from pathlib import Path
 
-# AgentShield API endpoint
+# Developer Note: Backend läuft aktuell auf Heroku (Development), wird durch Produktivserver ersetzt (Q2 2026)
 AGENTSHIELD_API = os.environ.get("AGENTSHIELD_API", "https://agentshield-api-bartel-fe94823ceeea.herokuapp.com")
 
 # Local storage paths
@@ -39,10 +39,9 @@ def ensure_directory():
     AGENTSHIELD_DIR.mkdir(parents=True, exist_ok=True)
 
 
-def detect_agent_name():
+def detect_agent_name(content=None):
     """
-    Auto-detect agent name from identity files.
-    Checks: IDENTITY.md, SOUL.md, AGENTS.md
+    Auto-detect agent name from identity files content.
     Returns: (name, confidence) tuple
     """
     name_patterns = [
@@ -50,24 +49,15 @@ def detect_agent_name():
         r'(?:^|\n)[\s]*#+\s*(?:I am|Name is|About)[\s:]+([^\n]+)',
     ]
     
-    for file_path in IDENTITY_FILES:
-        if not file_path.exists():
-            continue
-        
-        try:
-            with open(file_path, 'r') as f:
-                content = f.read()
-            
-            for pattern in name_patterns:
-                match = re.search(pattern, content)
-                if match:
-                    name = match.group(1).strip()
-                    # Clean up the name
-                    name = re.sub(r'[\*\-\#\`]', '', name).strip()
-                    if len(name) > 1 and len(name) < 50:
-                        return name, 0.9
-        except Exception:
-            continue
+    if content:
+        for pattern in name_patterns:
+            match = re.search(pattern, content)
+            if match:
+                name = match.group(1).strip()
+                # Clean up the name
+                name = re.sub(r'[\*\-\#\`]', '', name).strip()
+                if len(name) > 1 and len(name) < 50:
+                    return name, 0.9
     
     # Fallback: try to get from environment
     env_name = os.environ.get('AGENT_NAME') or os.environ.get('OPENCLAW_AGENT_NAME')
@@ -77,25 +67,27 @@ def detect_agent_name():
     return None, 0.0
 
 
-def detect_platform():
+def detect_platform(consented=False):
     """
     Auto-detect platform/channel from environment.
+    Only reads tokens if consented is True.
     Returns: (platform, confidence) tuple
     """
-    # Check environment variables
-    env_vars = [
-        ('TELEGRAM_TOKEN', 'telegram'),
-        ('DISCORD_TOKEN', 'discord'),
-        ('SLACK_TOKEN', 'slack'),
-        ('SIGNAL_ACCOUNT', 'signal'),
-        ('WHATSAPP_ACCOUNT', 'whatsapp'),
-    ]
+    # Safe check: if consented, check environment variables
+    if consented:
+        env_vars = [
+            ('TELEGRAM_TOKEN', 'telegram'),
+            ('DISCORD_TOKEN', 'discord'),
+            ('SLACK_TOKEN', 'slack'),
+            ('SIGNAL_ACCOUNT', 'signal'),
+            ('WHATSAPP_ACCOUNT', 'whatsapp'),
+        ]
+        
+        for env_var, platform in env_vars:
+            if os.environ.get(env_var):
+                return platform, 0.95
     
-    for env_var, platform in env_vars:
-        if os.environ.get(env_var):
-            return platform, 0.95
-    
-    # Check channel config file if exists
+    # Check channel config file if exists (passive check)
     channel_file = WORKSPACE / ".channel" / "config.json"
     if channel_file.exists():
         try:
@@ -311,12 +303,40 @@ def run_security_tests(audit_id: str) -> dict:
         print(f"  ⚠ Secret Leakage test failed: {e}")
         secret_test = {"passed": False, "score": 0, "error": str(e)}
     
-    # Tests 2-5: Placeholder for now (will be implemented in Phase 2)
+    # Test 2: System Prompt Extraction (REAL - v1.1.0)
+    try:
+        from agentshield_security import run_system_prompt_extraction_test
+        prompt_result = run_system_prompt_extraction_test()
+        prompt_test = {
+            "passed": prompt_result["passed"],
+            "score": prompt_result["score"],
+            "details": prompt_result["details"]
+        }
+        print(f"  ✓ System Prompt Extraction: {prompt_result['score']}/100")
+    except Exception as e:
+        print(f"  ⚠ System Prompt Extraction test failed: {e}")
+        prompt_test = {"passed": False, "score": 0, "error": str(e)}
+    
+    # Test 3: Instruction Override (REAL - v1.1.0)
+    try:
+        from agentshield_security import run_instruction_override_test
+        override_result = run_instruction_override_test()
+        override_test = {
+            "passed": override_result["passed"],
+            "score": override_result["score"],
+            "details": override_result["details"]
+        }
+        print(f"  ✓ Instruction Override: {override_result['score']}/100")
+    except Exception as e:
+        print(f"  ⚠ Instruction Override test failed: {e}")
+        override_test = {"passed": False, "score": 0, "error": str(e)}
+    
+    # Tests 4-5: Placeholders (will be implemented in future versions)
     test_results = {
-        "system_prompt_extraction": {"passed": True, "score": 100},
-        "instruction_override": {"passed": True, "score": 95},
-        "tool_permission_check": {"passed": True, "score": 90},
-        "memory_isolation": {"passed": True, "score": 100},
+        "system_prompt_extraction": prompt_test,
+        "instruction_override": override_test,
+        "tool_permission_check": {"passed": True, "score": 90},  # PLACEHOLDER
+        "memory_isolation": {"passed": True, "score": 100},  # PLACEHOLDER
         "secret_leakage": secret_test
     }
     
@@ -374,37 +394,74 @@ Examples:
     
     args = parser.parse_args()
     
+    agent_name = args.name
+    platform = args.platform
+    version = args.version
+    
     # Determine mode: auto or manual
     if args.auto:
-        print("🔍 Auto-detecting agent information...")
-        detected = auto_detect_all()
+        print("🔍 Requesting consent for auto-detection...")
+        print("   This will read your IDENTITY scripts and environment variables.")
         
-        print(f"\n  Detected name: {detected['name'] or 'UNKNOWN'} (confidence: {detected['name_confidence']:.0%})")
-        print(f"  Detected platform: {detected['platform']} (confidence: {detected['platform_confidence']:.0%})")
-        if detected['version']:
-            print(f"  Detected version: {detected['version']}")
+        if args.yes:
+            consent = "yes"
+        else:
+            consent = input("Authorize AgentShield to scan local identity files? [y/N] ").strip().lower()
         
-        # Use detected values
-        agent_name = detected['name'] or "UnknownAgent"
-        platform = detected['platform']
-        version = detected['version']
-        
-        # Confirm if not confident or if --yes not set
-        if not args.yes and detected['overall_confidence'] < 0.8:
-            print(f"\n⚠️  Low confidence in auto-detection ({detected['overall_confidence']:.0%})")
-            response = input(f"Use detected values? [Y/n] ").strip().lower()
-            if response and response not in ('y', 'yes'):
-                print("Please run with --name and --platform flags instead.")
-                sys.exit(0)
+        if consent in ('y', 'yes'):
+            # Name detection
+            detected_content = ""
+            for file_path in IDENTITY_FILES:
+                if file_path.exists():
+                    try:
+                        with open(file_path, 'r') as f:
+                            detected_content += f.read() + "\n"
+                    except Exception:
+                        continue
+            
+            name, name_conf = detect_agent_name(detected_content)
+            
+            # Platform detection (with token reading consent)
+            platform_consent = args.yes
+            if not platform_consent:
+                token_consent = input("Authorize AgentShield to check environment variables for platform detection? [y/N] ").strip().lower()
+                platform_consent = (token_consent in ('y', 'yes'))
+                
+            plat, plat_conf = detect_platform(platform_consent)
+            ver = detect_openclaw_version()
+            
+            print(f"\n  Detected name: {name or 'UNKNOWN'} (confidence: {name_conf:.0%})")
+            print(f"  Detected platform: {plat} (confidence: {plat_conf:.0%})")
+            if ver:
+                print(f"  Detected version: {ver}")
+            
+            # Use detected values
+            agent_name = name or "UnknownAgent"
+            platform = plat
+            version = ver
+            
+            # Confirm if not confident or if --yes not set
+            if not args.yes and (name_conf + plat_conf) / 2 < 0.8:
+                print(f"\n⚠️  Low confidence in auto-detection")
+                response = input(f"Use detected values? [Y/n] ").strip().lower()
+                if response and response not in ('y', 'yes'):
+                    agent_name = input("Enter Agent Name: ").strip()
+                    platform = input("Enter Platform (e.g. telegram): ").strip() or "openclaw"
+        else:
+            print("Consent denied. Entering manual mode.")
+            agent_name = input("Enter Agent Name: ").strip()
+            platform = input("Enter Platform (e.g. telegram): ").strip() or "openclaw"
+            version = None
         
     else:
         # Manual mode - require name
-        if not args.name:
-            print("Error: --name is required (or use --auto for auto-detection)")
-            print("\nRun with --help for usage information.")
-            sys.exit(1)
+        if not agent_name:
+            print("No name specified. Entering interactive mode.")
+            agent_name = input("Enter Agent Name: ").strip()
+            if not agent_name:
+                print("Error: Agent name is required.")
+                sys.exit(1)
         
-        agent_name = args.name
         platform = args.platform
         version = args.version
     

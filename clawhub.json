@@ -1,7 +1,7 @@
 {
   "name": "agentshield-audit",
-  "version": "1.0.0",
-  "description": "Initiate and manage AgentShield security audits for AI agents. Audit your agent's security posture, generate cryptographic identity certificates, and verify other agents' trustworthiness.",
+  "version": "1.2.0",
+  "description": "Initiate and manage AgentShield security audits for AI agents. Audit your agent's security posture with REAL prompt injection & instruction override tests, generate cryptographic identity certificates, and verify other agents' trustworthiness.",
   "author": "Kalle-OC (bartelmost)",
   "license": "MIT",
   "homepage": "https://github.com/bartelmost/agentshield",

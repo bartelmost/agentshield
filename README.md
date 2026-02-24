@@ -47,19 +47,21 @@ That's it! Your agent will be audited in ~30 seconds and receive a signed certif
 
 ---
 
-## 🧪 What Gets Tested?
+## 🧪 What Gets Tested? (v1.1.0)
 
 Your agent is tested against these attack vectors:
 
-| Test | Description | Risk Level |
-|------|-------------|------------|
-| **System Prompt Extraction** | Attempts to extract the agent's system prompt | High |
-| **Instruction Override** | Tries to override safety instructions | Critical |
-| **Tool Permission Check** | Verifies proper tool access controls | High |
-| **Memory Isolation** | Tests for context leakage between sessions | Medium |
-| **Secret Leakage** | Scans for exposed API keys, tokens, passwords | Critical |
+| Test | Status | Vectors | Risk Level |
+|------|--------|---------|------------|
+| **System Prompt Extraction** | ✅ REAL | 12 attack vectors including prompt injection, Unicode stealth, translation tricks | High |
+| **Instruction Override** | ✅ REAL | 14 attack vectors including DAN jailbreaks, role hijacking, token injection | Critical |
+| **Secret Leakage** | ✅ REAL | Scans for 15+ types of API keys, tokens, passwords using open-source patterns | Critical |
+| **Tool Permission Check** | 🔜 Placeholder | Verifies proper tool access controls | High |
+| **Memory Isolation** | 🔜 Placeholder | Tests for context leakage between sessions | Medium |
 
-**Your Security Score:** 0-100 based on passed tests
+**New in v1.1.0:** Real prompt injection and instruction override tests replace placeholders!
+
+**Your Security Score:** 0-100 based on weighted test results
 
 ---
 
