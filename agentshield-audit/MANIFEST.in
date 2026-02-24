@@ -1,0 +1,30 @@
+# Include documentation
+include README.md
+include SKILL.md
+include QUICKSTART.md
+include LICENSE
+
+# Include configuration files
+include clawhub.json
+include sandbox_config.yaml
+include scripts/requirements.txt
+
+# Include all scripts
+recursive-include scripts *.py
+recursive-include scripts *.txt
+
+# Include source code
+recursive-include src *.py
+
+# Include references
+recursive-include references *.md
+
+# Include tests (optional, for development)
+recursive-include tests *.py
+
+# Exclude compiled Python files
+global-exclude __pycache__
+global-exclude *.py[cod]
+global-exclude *$py.class
+global-exclude *.so
+global-exclude .DS_Store
