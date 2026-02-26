@@ -19,7 +19,7 @@ curl -H "Authorization: Bearer YOUR_API_KEY" \
      https://agentshield.live/api/crl/revoke/cert_xyz
 ```
 
-**Get API Key:** Contact enterprise@agentshield.live
+**Get API Key:** Contact ratgeberpro@gmail.com
 
 ---
 
@@ -456,7 +456,7 @@ All errors follow this format:
 | **Free** | `/api/challenge/*` | 3 req/hour (then 1/hour) |
 | **Pro** | All endpoints | 1000 req/hour |
 
-**Upgrade:** Contact enterprise@agentshield.live
+**Upgrade:** Contact ratgeberpro@gmail.com
 
 ---
 
@@ -516,7 +516,7 @@ See [examples/curl-examples.sh](../examples/curl-examples.sh)
 
 - **Documentation:** [github.com/bartelmost/agentshield](https://github.com/bartelmost/agentshield)
 - **API Status:** [status.agentshield.live](https://status.agentshield.live)
-- **Support:** security@agentshield.live
+- **Support:** ratgeberpro@gmail.com
 
 ---
 

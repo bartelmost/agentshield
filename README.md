@@ -235,7 +235,7 @@ docker-compose up -d
 agentshield --offline --internal-registry
 ```
 
-**Enterprise:** Contact enterprise@agentshield.live
+**Enterprise:** Contact ratgeberpro@gmail.com
 
 ---
 
@@ -280,7 +280,7 @@ agentshield --offline --internal-registry
 - **Website:** [agentshield.live](https://agentshield.live)
 - **GitHub:** [github.com/bartelmost/agentshield](https://github.com/bartelmost/agentshield)
 - **ClawHub:** [clawhub.ai/skills/agentshield-audit](https://clawhub.ai/skills/agentshield-audit)
-- **Email:** security@agentshield.live
+- **Email:** ratgeberpro@gmail.com
 
 ---
 

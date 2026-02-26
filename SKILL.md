@@ -44,6 +44,40 @@ python scripts/initiate_audit.py --auto --yes
 
 ---
 
+## 🔍 Developer Transparency
+
+### Infrastructure Honesty
+
+**⚠️ IMPORTANT FOR DEVELOPERS:**
+
+> **Current Registry Server:** Heroku (Development Environment)
+> - **Status:** Will be replaced with dedicated infrastructure (Q2 2026)
+> - **Purpose:** ONLY stores public certificate IDs and trust scores
+> - **NO sensitive data:** Prompts, code, test results NEVER leave your system
+
+**What the server sees:**
+✅ Certificate ID (public key hash) — used for registry lookup
+✅ Challenge-response signature — for identity verification
+✅ Timestamp — for audit trail
+
+**What the server NEVER sees:**
+🚫 Agent prompts or conversations
+🚫 Your internal code
+🚫 Test results (PDF stays local)
+🚫 System logs or configuration
+
+**Data Flow:**
+```
+Your Agent → Local Tests → Ed25519 Signing → Public Certificate → Registry
+   (Code)      (52+ Tests)    (Private Key)      (Public Key)    (ID Only)
+                                                     👆
+                                              Only this goes to server!
+```
+
+**Full Details:** See `DEVELOPER_TRANSPARENCY.md`
+
+---
+
 ## ✨ Features
 
 ### 🔐 Privacy-First Security
@@ -298,7 +332,7 @@ pip install -r requirements.txt
 
 ## 🤝 Support
 
-- **Email:** security@agentshield.live
+- **Email:** ratgeberpro@gmail.com
 - **GitHub Issues:** [github.com/bartelmost/agentshield/issues](https://github.com/bartelmost/agentshield/issues)
 - **Documentation:** [github.com/bartelmost/agentshield](https://github.com/bartelmost/agentshield)
 

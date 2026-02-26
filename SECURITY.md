@@ -155,7 +155,7 @@ $ agentshield --offline --internal-registry
 - No external dependencies
 - Custom test suites
 
-Contact: enterprise@agentshield.live
+Contact: ratgeberpro@gmail.com
 
 ---
 
@@ -169,7 +169,7 @@ Contact: enterprise@agentshield.live
 
 ### Bug Bounty
 
-Responsible disclosure: security@agentshield.live
+Responsible disclosure: ratgeberpro@gmail.com
 
 **Rewards:**
 - 🥇 Critical: $500 + Hall of Fame
@@ -226,9 +226,9 @@ const result = await sandbox.execute({
 
 ## Contact
 
-**Security Team:** security@agentshield.live
+**Security Team:** ratgeberpro@gmail.com
 
-**PGP Key:** [security@agentshield.live.asc](https://agentshield.live/security.key)
+**PGP Key:** [ratgeberpro@gmail.com.asc](https://agentshield.live/security.key)
 
 **Emergency:** +49 180 123 4567 (24/7 SOC)
 

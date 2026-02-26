@@ -40,7 +40,7 @@ python -m pytest tests/
 
 ## Security
 
-If you discover a security vulnerability, please email security@agentshield.live instead of opening a public issue.
+If you discover a security vulnerability, please email ratgeberpro@gmail.com instead of opening a public issue.
 
 ## Questions?
 
