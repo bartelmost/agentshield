@@ -1,7 +1,0 @@
-__pycache__/
-*.pyc
-*.log
-.env
-.venv
-.agentshield/
-*.tar.gz

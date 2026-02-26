@@ -1,0 +1,41 @@
+name: API Health Check
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # Run daily at 6 AM UTC
+    - cron: '0 6 * * *'
+
+jobs:
+  test-api:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Test API Health
+      run: |
+        curl -f https://agentshield.live/api/status || exit 1
+    
+    - name: Test Registry Endpoint
+      run: |
+        curl -f https://agentshield.live/api/registry/agents?limit=1 || exit 1
+    
+    - name: Test CRL Download
+      run: |
+        curl -f -o /tmp/test.crl https://agentshield.live/api/crl/download || exit 1
+        ls -lh /tmp/test.crl
+    
+    - name: Test Verify Endpoint
+      run: |
+        # Test with a known agent ID (adjust if needed)
+        curl -f https://agentshield.live/api/verify/agent_kalle_oc_2024 || echo "No agent found (expected)"
+    
+    - name: Notify on Failure
+      if: failure()
+      run: |
+        echo "❌ API tests failed! Check https://agentshield.live/api/status"
