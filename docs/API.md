@@ -505,7 +505,7 @@ See [examples/curl-examples.sh](../examples/curl-examples.sh)
 
 ## 🔗 Webhooks
 
-**[Coming in v6.5]** Subscribe to events:
+**[Coming in v1.2.0]** Subscribe to events:
 - Certificate issued
 - Certificate revoked
 - Trust score updated
@@ -521,4 +521,4 @@ See [examples/curl-examples.sh](../examples/curl-examples.sh)
 ---
 
 *Last Updated: 2026-02-26*  
-*API Version: v6.4*
+*API Version: v1.2.0*
