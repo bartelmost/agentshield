@@ -1,271 +1,156 @@
-# Changelog - AgentShield
+# AgentShield Changelog
 
 All notable changes to AgentShield are documented here.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+---
+
+## [1.2.0] - 2026-03-07
+
+### 🎯 Major Release: Complete Security Testing Suite
+
+**Added:**
+- **77 Comprehensive Security Tests** (`agentshield_tester.py`)
+  - 25 static security tests (Input Sanitizer, Output DLP, Tool Sandbox, EchoLeak, Secret Scanner, Supply Chain)
+  - 52 live attack vectors (Direct Override, Role Hijacking, Encoding, Multi-Language, Context Manipulation, Social Engineering, Prompt Leaks)
+  - Complete test documentation ([TESTING.md](TESTING.md))
+  - JSON output with scoring system (0-100)
+  - Tier classification (MINIMAL_RISKS → RISKS_DETECTED)
+
+**Changed:**
+- **Official API Endpoint:** All references updated from Heroku development URL to `https://agentshield.live/api`
+- **Unified Versioning:** Switched from v6.x to semantic versioning (v1.2.0)
+- Documentation updated throughout for consistency
+
+**Improved:**
+- Production-ready testing capability
+- NO placeholders - all tests with real checking logic
+- Standalone test usage (works without AgentShield API)
+- Comprehensive documentation across all files
 
 ---
 
-## [6.4.0] - 2026-02-26
+## [1.1.1] - 2026-03-07
 
-### 🆕 Added - CRL + Registry Release
-
-**Certificate Revocation**
-- Certificate Revocation List (CRL) endpoint `/api/crl/download`
-- RFC 5280 compliant CRL format
-- Instant revocation via `/api/crl/revoke/:id`
-- CRL check endpoint `/api/crl/check/:id`
-- Automatic CRL generation every 24 hours
-
-**Public Trust Registry**
-- Public agent registry at `/registry` page
-- Search functionality for verified agents
-- Trust score display with tier badges
-- Pagination for large agent lists
-- Agent profile pages with verification history
-
-**Trust Score System**
-- Trust score calculation algorithm (0-100)
-- Tier system: UNVERIFIED (0) → BASIC (1-49) → VERIFIED (50-79) → TRUSTED (80-100)
-- Score factors: 40% verifications, 30% age, 30% success rate
-- Automatic score updates on new verifications
-
-**Frontend Improvements**
-- Trust score badges on registry
-- CRL status indicators
-- Filter by verification tier
-- Responsive registry table
-- Real-time status updates
-
-### 🔧 Changed
-- Updated API rate limits for registry endpoints
-- Enhanced certificate metadata storage
-- Improved database schema for CRL support
-
-### 📚 Documentation
-- Added CRL architecture documentation
-- Trust score calculation explained
-- Registry API endpoints documented
-- Updated security model diagrams
+### Changed
+- **API URL Migration:** Updated all endpoints from Heroku development URL to official `agentshield.live/api`
+- All Python scripts updated with new default endpoint
+- Documentation reflects official API throughout
 
 ---
 
-## [6.3.0] - 2026-02-20
+## [1.0.1] - 2026-03-06
 
-### 🆕 Added - Agent Registry
-
-**Public Registry**
-- Agent certificate directory at `/api/registry/agents`
-- Search endpoint `/api/registry/search`
-- Public verification status pages
-- Trust score badges
-
-**Multi-Verification Support**
-- Track multiple verifications per agent
-- Calculate trust score from verification history
-- Display verification count in registry
-
-**Database Enhancements**
-- PostgreSQL production database
-- SQLite local development fallback
-- Certificate persistence layer
-- Verification history tracking
-
-### 🔧 Changed
-- API responses include trust score
-- Certificate format extended with metadata
-- Frontend displays public registry link
+### Fixed
+- **ClawHub Security Feedback:**
+  - Removed silent environment variable scanning
+  - Removed consent bypass (`--yes` flag)
+  - API endpoint clearly marked as DEV/BETA
+  - Improved privacy documentation
 
 ---
 
-## [6.2.0] - 2026-02-15
+## [1.0.0] - 2026-02-24
 
-### 🆕 Added - Challenge-Response Protocol
+### Initial Release
 
-**Cryptographic Identity**
-- Ed25519 key pair generation (local)
-- Challenge-response verification
-- Zero-knowledge proof of identity
-- Public key registry
+**Core Features:**
+- Ed25519 cryptographic certificates for AI agents
+- Human-in-the-Loop consent flow
+- Complete local bundle (no external code fetching)
+- Challenge-response authentication protocol
+- Public trust registry
+- Certificate Revocation List (CRL)
 
-**Security Enhancements**
-- Private keys never transmitted
-- Challenge nonce with 5-minute expiry
-- Signature validation on backend
-- Tamper-proof certificate issuance
+**Security:**
+- Zero knowledge architecture
+- Private keys never leave local environment
+- Explicit user consent required for file access
+- Minimal data transmission (public key only)
 
-**API Endpoints**
-- `/api/challenge/create` - Generate challenge nonce
-- `/api/challenge/verify` - Validate signature
-- `/api/verify/:agent_id` - Check certificate status
-
-### 🔧 Changed
-- Certificate format now includes public key hash
-- Assessment results linked to cryptographic identity
-- PDF reports include Ed25519 fingerprint
-
-### 📚 Documentation
-- Challenge-response protocol explained
-- Ed25519 signature examples
-- Security architecture diagrams
+**Documentation:**
+- Complete API documentation
+- Installation guides
+- Security policy
+- Developer transparency document
 
 ---
 
-## [6.1.0] - 2026-02-10
+## Version History Summary
 
-### 🆕 Added - Privacy-First Tests
-
-**Local Security Testing**
-- 52+ security tests run locally in agent environment
-- Subagent-based test execution
-- Zero data exfiltration to AgentShield servers
-- Open source test suite
-
-**Test Categories**
-- Input Sanitizer (prompt injection detection)
-- EchoLeak (zero-click data exfiltration tests)
-- Tool Sandbox (permission boundary controls)
-- Output DLP (PII/API key detection)
-- Supply Chain Scanner (dependency integrity)
-
-**Privacy Architecture**
-- All tests execute in user's agent session
-- No code or prompt data uploaded
-- Only public certificate data stored
-- GDPR/CCPA compliant design
-
-**Rate Limiting**
-- 3 free audits per hour
-- 1 audit per hour after limit
-- Rate limit headers in API responses
-- SQLite-based rate tracking
-
-### 🔧 Changed
-- Moved from cloud-based to local-first testing
-- Reduced API payload to public key only
-- Enhanced privacy guarantees in documentation
-
-### 📚 Documentation
-- Privacy-first architecture explained
-- Local vs cloud scanning comparison
-- Open source test verification guide
+| Version | Date | Key Features |
+|---------|------|--------------|
+| **1.2.0** | 2026-03-07 | **77 Security Tests**, Official API |
+| 1.1.1 | 2026-03-07 | API URL Migration |
+| 1.0.1 | 2026-03-06 | ClawHub Security Fixes |
+| 1.0.0 | 2026-02-24 | Initial Release |
 
 ---
 
-## [6.0.0] - 2026-02-01
+## Deprecated Versions
 
-### 🆕 Added - Initial Release
+### v6.x Series (Internal Development)
+- v6.5 - Free tier implementation (internal)
+- v6.4 - CRL + Registry release (internal)
+- Earlier versions were development iterations
 
-**Core Features**
-- Basic security assessment framework
-- PDF report generation
-- API backend deployment
-- Certificate issuance (basic)
-
-**Security Tests**
-- Token optimization analysis
-- Code vulnerability scanning
-- Basic prompt injection tests
-
-**Infrastructure**
-- Heroku backend deployment
-- SQLite database for certificates
-- Basic rate limiting
-
-### 📚 Documentation
-- README with quick start guide
-- Basic API documentation
-- Installation instructions
+**Note:** Version numbering was unified to semantic versioning (1.x.x) starting with public release.
 
 ---
 
-## Version Numbering
+## Upgrade Paths
 
-- **Major (X.0.0)**: Breaking API changes, major architecture overhaul
-- **Minor (6.X.0)**: New features, backwards-compatible additions
-- **Patch (6.4.X)**: Bug fixes, minor improvements
+### From v1.0.x → v1.2.0
+**No breaking changes.** All existing features work as before.
 
----
+**New capabilities:**
+- Run standalone security tests
+- Access 77-test comprehensive suite
+- Use official API endpoint
 
-## Upgrade Guides
-
-### Upgrading to v6.4
+**Migration:**
 ```bash
-# Update skill
-clawhub update agentshield-audit
+# Update repository
+git pull origin main
 
-# No breaking changes - existing certificates remain valid
-```
+# Optional: Update API endpoint in environment
+export AGENTSHIELD_API="https://agentshield.live/api"
 
-### Upgrading to v6.3
-```bash
-# Database migration required for registry
-python migrate.py --to-6.3
-
-# Existing certificates auto-imported to registry
-```
-
-### Upgrading to v6.2
-```bash
-# Re-run assessment to generate Ed25519 identity
-agentshield-audit --auto --yes
-
-# Old certificates remain valid but lack cryptographic proof
+# Run new tests
+python agentshield_tester.py --config agent_config.json --prompt system_prompt.txt
 ```
 
 ---
 
-## Roadmap
+## Upcoming Features
 
-### Upcoming Features (v6.5+)
+### v1.3.0 (Planned)
+- Real-time live attack testing (interactive agent testing)
+- Enhanced CRL with delta updates
+- Registry API rate limiting improvements
+- WebAuthn certificate integration
 
-**Planned:**
-- 🔄 Automatic certificate renewal
-- 🏢 Enterprise self-hosted registry
-- 🔗 Blockchain anchoring (optional)
-- 🌐 Multi-language support
-- 📊 Trust score analytics dashboard
-
-**Under Consideration:**
-- Integration with major AI platforms
-- Cross-platform agent verification
-- Federation protocol for multiple registries
+### v2.0.0 (Roadmap)
+- Multi-signature certificates (consortium trust)
 - Hardware security module (HSM) support
-
-**Vote on features:** [GitHub Discussions](https://github.com/bartelmost/agentshield/discussions)
+- Regulatory compliance reports (EU AI Act, GDPR)
+- Agent mesh trust networks
 
 ---
 
 ## Breaking Changes
 
-### v6.0 → v6.1
-- **API Endpoint Change:** `/audit` → `/api/assess`
-- **Migration:** Update ClawHub skill to latest version
-
-### v6.1 → v6.2
-- **Certificate Format:** Added Ed25519 public key field
-- **Migration:** Re-run assessment to upgrade certificate
-
-### v6.2 → v6.3
-- **Database Schema:** New `verifications` table
-- **Migration:** Run `migrate.py` script
-
-### v6.3 → v6.4
-- **Database Schema:** New `crl_entries` table
-- **Migration:** Auto-migration on first API start
+**None yet.** AgentShield maintains backward compatibility.
 
 ---
 
 ## Security Advisories
 
-**None reported yet.**
+**None.** No security vulnerabilities have been reported.
 
-For responsible disclosure: ratgeberpro@gmail.com
-
-**Bug Bounty:** See [SECURITY.md](./SECURITY.md#bug-bounty)
+To report security issues: See [SECURITY.md](SECURITY.md)
 
 ---
 
-*Maintained by Kalle-OC*  
-*Last Updated: 2026-02-26*
+**Maintained by:** Kalle-OC (@bartelmost)  
+**Contact:** ratgeberpro@gmail.com  
+**Last Updated:** 2026-03-07

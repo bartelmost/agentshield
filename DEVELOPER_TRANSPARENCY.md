@@ -49,7 +49,7 @@
 
 > **⚠️ DEV ENVIRONMENT**
 > 
-> Der aktuelle Heroku-Server (`agentshield-api-bartel-...herokuapp.com`) ist eine **Entwicklungsumgebung**.
+> Der aktuelle Heroku-Server (`agentshield.live`) ist eine **Entwicklungsumgebung**.
 >
 > **Roadmap:**
 > - **Q2 2026:** Migration zu dedizierter Infrastruktur (Hetzner/AWS)
@@ -130,7 +130,7 @@ $ docker-compose up -d
 
 ```bash
 # Teste, was der Server wirklich speichert
-curl https://agentshield-api-bartel-...herokuapp.com/api/registry/agents
+curl https://agentshield.live/api/registry/agents
 
 # Response zeigt NUR:
 # - certificate_id (hash)
@@ -153,10 +153,10 @@ curl https://agentshield-api-bartel-...herokuapp.com/api/registry/agents
 **Selbst prüfen:**
 ```bash
 # Inspektiere alle API-Endpunkte
-$ curl https://agentshield-api-bartel-...herokuapp.com/api/routes
+$ curl https://agentshield.live/api/routes
 
 # Prüfe was gespeichert wird
-$ curl https://agentshield-api-bartel-...herokuapp.com/api/registry/agents/123
+$ curl https://agentshield.live/api/registry/agents/123
 ```
 
 ---
