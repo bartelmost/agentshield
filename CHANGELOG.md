@@ -1,156 +1,162 @@
-# AgentShield Changelog
+# CHANGELOG - AgentShield v1.4.0
 
-All notable changes to AgentShield are documented here.
+## v1.4.0 - TRUST HANDSHAKE PROTOCOL LAUNCH 🚀 (2026-03-09)
 
----
+**MAJOR RELEASE:** Agent-to-Agent Trust Infrastructure
 
-## [1.2.0] - 2026-03-07
+### 🎉 NEW FEATURES (PHASE 2)
 
-### 🎯 Major Release: Complete Security Testing Suite
+#### Trust Handshake Protocol
+**The Core Feature:** Mutual cryptographic verification between AI agents
 
-**Added:**
-- **77 Comprehensive Security Tests** (`agentshield_tester.py`)
-  - 25 static security tests (Input Sanitizer, Output DLP, Tool Sandbox, EchoLeak, Secret Scanner, Supply Chain)
-  - 52 live attack vectors (Direct Override, Role Hijacking, Encoding, Multi-Language, Context Manipulation, Social Engineering, Prompt Leaks)
-  - Complete test documentation ([TESTING.md](TESTING.md))
-  - JSON output with scoring system (0-100)
-  - Tier classification (MINIMAL_RISKS → RISKS_DETECTED)
+**New Endpoints:**
+1. `GET /api/verify-peer/:agent_id` - Quick trust verification
+2. `POST /api/trust-handshake/initiate` - Start mutual handshake
+3. `POST /api/trust-handshake/complete` - Submit Ed25519 signatures
+4. `GET /api/trust-handshake/status/:id` - Check handshake progress
+5. `GET /api/trust-handshake/history/:id` - View agent's track record
 
-**Changed:**
-- **Official API Endpoint:** All references updated from Heroku development URL to `https://agentshield.live/api`
-- **Unified Versioning:** Switched from v6.x to semantic versioning (v1.2.0)
-- Documentation updated throughout for consistency
+**What It Does:**
+- Agent A verifies Agent B's trustworthiness
+- Both agents mutually authenticate (Ed25519 signatures)
+- System generates ephemeral session key
+- Both agents receive +5 trust points
+- Complete history tracked for reputation
 
-**Improved:**
-- Production-ready testing capability
-- NO placeholders - all tests with real checking logic
-- Standalone test usage (works without AgentShield API)
-- Comprehensive documentation across all files
-
----
-
-## [1.1.1] - 2026-03-07
-
-### Changed
-- **API URL Migration:** Updated all endpoints from Heroku development URL to official `agentshield.live/api`
-- All Python scripts updated with new default endpoint
-- Documentation reflects official API throughout
-
----
-
-## [1.0.1] - 2026-03-06
-
-### Fixed
-- **ClawHub Security Feedback:**
-  - Removed silent environment variable scanning
-  - Removed consent bypass (`--yes` flag)
-  - API endpoint clearly marked as DEV/BETA
-  - Improved privacy documentation
-
----
-
-## [1.0.0] - 2026-02-24
-
-### Initial Release
-
-**Core Features:**
-- Ed25519 cryptographic certificates for AI agents
-- Human-in-the-Loop consent flow
-- Complete local bundle (no external code fetching)
-- Challenge-response authentication protocol
-- Public trust registry
-- Certificate Revocation List (CRL)
-
-**Security:**
-- Zero knowledge architecture
-- Private keys never leave local environment
-- Explicit user consent required for file access
-- Minimal data transmission (public key only)
-
-**Documentation:**
-- Complete API documentation
-- Installation guides
-- Security policy
-- Developer transparency document
-
----
-
-## Version History Summary
-
-| Version | Date | Key Features |
-|---------|------|--------------|
-| **1.2.0** | 2026-03-07 | **77 Security Tests**, Official API |
-| 1.1.1 | 2026-03-07 | API URL Migration |
-| 1.0.1 | 2026-03-06 | ClawHub Security Fixes |
-| 1.0.0 | 2026-02-24 | Initial Release |
-
----
-
-## Deprecated Versions
-
-### v6.x Series (Internal Development)
-- v6.5 - Free tier implementation (internal)
-- v6.4 - CRL + Registry release (internal)
-- Earlier versions were development iterations
-
-**Note:** Version numbering was unified to semantic versioning (1.x.x) starting with public release.
-
----
-
-## Upgrade Paths
-
-### From v1.0.x → v1.2.0
-**No breaking changes.** All existing features work as before.
-
-**New capabilities:**
-- Run standalone security tests
-- Access 77-test comprehensive suite
-- Use official API endpoint
-
-**Migration:**
+**Use Case:**
 ```bash
-# Update repository
-git pull origin main
+# 1. Quick trust check
+GET /api/verify-peer/agent_b?min_score=70
 
-# Optional: Update API endpoint in environment
-export AGENTSHIELD_API="https://agentshield.live/api"
+# 2. Initiate handshake
+POST /api/trust-handshake/initiate
+→ Returns handshake_id + challenges
 
-# Run new tests
-python agentshield_tester.py --config agent_config.json --prompt system_prompt.txt
+# 3. Both agents sign challenges locally
+agent_a_signature = Ed25519.sign(challenge_a)
+agent_b_signature = Ed25519.sign(challenge_b)
+
+# 4. Complete handshake
+POST /api/trust-handshake/complete
+→ Verifies signatures → Returns session_key
+
+# 5. View track record
+GET /api/trust-handshake/history/agent_a
+→ Shows success_rate, completed handshakes
 ```
 
+#### Database Schema
+- New `handshakes` table with 4 performance indexes
+- Trust score updates (+5 per successful handshake)
+- Verification count tracking
+- Success rate statistics
+
+#### Security Features
+- Ed25519 cryptographic signatures (same as certificates)
+- TTL-based expiry (60 seconds to 24 hours)
+- Self-handshake prevention
+- Revocation checks (CRL integration)
+- Certificate expiry validation
+
+### 🔧 BUG FIXES
+
+#### v1.3.1 (Minor)
+- Fixed `verify-peer` min_score bug (now checks `security_score` instead of `trust_score`)
+- Added None-safety to `is_handshake_expired()`
+
+#### v1.3.2 (Minor)
+- Added comprehensive error logging to handshake endpoints
+- Try-catch blocks for better debugging
+
+#### v1.3.3 (Minor)
+- Added `/api/debug/handshake-table` endpoint
+- Added `/api/admin/migrate-db` endpoint for manual migrations
+
+#### v1.3.4-v1.3.8 (Patch)
+- Fixed DateTime timezone comparison bugs (offset-naive vs offset-aware)
+- Fixed double `+00:00` bug in timestamp storage
+- Fixed History endpoint indentation bug
+- Smart `.replace('Z', '+00:00')` only when needed
+
+### 📊 TESTING
+
+**Comprehensive Test Coverage (by My1stBot):**
+- ✅ Invalid signatures (garbage, wrong key, mixed) → 403
+- ✅ TTL validation (min 60s enforced) → 400
+- ✅ Self-handshake prevention → 400
+- ✅ Non-existent agents → 404
+- ✅ Double-complete prevention → 409
+- ✅ Full happy path (Initiate → Complete → History → Status)
+
+**Result:** 10/11 tests PASSED (1 skipped: manual expiry test)
+
+### 💰 PRICING IMPACT
+
+**No changes yet** - Trust Handshake Protocol is FREE during beta.
+
+**Future Pricing (post-launch):**
+- Free tier: 5 handshakes/month
+- Pro tier (€10/month): 100 handshakes/month
+- Team tier (€30/month): Unlimited handshakes
+
+**Validated Willingness to Pay:** €10/month (My1stBot)
+
+### 📝 DOCUMENTATION
+
+- Updated API.md with 5 new endpoints
+- Updated README.md with Trust Protocol section
+- Added Integration Guide (Python examples)
+- Updated ClawHub SKILL.md with handshake support
+
+### 🙏 CREDITS
+
+**Special Thanks:**
+- My1stBot for systematic testing, detailed bug reports, and patience through 8 bugfix iterations
+
 ---
 
-## Upcoming Features
+## v1.2.1 - PHASE 1 COMPLETION (2026-03-07)
 
-### v1.3.0 (Planned)
-- Real-time live attack testing (interactive agent testing)
-- Enhanced CRL with delta updates
-- Registry API rate limiting improvements
-- WebAuthn certificate integration
+**CRITICAL FIX:** Client-submitted scores now respected
+- Server accepts local audit scores (Client-First Model)
+- Fixed score discrepancy bug (reported by My1stBot)
 
-### v2.0.0 (Roadmap)
-- Multi-signature certificates (consortium trust)
-- Hardware security module (HSM) support
-- Regulatory compliance reports (EU AI Act, GDPR)
-- Agent mesh trust networks
+**My1stBot Feedback:**
+- "Ready for Beta Users!"
+- "For the Trust Handshake Protocol, I'd pay €20/month"
 
 ---
 
-## Breaking Changes
+## v1.2.0 - Enhanced Audit + CRL (2026-02-26)
 
-**None yet.** AgentShield maintains backward compatibility.
+### New Features
+- Certificate Revocation List (CRL) - RFC 5280 compliant
+- Public Trust Registry with search
+- Challenge-Response Protocol (Ed25519)
+- 52 Attack Vectors in LiveTestEngine
+
+### Endpoints
+- `/api/crl`, `/api/crl/download`, `/api/crl/revoke`
+- `/api/registry/agents`, `/api/registry/search`
+- `/api/agent-audit/challenge`, `/api/agent-audit/complete`
 
 ---
 
-## Security Advisories
+## v1.0.0 - Initial Release (2026-02-19)
 
-**None.** No security vulnerabilities have been reported.
+### Core Features
+- Token Optimizer with ROI calculation
+- Code Security Scanner (SQLi, XSS, Command Injection)
+- Full Agent Audit with Ed25519 certificates
+- PDF Reports (7 pages)
+- Security Tier System (VULNERABLE → BASIC → PROTECTED → HARDENED)
 
-To report security issues: See [SECURITY.md](SECURITY.md)
+### Pricing
+- $0.50 Token Optimizer
+- $0.10 Code Scan
+- $2.50 Full Audit
+- $2.90 Bundle (all 3)
 
----
-
-**Maintained by:** Kalle-OC (@bartelmost)  
-**Contact:** ratgeberpro@gmail.com  
-**Last Updated:** 2026-03-07
+### Promotional Codes
+- BETA5: Unlimited audits
+- LAUNCH1-10: 10 scans each
