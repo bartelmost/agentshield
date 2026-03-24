@@ -1,162 +1,155 @@
-# CHANGELOG - AgentShield v1.4.0
+# Changelog - AgentShield
 
-## v1.4.0 - TRUST HANDSHAKE PROTOCOL LAUNCH 🚀 (2026-03-09)
+All notable changes to this project will be documented in this file.
 
-**MAJOR RELEASE:** Agent-to-Agent Trust Infrastructure
-
-### 🎉 NEW FEATURES (PHASE 2)
-
-#### Trust Handshake Protocol
-**The Core Feature:** Mutual cryptographic verification between AI agents
-
-**New Endpoints:**
-1. `GET /api/verify-peer/:agent_id` - Quick trust verification
-2. `POST /api/trust-handshake/initiate` - Start mutual handshake
-3. `POST /api/trust-handshake/complete` - Submit Ed25519 signatures
-4. `GET /api/trust-handshake/status/:id` - Check handshake progress
-5. `GET /api/trust-handshake/history/:id` - View agent's track record
-
-**What It Does:**
-- Agent A verifies Agent B's trustworthiness
-- Both agents mutually authenticate (Ed25519 signatures)
-- System generates ephemeral session key
-- Both agents receive +5 trust points
-- Complete history tracked for reputation
-
-**Use Case:**
-```bash
-# 1. Quick trust check
-GET /api/verify-peer/agent_b?min_score=70
-
-# 2. Initiate handshake
-POST /api/trust-handshake/initiate
-→ Returns handshake_id + challenges
-
-# 3. Both agents sign challenges locally
-agent_a_signature = Ed25519.sign(challenge_a)
-agent_b_signature = Ed25519.sign(challenge_b)
-
-# 4. Complete handshake
-POST /api/trust-handshake/complete
-→ Verifies signatures → Returns session_key
-
-# 5. View track record
-GET /api/trust-handshake/history/agent_a
-→ Shows success_rate, completed handshakes
-```
-
-#### Database Schema
-- New `handshakes` table with 4 performance indexes
-- Trust score updates (+5 per successful handshake)
-- Verification count tracking
-- Success rate statistics
-
-#### Security Features
-- Ed25519 cryptographic signatures (same as certificates)
-- TTL-based expiry (60 seconds to 24 hours)
-- Self-handshake prevention
-- Revocation checks (CRL integration)
-- Certificate expiry validation
-
-### 🔧 BUG FIXES
-
-#### v1.3.1 (Minor)
-- Fixed `verify-peer` min_score bug (now checks `security_score` instead of `trust_score`)
-- Added None-safety to `is_handshake_expired()`
-
-#### v1.3.2 (Minor)
-- Added comprehensive error logging to handshake endpoints
-- Try-catch blocks for better debugging
-
-#### v1.3.3 (Minor)
-- Added `/api/debug/handshake-table` endpoint
-- Added `/api/admin/migrate-db` endpoint for manual migrations
-
-#### v1.3.4-v1.3.8 (Patch)
-- Fixed DateTime timezone comparison bugs (offset-naive vs offset-aware)
-- Fixed double `+00:00` bug in timestamp storage
-- Fixed History endpoint indentation bug
-- Smart `.replace('Z', '+00:00')` only when needed
-
-### 📊 TESTING
-
-**Comprehensive Test Coverage (by My1stBot):**
-- ✅ Invalid signatures (garbage, wrong key, mixed) → 403
-- ✅ TTL validation (min 60s enforced) → 400
-- ✅ Self-handshake prevention → 400
-- ✅ Non-existent agents → 404
-- ✅ Double-complete prevention → 409
-- ✅ Full happy path (Initiate → Complete → History → Status)
-
-**Result:** 10/11 tests PASSED (1 skipped: manual expiry test)
-
-### 💰 PRICING IMPACT
-
-**No changes yet** - Trust Handshake Protocol is FREE during beta.
-
-**Future Pricing (post-launch):**
-- Free tier: 5 handshakes/month
-- Pro tier (€10/month): 100 handshakes/month
-- Team tier (€30/month): Unlimited handshakes
-
-**Validated Willingness to Pay:** €10/month (My1stBot)
-
-### 📝 DOCUMENTATION
-
-- Updated API.md with 5 new endpoints
-- Updated README.md with Trust Protocol section
-- Added Integration Guide (Python examples)
-- Updated ClawHub SKILL.md with handshake support
-
-### 🙏 CREDITS
-
-**Special Thanks:**
-- My1stBot for systematic testing, detailed bug reports, and patience through 8 bugfix iterations
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
-## v1.2.1 - PHASE 1 COMPLETION (2026-03-07)
+## [1.0.23] - 2026-03-24
 
-**CRITICAL FIX:** Client-submitted scores now respected
-- Server accepts local audit scores (Client-First Model)
-- Fixed score discrepancy bug (reported by My1stBot)
+### Fixed
+- **Critical: API URL Bug in Trust Handshake** 🐛
+  - File: `complete_handshake.py`
+  - Issue: `https://agentshield.live/api` + `/api/...` = `/api/api/` (404 errors)
+  - Fix: Changed to `https://agentshield.live` (without `/api` suffix)
+  - Impact: Trust Handshake Protocol now works correctly
+  - Thanks to **My1stBot** for testing and reporting!
 
-**My1stBot Feedback:**
-- "Ready for Beta Users!"
-- "For the Trust Handshake Protocol, I'd pay €20/month"
+- **Dependencies Installation** 📦
+  - Added explicit `pip3 install -r requirements.txt` instruction to SKILL.md
+  - Prevents `cryptography` and `requests` import errors on fresh installs
+  - Addresses user feedback about missing dependencies
+
+- **Non-Interactive Mode** 🤖
+  - Added `--yes` / `-y` flag to `initiate_audit.py`
+  - Usage: `python3 initiate_audit.py --auto --yes`
+  - Enables CI/CD pipelines and automated testing workflows
+  - Skips confirmation prompts when confidence is high
+
+### Improved
+- **Code Documentation** 💡
+  - Added clarifying comment in `agentshield_tester.py` line 322
+  - Explains that `exec/eval` are **search patterns**, not actual code execution
+  - Addresses false-positive from security scanners
+
+### Technical Details
+**API Endpoint Changes:**
+- ❌ Old: `AGENTSHIELD_API = "https://agentshield.live/api"`
+- ✅ New: `AGENTSHIELD_API = "https://agentshield.live"`
+- Reason: Code already appends `/api/...` paths
+
+**Files Changed:**
+- `complete_handshake.py` (API URL fix)
+- `initiate_audit.py` (added `--yes` flag)
+- `SKILL.md` (dependencies documentation)
+- `agentshield_tester.py` (clarifying comment)
+- `clawhub.json` (version bump)
+
+### Impact
+- ✅ Out-of-the-box functionality for all users
+- ✅ Trust Handshake Protocol fully operational
+- ✅ Better CI/CD integration support
+- ✅ Improved code clarity for security reviewers
 
 ---
 
-## v1.2.0 - Enhanced Audit + CRL (2026-02-26)
+## [1.0.22] - 2026-03-11
 
-### New Features
-- Certificate Revocation List (CRL) - RFC 5280 compliant
-- Public Trust Registry with search
-- Challenge-Response Protocol (Ed25519)
-- 52 Attack Vectors in LiveTestEngine
+### Fixed
+- **Hardcoded API Endpoint**
+  - Changed `complete_handshake.py` from Heroku URL to domain-aligned endpoint
+  - From: `https://agentshield-api-bartel-fe94823ceeea.herokuapp.com/api`
+  - To: `https://agentshield.live/api`
+  - Resolves OpenClaw scanner flag about external Heroku endpoint
 
-### Endpoints
-- `/api/crl`, `/api/crl/download`, `/api/crl/revoke`
-- `/api/registry/agents`, `/api/registry/search`
-- `/api/agent-audit/challenge`, `/api/agent-audit/complete`
+### Added
+- **Data Transmission Transparency** (SKILL.md)
+  - Explicit JSON payload examples
+  - "What is NOT sent" documentation
+  - API endpoint specifications (HTTPS, TLS 1.2+)
+
+- **Consent Flow Documentation** (SKILL.md)
+  - File read prompts: "Read IDENTITY.md? [Y/n]"
+  - Privacy-First mode: `AGENTSHIELD_NO_AUTO_DETECT=1`
+
+- **PRIVACY.md** - Comprehensive data handling guide
+  - What data is read (IDENTITY.md, SOUL.md)
+  - What data is sent (name, platform, public key, scores)
+  - What is NOT sent (private keys, prompts, workspace)
+  - Manual mode instructions
+
+### Changed
+- Version number updated across all metadata files
 
 ---
 
-## v1.0.0 - Initial Release (2026-02-19)
+## [1.0.21] - 2026-03-09
 
-### Core Features
-- Token Optimizer with ROI calculation
-- Code Security Scanner (SQLi, XSS, Command Injection)
-- Full Agent Audit with Ed25519 certificates
-- PDF Reports (7 pages)
-- Security Tier System (VULNERABLE → BASIC → PROTECTED → HARDENED)
+### Security
+- Enhanced input sanitization patterns
+- Improved unicode attack detection
+- Updated threat categorization
 
-### Pricing
-- $0.50 Token Optimizer
-- $0.10 Code Scan
-- $2.50 Full Audit
-- $2.90 Bundle (all 3)
+---
 
-### Promotional Codes
-- BETA5: Unlimited audits
-- LAUNCH1-10: 10 scans each
+## [1.0.20] - 2026-03-05
+
+### Added
+- Trust Handshake Protocol (Phase 1)
+- `handshake.py` - Initiate trust handshakes
+- `complete_handshake.py` - Complete challenge-response
+- Mutual verification between agents
+
+### Improved
+- Audit performance optimizations
+- Better error messages
+- Cleaner CLI output
+
+---
+
+## [1.0.19] - 2026-02-28
+
+### Added
+- 77 Security Tests (52 live + 25 static)
+- Live attack testing engine
+- Response analyzer with AI scoring
+
+### Changed
+- Moved from 5 placeholder tests to full test suite
+- Updated scoring algorithm
+- New tier system: VULNERABLE → BASIC → VERIFIED → TRUSTED → HARDENED
+
+---
+
+## [1.0.0] - 2026-02-24
+
+### Added
+- Initial ClawHub release
+- Ed25519 cryptographic identity
+- Basic security audit (5 tests)
+- Certificate signing
+- Auto-detection from IDENTITY.md/SOUL.md
+- Peer verification
+
+---
+
+## Versioning Strategy
+
+- **Major (X.0.0):** Breaking API changes
+- **Minor (1.X.0):** New features, backward compatible
+- **Patch (1.0.X):** Bug fixes, documentation updates
+
+---
+
+## Links
+
+- **ClawHub:** https://clawhub.com/skills/agentshield-audit
+- **GitHub:** https://github.com/bartelmost/agentshield
+- **Website:** https://agentshield.live
+- **Issues:** https://github.com/bartelmost/agentshield/issues
+
+---
+
+**Last Updated:** 2026-03-24

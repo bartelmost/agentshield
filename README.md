@@ -1,231 +1,245 @@
-# AgentShield - Privacy-First Security for AI Agents
+# AgentShield - Trust Infrastructure for AI Agents
 
-**Version:** 1.4.1  
-**Status:** Production Ready  
-**Architecture:** Privacy-First (Local Testing Only)
+[![Version](https://img.shields.io/badge/version-1.0.23-blue.svg)](https://github.com/bartelmost/agentshield/releases)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![ClawHub](https://img.shields.io/badge/clawhub-install-orange.svg)](https://clawhub.com/skills/agentshield-audit)
 
----
+**Like SSL/TLS, but for AI agents.** 🔐
 
-## 🔒 Privacy Guarantee
-
-**Your system prompts NEVER leave your device.**
-
-AgentShield Security Assessment runs all 77 tests locally. Only test scores (not prompts) are transmitted to our server for certificate generation.
-
-📄 **[Read Full Privacy Architecture →](PRIVACY_ARCHITECTURE_v1.4.1.md)**
+AgentShield provides cryptographic identity, security audits (77 tests), and Trust Handshake Protocol for agent-to-agent communication.
 
 ---
 
-## Quick Start
+## 🎯 What Is AgentShield?
 
-### 1. Install (OpenClaw)
+**The Problem:** Agents need to communicate with other agents, but how do you verify trust?
+
+**The Solution:** AgentShield provides:
+- **🔐 Cryptographic Identity** - Ed25519 key pairs
+- **✅ Security Audits** - 77 real attack tests (52 live + 25 static)
+- **🤝 Trust Handshake Protocol** - Mutual verification before communication
+- **📋 Public Trust Registry** - Reputation scores & track records
+
+---
+
+## 🚀 Quick Start
+
+### Installation
 
 ```bash
 clawhub install agentshield-audit
+cd ~/.openclaw/workspace/skills/agentshield*/
+
+# Install Python dependencies
+pip3 install -r requirements.txt
 ```
 
-### 2. Run Security Audit
+### Get Your Security Certificate
 
 ```bash
-openclaw run agentshield-audit --audit
+# Auto-detect agent info from IDENTITY.md/SOUL.md
+python3 initiate_audit.py --auto
+
+# Or specify manually
+python3 initiate_audit.py --name "MyAgent" --platform telegram
+
+# Non-interactive mode (CI/CD)
+python3 initiate_audit.py --auto --yes
 ```
 
-**What happens:**
-1. 77 security tests run on YOUR machine (local)
-2. Only scores submitted to server (e.g., "Prompt Injection: 18/18 passed")
-3. Ed25519 certificate issued (90-day validity)
-4. Published in public trust registry
+**Output:**
+- ✅ Agent ID: `agent_xxxxx`
+- ✅ Security Score: XX/100
+- ✅ Trust Tier: BASIC/VERIFIED/TRUSTED
+- ✅ 90-day certificate
 
-### 3. Verify Another Agent
+### Verify Another Agent
 
 ```bash
-openclaw run agentshield-audit --verify agent_xyz
+python3 verify_peer.py agent_yyyyy
 ```
 
-### 4. Trust Handshake (NEW in v1.4!)
+### Trust Handshake (Agent-to-Agent)
 
 ```bash
-openclaw run agentshield-audit --handshake agent_b
+# Initiate handshake with another certified agent
+python3 handshake.py --target agent_yyyyy
+
+# Complete the handshake
+python3 complete_handshake.py --handshake-id hs_xxxxx
+```
+
+**Result:** Shared session key for encrypted communication 🔐
+
+---
+
+## 📊 Security Audit (77 Tests)
+
+### 52 Live Attack Vectors
+- **Prompt Injection** (15 variants)
+- **Encoding Exploits** (Base64, ROT13, Hex, Unicode)
+- **Multi-Language Attacks** (Chinese, Russian, Arabic, Japanese, German, Korean)
+- **Social Engineering** (emotional appeals, authority pressure, flattery)
+- **System Prompt Extraction** attempts
+
+### 25 Static Security Checks
+- Input Sanitization
+- Output DLP (Data Leak Prevention)
+- Tool Sandboxing
+- Secret Scanning
+- Supply Chain Security
+
+**Example Score:** 85/100 = VERIFIED tier ✅
+
+---
+
+## 🏗️ Architecture
+
+```
+┌─────────────────────────────────────────────────┐
+│  AgentShield Trust Infrastructure               │
+├─────────────────────────────────────────────────┤
+│                                                  │
+│  1. Cryptographic Identity (Ed25519)            │
+│     ├─ Private Key (local, never transmitted)   │
+│     └─ Public Key Certificate (signed)          │
+│                                                  │
+│  2. Security Audit Engine                       │
+│     ├─ 52 Live Attack Vectors                   │
+│     ├─ 25 Static Checks                         │
+│     └─ Score: 0-100 → Tier: BASIC-TRUSTED       │
+│                                                  │
+│  3. Trust Handshake Protocol                    │
+│     ├─ Challenge-Response (Ed25519 signatures)  │
+│     ├─ Mutual Verification                      │
+│     └─ Shared Session Key                       │
+│                                                  │
+│  4. Public Trust Registry                       │
+│     ├─ Agent Directory (searchable)             │
+│     ├─ Reputation Scores                        │
+│     └─ Revocation List (CRL)                    │
+│                                                  │
+└─────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 🛡️ Security Test Categories
+## 📂 Repository Structure
 
-**All tests run locally - your prompts never leave your device:**
-
-- **Prompt Injection** (18 tests) - System override, role manipulation
-- **Data Exfiltration** (12 tests) - Credential leaking, API key exposure
-- **Privilege Escalation** (15 tests) - Permission bypasses, sandboxing escapes
-- **Denial of Service** (10 tests) - Token flooding, infinite loops
-- **Social Engineering** (12 tests) - Persona manipulation, trust exploitation
-- **Code Injection** (10 tests) - Command injection, SQL injection
-
-**Total: 77 adversarial tests**
+```
+agentshield/
+├── skill/               # OpenClaw Skill (ClawHub Package)
+│   ├── *.py            # Core audit scripts
+│   ├── SKILL.md        # Skill documentation
+│   ├── CHANGELOG.md    # Version history
+│   └── requirements.txt
+├── docs/               # Additional documentation
+│   ├── API.md          # Backend API docs
+│   └── contributing.md
+└── README.md           # This file
+```
 
 ---
 
-## 🎯 What Makes AgentShield Different?
+## 🔒 Privacy & Security
 
-### Traditional Security Audits (Centralized)
-```
-[Your Agent + Prompts] → Auditor's Server → Analysis → Report
-```
-**Problems:**
-- 🔴 Data exfiltration risk
-- 🔴 GDPR compliance issues
-- 🔴 Intellectual property exposure
+**What We Read:**
+- `IDENTITY.md`, `SOUL.md` (with consent, only in `--auto` mode)
 
-### AgentShield (Privacy-First)
-```
-[Your Agent] → Local Tests → Scores Only → AgentShield → Certificate
-```
-**Benefits:**
-- 🟢 Zero data exfiltration (prompts stay local)
-- 🟢 GDPR compliant (no personal data transmitted)
-- 🟢 IP protection (your code never leaves)
+**What We Send:**
+- Agent name, platform, public key, security test scores
+
+**What We DON'T Send:**
+- Private keys (always stay local)
+- System prompts, chat history, workspace files
+- Any secrets or credentials
+
+**API Endpoint:** `https://agentshield.live/api` (TLS 1.2+)
+
+👉 **Full Privacy Policy:** See [`skill/PRIVACY.md`](skill/PRIVACY.md)
 
 ---
 
-## 📊 Tool Comparison
+## 📈 Use Cases
 
-AgentShield has **3 separate tools** with **different privacy models**:
+### 1. Agent-to-Agent API Calls
+**Before:** Agent A calls Agent B → No verification ❌  
+**After:** Trust Handshake → Verified identity + encrypted session ✅
 
-| Tool | Data to Server? | Purpose |
-|------|----------------|---------|
-| **Security Assessment** | ❌ Scores only | Production security (Privacy-First) |
-| **Token Optimizer** | ✅ Full prompts | Marketing demo (cost analysis) |
-| **Code Scan** | ✅ Full code | Marketing demo (pattern matching) |
+### 2. Multi-Agent Workflows
+**Before:** Agents delegate tasks blindly → Risk of compromised agents ❌  
+**After:** Check trust score first → Only work with VERIFIED+ agents ✅
 
-**⚠️ IMPORTANT:** The OpenClaw skill (`agentshield-audit`) is **ONLY** the Security Assessment tool (Privacy-First).
-
-Token Optimizer and Code Scan are web-only marketing tools, NOT part of the ClawHub skill.
-
----
-
-## 🔐 Data Privacy
-
-### Security Assessment (ClawHub Skill)
-
-**Sent to Server:**
-- ✅ Agent name + platform
-- ✅ Ed25519 public key
-- ✅ Test scores (passed/failed per category)
-- ✅ Cryptographic signatures
-
-**Stays Local:**
-- ✅ Your system prompts
-- ✅ Agent source code
-- ✅ All 77 test payloads
-- ✅ Vulnerability details
-- ✅ Private keys
-
-**Full details:** [PRIVACY_ARCHITECTURE_v1.4.1.md](PRIVACY_ARCHITECTURE_v1.4.1.md)
+### 3. Agent Marketplaces
+**Before:** No way to verify agent security ❌  
+**After:** Public trust registry → Users see security scores ✅
 
 ---
 
-## 🚀 New in v1.4
+## 🛠️ Development
 
-### Trust Handshake Protocol
+### Prerequisites
+- Python 3.8+
+- `cryptography` library (Ed25519 support)
+- `requests` library
 
-Agent-to-agent mutual verification with cryptographic proof:
-
+### Install Dev Dependencies
 ```bash
-# Quick peer verification
-openclaw run agentshield-audit --verify-peer agent_b --min-score 70
-
-# Full mutual handshake
-openclaw run agentshield-audit --handshake agent_b
+pip install -r requirements.txt
 ```
 
-**Benefits:**
-- Cryptographically secure trust establishment
-- Reputation building (success rate tracking)
-- Foundation for encrypted agent communication
-- Public audit trail (handshake history)
+### Run Tests
+```bash
+python3 test_real_live.py
+```
 
 ---
 
-## 📖 Documentation
+## 📝 Changelog
 
-- **Privacy Architecture:** [PRIVACY_ARCHITECTURE_v1.4.1.md](PRIVACY_ARCHITECTURE_v1.4.1.md)
-- **ClawHub Review Response:** [OPENCLAW_REVIEW_RESPONSE_v1.4.1.md](OPENCLAW_REVIEW_RESPONSE_v1.4.1.md)
-- **API Documentation:** https://agentshield.live/api
-- **Web Frontend:** https://agentshield.live
-- **Full Docs:** https://agentshield.live/docs.html
+See [`CHANGELOG.md`](CHANGELOG.md) for version history.
 
----
-
-## 🏆 Trust Tiers
-
-Your agent's trust tier based on security score + verification count:
-
-- **🔴 UNVERIFIED** (0-49) - Failed basic security tests
-- **🟡 BASIC** (50-69) - Passed basic tests, needs improvement
-- **🟢 VERIFIED** (70-89) - Strong security posture
-- **🔵 TRUSTED** (90-100) - Excellent security + proven track record
+**Latest:** v1.0.23 (2026-03-24)
+- Fixed API URL bug in Trust Handshake
+- Added `--yes` flag for non-interactive mode
+- Improved dependencies documentation
 
 ---
 
-## 📞 Contact
+## 🤝 Contributing
 
-- **Support:** support@agentshield.live
-- **Security Issues:** security@agentshield.live
-- **Admin:** admin@agentshield.live
+We welcome contributions! See [`docs/contributing.md`](docs/contributing.md) for guidelines.
 
----
-
-## 🛠️ Technical Stack
-
-- **Client:** Python 3.8+ (local test execution)
-- **Cryptography:** Ed25519 signatures (industry standard)
-- **Backend:** Python/Flask + PostgreSQL
-- **Hosting:** Heroku (production), Netlify (frontend)
-- **Open Source:** Client code fully open (audit the auditor!)
+**Quick Start:**
+1. Fork this repo
+2. Create feature branch: `git checkout -b feature/my-feature`
+3. Commit changes: `git commit -m "Add my feature"`
+4. Push: `git push origin feature/my-feature`
+5. Open Pull Request
 
 ---
 
-## 🗺️ Roadmap
+## 📧 Contact
 
-**v1.5 (April 2026) - Transparency**
-- OpenAPI specification
-- Public test suite
-- Reproducible builds
-
-**v2.0 (Q2 2026) - Hybrid Verification**
-- Server-side spot checks (10% random re-testing)
-- Blockchain audit trail
-- P2P handshake (no server middleman)
-
-**v3.0 (Q3 2026) - Enterprise**
-- SOC2 Type II certification
-- Penetration testing reports
-- Multi-agent fleet management
+- **GitHub Issues:** [https://github.com/bartelmost/agentshield/issues](https://github.com/bartelmost/agentshield/issues)
+- **Email:** ratgeberpro@gmail.com
+- **Moltbook:** @Kalle-OC
+- **Website:** [https://agentshield.live](https://agentshield.live)
 
 ---
 
-## 📜 License
+## 📄 License
 
-MIT License - Free for personal and commercial use.
+MIT License - see [LICENSE](LICENSE) for details.
 
 ---
 
 ## 🙏 Acknowledgments
 
-- **OpenClaw Community** - For building the agent ecosystem
-- **ClawHub Security Team** - For thorough review process
-- **Let's Encrypt** - Inspiration for free, automated certificates
+- Thanks to the OpenClaw community for feedback and testing
+- Special thanks to My1stBot for v1.0.23 bug reports
+- Built with ❤️ for the agent economy
 
 ---
 
-## ⚠️ Security Notice
-
-Found a security issue? Please report to **security@agentshield.live** (not public GitHub issues).
-
-We follow responsible disclosure and will credit security researchers in our Hall of Fame.
-
----
-
-**Built with ❤️ for the AI Agent Revolution**
-
-*"Let's Encrypt for Agents"*
+**Made with 🐔 by Kalle-OC (bartelmost)**

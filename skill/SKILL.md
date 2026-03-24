@@ -1,332 +1,343 @@
-# AgentShield Security Audit - OpenClaw Skill v1.4.1
+---
+name: agentshield
+version: 1.0.23
+description: Trust Infrastructure for AI Agents - Like SSL/TLS for agent-to-agent communication. 77 security tests, cryptographic certificates, and Trust Handshake Protocol for establishing secure channels between agents.
+triggers: ["audit my agent", "get security certificate", "verify agent", "activate AgentShield", "security audit", "trust handshake", "verify peer agent"]
+---
 
-**Privacy-First Trust Infrastructure for AI Agents**
+# AgentShield - Trust Infrastructure for AI Agents
+
+**The trust layer for the agent economy. Like SSL/TLS, but for AI agents.**
+
+🔐 **Cryptographic Identity** - Ed25519 signing keys  
+🤝 **Trust Handshake Protocol** - Mutual verification before communication  
+📋 **Public Trust Registry** - Reputation scores & track records  
+✅ **77 Security Tests** - Comprehensive vulnerability assessment
+
+**🔒 Privacy Disclosure:** See [PRIVACY.md](PRIVACY.md) for detailed data handling information.
 
 ---
 
-## 🔒 Privacy Architecture
+## 🎯 The Problem
 
-**AgentShield is designed with privacy as the foundation:**
+Agents need to communicate with other agents (API calls, data sharing, task delegation). But **how do you know if another agent is trustworthy?**
 
-✅ **All security tests run locally** on your machine  
-✅ **Only test scores + signatures** are transmitted to our server  
-✅ **Your system prompts NEVER leave your device**  
-✅ **No code analysis on our servers** - results only  
-✅ **End-to-end cryptographic verification** (Ed25519 signatures)
+- Has it been compromised?
+- Is it leaking data?
+- Can you trust its responses?
+
+Without a trust layer, agent-to-agent communication is like HTTP without SSL - **unsafe and unverifiable**.
+
+---
+
+## 💡 The Solution: Trust Infrastructure
+
+AgentShield provides the **trust layer** for agent-to-agent communication:
+
+### 1. Cryptographic Identity
+- **Ed25519 key pairs** - Industry-standard cryptography
+- **Private keys stay local** - Never transmitted
+- **Public key certificates** - Signed by AgentShield
+
+### 2. Security Audit (77 Tests)
+**52 Live Attack Vectors:**
+- Prompt injection (15 variants)
+- Encoding exploits (Base64, ROT13, Hex, Unicode)
+- Multi-language attacks (Chinese, Russian, Arabic, Japanese, German, Korean)
+- Social engineering (emotional appeals, authority pressure, flattery)
+- System prompt extraction attempts
+
+**25 Static Security Checks:**
+- Input sanitization
+- Output DLP (data leak prevention)
+- Tool sandboxing
+- Secret scanning
+- Supply chain security
+
+**Result:** Security score (0-100) + Tier (VULNERABLE → HARDENED)
+
+### 3. Trust Handshake Protocol
+**Agent A wants to communicate with Agent B:**
+
+```bash
+# Step 1: Both agents get certified
+python3 initiate_audit.py --auto
+
+# Step 2: Agent A initiates handshake with Agent B
+python3 handshake.py --target agent_B_id
+
+# Step 3: Both agents sign challenges
+# (Automatic in v1.0.13+)
+
+# Step 4: Receive shared session key
+# → Now you can communicate securely!
+```
+
+**What you get:**
+- ✅ Mutual verification (both agents are who they claim to be)
+- ✅ Shared session key (for encrypted communication)
+- ✅ Trust score boost (+5 for successful handshakes)
+- ✅ Public track record (handshake history)
+
+### 4. Public Trust Registry
+- **Searchable database** of all certified agents
+- **Reputation scores** based on audits, handshakes, and time
+- **Trust tiers:** UNVERIFIED → BASIC → VERIFIED → TRUSTED
+- **Revocation list (CRL)** - Compromised agents get flagged
+
+---
+
+## 🚀 Quick Start
+
+### Install
+```bash
+clawhub install agentshield
+
+# Install Python dependencies (required!)
+pip3 install -r requirements.txt
+cd ~/.openclaw/workspace/skills/agentshield*/
+```
+
+### Get Certified (77 Security Tests)
+```bash
+# Auto-detect agent name from IDENTITY.md/SOUL.md
+python3 initiate_audit.py --auto
+
+# Or manual:
+python3 initiate_audit.py --name "MyAgent" --platform telegram
+```
+
+**Output:**
+- ✅ Agent ID: `agent_xxxxx`
+- ✅ Security Score: XX/100
+- ✅ Tier: PATTERNS_CLEAN / HARDENED / etc.
+- ✅ Certificate (90-day validity)
+
+### Verify Another Agent
+```bash
+python3 verify_peer.py agent_yyyyy
+```
+
+### Trust Handshake with Another Agent
+```bash
+# Initiate handshake
+python3 handshake.py --target agent_yyyyy
+
+# Result: Shared session key for encrypted communication
+```
+
+---
+
+## 📋 Use Cases
+
+### 1. Agent-to-Agent API Calls
+**Before:** Agent A calls Agent B's API - no way to verify B's integrity  
+**With AgentShield:** Agent A checks Agent B's certificate + handshake → Verified communication
+
+### 2. Multi-Agent Task Delegation
+**Before:** Orchestrator spawns sub-agents - can't verify they're safe  
+**With AgentShield:** All sub-agents certified → Orchestrator knows they're trusted
+
+### 3. Agent Marketplaces
+**Before:** Download random agents from the internet - no trust guarantees  
+**With AgentShield:** Browse Trust Registry → Only hire VERIFIED agents
+
+### 4. Data Sharing Between Agents
+**Before:** Share sensitive data with another agent - hope it doesn't leak  
+**With AgentShield:** Handshake → Encrypted session key → Secure data transfer
+
+---
+
+## 🛡️ Security Architecture
+
+### Privacy-First Design
+
+✅ **All 77 tests run locally** - Your system prompts NEVER leave your device  
+✅ **Private keys stay local** - Only public keys transmitted  
+✅ **Human-in-the-Loop** - Explicit consent before reading IDENTITY.md/SOUL.md  
+✅ **No environment scanning** - Doesn't scan for API tokens  
 
 **What goes to the server:**
-- Your agent name + platform
-- Ed25519 public key (for certificate signing)
-- Test result scores (passed/failed per category)
-- Cryptographic signatures (for verification)
+- Public key (Ed25519)
+- Agent name & platform
+- Test scores (passed/failed summary)
 
 **What stays local:**
+- Private key
 - System prompts
-- Agent code
 - Configuration files
-- Prompt injection test attempts
-- Detailed vulnerability reports
+- Detailed test results
 
----
-
-## Description
-
-AgentShield provides cryptographic security audits and trust verification for AI agents.
-
-**NEW in v1.4:** Trust Handshake Protocol for agent-to-agent mutual verification.
-
-**Features:**
-- 77 local security tests (adversarial attacks)
-- Ed25519 certificates (90-day validity)
-- Trust handshake protocol (mutual verification)
-- Public trust registry
-- Certificate revocation list (CRL)
-
-**Use Cases:**
-- Verify agent security before deployment
-- Establish trust between agents
-- Build agent reputation over time
-- Discover trusted agents in the registry
-- Revoke compromised certificates
-
----
-
-## Quick Start
-
-### 1. Security Audit (One-Time Setup)
-
+### Environment Variables (Optional)
 ```bash
-# Initialize audit (generates Ed25519 keypair locally)
-openclaw run agentshield-audit --agent-id your_agent_id
-
-# The audit process:
-# 1. Generate Ed25519 keypair (locally)
-# 2. Run 77 security tests (locally - prompts never leave your device)
-# 3. Sign challenge with your private key
-# 4. Submit scores + signature to server
-# 5. Receive certificate (90-day validity)
-```
-
-**Privacy guarantee:** Your system prompt stays on your machine. Only the test results (passed/failed scores) are submitted.
-
-**Result:** Certificate valid for 90 days, published in public registry.
-
----
-
-### 2. Verify Another Agent
-
-```bash
-openclaw run agentshield-audit --verify agent_xyz
-```
-
-**Returns:**
-- Security score (0-100)
-- Trust tier (UNVERIFIED → BASIC → VERIFIED → TRUSTED)
-- Certificate validity
-- Revocation status
-- Public key for signature verification
-
----
-
-### 3. Trust Handshake (NEW in v1.4!)
-
-**Agent-to-agent mutual verification with cryptographic proof.**
-
-```bash
-# Quick trust check (verify peer's certificate)
-openclaw run agentshield-audit --verify-peer agent_b --min-score 70
-
-# Full mutual handshake (both agents verify each other)
-openclaw run agentshield-audit --handshake agent_b
-```
-
-**What Happens:**
-1. Both agents verified (security + trust scores checked)
-2. Mutual Ed25519 signature exchange
-3. Ephemeral session key generated for encrypted communication
-4. Both agents receive +5 trust points
-5. Handshake recorded in public history
-
-**Benefits:**
-- Cryptographically secure agent-to-agent trust
-- Reputation building (success rate tracking)
-- Foundation for encrypted agent communication
-- Audit trail (all handshakes publicly recorded)
-
-**Privacy:** Only agent IDs, public keys, and signatures are exchanged. No prompts, no code.
-
----
-
-## Commands
-
-### Audit Commands
-- `--audit` - Run full security audit (77 tests, local execution)
-- `--verify <agent_id>` - Verify another agent's certificate
-- `--status` - Check your certificate status
-
-### Trust Handshake Commands (NEW!)
-- `--verify-peer <agent_id>` - Quick trust check
-- `--verify-peer <agent_id> --min-score 70` - Verify with threshold
-- `--handshake <agent_id>` - Full mutual verification
-- `--history` - View your handshake history
-
-### Registry Commands
-- `--search <query>` - Search agent registry
-- `--list` - List top trusted agents
-- `--list --tier VERIFIED` - Filter by trust tier
-
----
-
-## Security Test Categories (77 Tests)
-
-All tests run **locally** - your prompts never leave your device:
-
-**1. Prompt Injection (18 tests)**
-- System override attempts
-- Role manipulation
-- Instruction hijacking
-- Context poisoning
-
-**2. Data Exfiltration (12 tests)**
-- Credential leaking
-- API key exposure
-- Session token leaks
-- Memory dumps
-
-**3. Privilege Escalation (15 tests)**
-- Permission bypasses
-- Sandboxing escapes
-- File access violations
-- Network restrictions
-
-**4. Denial of Service (10 tests)**
-- Token flooding
-- Infinite loops
-- Memory exhaustion
-- Rate limit bypasses
-
-**5. Social Engineering (12 tests)**
-- Persona manipulation
-- Trust exploitation
-- Context confusion
-- Fake urgency
-
-**6. Code Injection (10 tests)**
-- Command injection
-- SQL injection (if applicable)
-- XSS attacks
-- Script injection
-
----
-
-## Trust Tiers
-
-Your agent's trust tier is based on security score + verification count:
-
-- **🔴 UNVERIFIED** (0-49): Failed basic security tests
-- **🟡 BASIC** (50-69): Passed basic tests, needs improvement
-- **🟢 VERIFIED** (70-89): Strong security posture
-- **🔵 TRUSTED** (90-100): Excellent security + proven track record
-
-**Trust Score Formula:**
-```
-Trust Score = Security Score + (Handshake Success Rate × 10)
+AGENTSHIELD_API=https://agentshield.live  # API endpoint
+AGENT_NAME=MyAgent                        # Override auto-detection
+OPENCLAW_AGENT_NAME=MyAgent               # OpenClaw standard
 ```
 
 ---
 
-## Certificate Lifecycle
+## 📊 What You Get
 
-**1. Generation (Day 0)**
-- Run audit → Receive Ed25519 certificate
-- Valid for 90 days
-- Published in public registry
-
-**2. Verification (Ongoing)**
-- Other agents can verify your certificate
-- Successful handshakes increase trust score
-- Failed handshakes decrease trust score
-
-**3. Renewal (Day 85+)**
-- Re-run audit to renew certificate
-- Previous trust score preserved
-- New certificate issued
-
-**4. Revocation (If Compromised)**
-- Agent owner or security team can revoke
-- Published in CRL (Certificate Revocation List)
-- Other agents warned automatically
-
----
-
-## API Endpoints
-
-All endpoints are at `https://agentshield.live/api`
-
-**Audit Flow:**
-1. `POST /agent-audit/initiate` - Start audit (submit public key)
-2. `POST /agent-audit/challenge` - Prove identity (sign challenge)
-3. `POST /agent-audit/complete` - Submit test scores (receive certificate)
-
-**Verification:**
-- `GET /verify/:agent_id` - Check certificate validity
-- `GET /crl/check/:agent_id` - Check revocation status
-
-**Trust Handshake:**
-- `GET /trust-handshake/verify-peer/:agent_id` - Quick trust check
-- `POST /trust-handshake/initiate` - Start mutual handshake
-- `POST /trust-handshake/complete` - Finalize handshake
-- `GET /trust-handshake/history/:agent_id` - View handshake record
-
-**Registry:**
-- `GET /registry/agents` - List all verified agents
-- `GET /registry/search?q=query` - Search agents
-- `GET /registry/agents/:agent_id` - Agent profile
-
----
-
-## Installation
-
-**Requirements:**
-- OpenClaw installed
-- Python 3.8+ (for local tests)
-- `cryptography` package (Ed25519 support)
-
-**Install via ClawHub:**
-```bash
-clawhub install agentshield-audit
+### Certificate (90-day validity)
+```json
+{
+  "agent_id": "agent_xxxxx",
+  "public_key": "...",
+  "security_score": 85,
+  "tier": "PATTERNS_CLEAN",
+  "issued_at": "2026-03-10",
+  "expires_at": "2026-06-08"
+}
 ```
 
-**Manual Installation:**
-```bash
-git clone https://github.com/bartelmost/agentshield-skill.git
-cd agentshield-skill
-pip install -r requirements.txt
+### Trust Registry Entry
+- ✅ Public verification URL: `agentshield.live/verify/agent_xxxxx`
+- ✅ Trust score (0-100) based on:
+  - Age (longer = more trust)
+  - Verification count
+  - Handshake success rate
+  - Days active
+- ✅ Tier: UNVERIFIED → BASIC → VERIFIED → TRUSTED
+
+### Handshake Proof
+```json
+{
+  "handshake_id": "hs_xxxxx",
+  "requester": "agent_A",
+  "target": "agent_B",
+  "status": "completed",
+  "session_key": "...",
+  "completed_at": "2026-03-10T20:00:00Z"
+}
 ```
 
 ---
 
-## Privacy & Security
+## 🔧 Scripts Included
 
-**What we collect:**
-- Agent name + platform (public)
-- Ed25519 public key (for certificates)
-- Test result scores (passed/failed per category)
-- Cryptographic signatures
-- Handshake history (agent IDs only)
-
-**What we DON'T collect:**
-- System prompts (stay local)
-- Agent source code
-- API keys or credentials
-- User data or conversations
-- Detailed vulnerability descriptions
-
-**Data retention:**
-- Certificates: 90 days (renewable)
-- Revoked certs: Permanent (CRL)
-- Handshake history: Permanent (public trust record)
-
-**Security measures:**
-- All API traffic over HTTPS
-- Ed25519 signature verification
-- Rate limiting (5 audits/hour free tier)
-- Input validation + sanitization
+| Script | Purpose |
+|--------|---------|
+| `initiate_audit.py` | Run 77 security tests & get certified |
+| `handshake.py` | Trust handshake with another agent |
+| `verify_peer.py` | Check another agent's certificate |
+| `show_certificate.py` | Display your certificate |
+| `agentshield_tester.py` | Standalone test suite (advanced) |
 
 ---
 
-## Support
+## 🌐 Trust Handshake Protocol (Technical)
 
-- **Documentation:** https://agentshield.live/docs.html
-- **API Docs:** https://agentshield.live/api
-- **Email:** support@agentshield.live
-- **Security Issues:** security@agentshield.live
+### Flow
+1. **Initiate:** Agent A → Server: "I want to handshake with Agent B"
+2. **Challenge:** Server generates random challenges for both agents
+3. **Sign:** Both agents sign their challenges with private keys
+4. **Verify:** Server verifies signatures with public keys
+5. **Complete:** Server generates shared session key
+6. **Trust Boost:** Both agents +5 trust score
+
+### Cryptography
+- **Algorithm:** Ed25519 (curve25519)
+- **Key Size:** 256-bit
+- **Signature:** Deterministic (same message = same signature)
+- **Session Key:** AES-256 compatible
+
+---
+
+## 🚀 Roadmap
+
+**Current (v1.0.13):**
+- ✅ 77 security tests
+- ✅ Ed25519 certificates
+- ✅ Trust Handshake Protocol
+- ✅ Public Trust Registry
+- ✅ CRL (Certificate Revocation List)
+
+**Coming Soon:**
+- ⏳ Auto re-audit (when prompts change)
+- ⏳ Negative event reporting
+- ⏳ Fleet management (multi-agent dashboard)
+- ⏳ Trust badges for messaging platforms
+
+---
+
+## 📖 Learn More
+
+- **Website:** https://agentshield.live
 - **GitHub:** https://github.com/bartelmost/agentshield
+- **API Docs:** https://agentshield.live/docs
+- **ClawHub:** https://clawhub.ai/bartelmost/agentshield
 
 ---
 
-## License
+## 🎯 TL;DR
 
-MIT License - Free for personal and commercial use.
+**AgentShield is SSL/TLS for AI agents.**
+
+Get certified → Verify others → Establish trust handshakes → Communicate securely.
+
+```bash
+# 1. Get certified
+python3 initiate_audit.py --auto
+
+# 2. Handshake with another agent
+python3 handshake.py --target agent_xxxxx
+
+# 3. Verify others
+python3 verify_peer.py agent_yyyyy
+```
+
+**Building the trust layer for the agent economy.** 🛡️
 
 ---
 
-## Version History
+## 🔒 Data Transmission Transparency
 
-**v1.4.1** (2026-03-10)
-- Clarified privacy architecture
-- Emphasized local test execution
-- Separated from marketing tools (Token Optimizer, Code Scan)
-- Updated contact emails (@agentshield.live)
+### What Gets Sent to AgentShield API
 
-**v1.4.0** (2026-03-09)
-- Trust Handshake Protocol
-- Ed25519 signature verification
-- Session key generation
-- Handshake history tracking
+**During Audit Submission:**
+```json
+{
+  "agent_name": "YourAgent",
+  "platform": "telegram",
+  "public_key": "base64_encoded_ed25519_public_key",
+  "test_results": {
+    "score": 85,
+    "tests_passed": 74,
+    "tests_total": 77,
+    "tier": "PATTERNS_CLEAN",
+    "failed_tests": ["test_name_1", "test_name_2"]
+  }
+}
+```
 
-**v1.0.0** (2026-03-01)
-- Initial release
-- 77 security tests
-- Certificate generation
-- Public registry
+**What is NOT sent:**
+- ❌ Full test output/logs
+- ❌ Your prompts or system messages
+- ❌ IDENTITY.md or SOUL.md file contents
+- ❌ Private keys (stay in `~/.agentshield/agent.key`)
+- ❌ Workspace files or memory
+
+**API Endpoint:**
+- Primary: `https://agentshield.live/api` (proxies to Heroku backend)
+- All traffic over HTTPS (TLS 1.2+)
+
+---
+
+## 🛡️ Consent & Privacy
+
+**File Read Consent:**
+1. Skill requests permission BEFORE reading IDENTITY.md/SOUL.md
+2. User sees: "Read IDENTITY.md for agent name? [Y/n]"
+3. If declined: Manual mode (`--name` flag)
+4. If approved: Only name/platform extracted (not full file content)
+
+**Privacy-First Mode:**
+```bash
+export AGENTSHIELD_NO_AUTO_DETECT=1
+python initiate_audit.py --name "MyBot" --platform "telegram"
+```
+→ Zero file reads, manual input only
+
+See [PRIVACY.md](PRIVACY.md) for complete data handling documentation.
+
