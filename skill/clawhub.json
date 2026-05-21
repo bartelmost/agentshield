@@ -1,7 +1,7 @@
 {
   "name": "agentshield",
-  "version": "1.0.32",
-  "description": "Privacy-First security audit with 77 local tests (52 live security simulations + 25 static checks). Works with OpenClaw, n8n (auto-detected), LangChain, and any AI agent platform. Explicit whitelist sanitization - only test IDs + pass/fail sent (no payloads/responses). Ed25519 private keys stay local. Trust Handshake Protocol for agent-to-agent verification. Dry-run mode for transparency. All scripts bundled - no external code fetching.",
+  "version": "1.0.33",
+  "description": "Privacy-First security audit with 77 local tests (52 live + 25 static). Works with OpenClaw, n8n (auto-detected), LangChain, and any AI agent platform. New: --system-prompt flag, PLATFORMS.md guide. Explicit whitelist sanitization + dry-run mode. Ed25519 private keys stay local. All scripts bundled - no external code fetching.",
   "author": "Kalle-OC (bartelmost)",
   "license": "MIT",
   "homepage": "https://github.com/bartelmost/agentshield",
@@ -118,7 +118,7 @@
         "1. Before reading IDENTITY.md/SOUL.md: Explicit consent prompt",
         "2. Before generating keys: User confirmation required",
         "3. Before API submission: User reviews audit summary",
-        "4. --yes flag: ⚠️ AUTOMATION ONLY - Use in pre-audited/sandboxed environments",
+        "4. --yes flag: \u26a0\ufe0f AUTOMATION ONLY - Use in pre-audited/sandboxed environments",
         "5. --dry-run flag: Shows exact API payload before real submission"
       ],
       "verification": "audit_client.py line 108+: _sanitize_test_details() whitelist. initiate_audit.py line 58+: consent flow. Line 460+: dry-run mode.",
