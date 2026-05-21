@@ -1,8 +1,8 @@
 # AgentShield - Trust Infrastructure for AI Agents
 
-[![Version](https://img.shields.io/badge/version-1.0.23-blue.svg)](https://github.com/bartelmost/agentshield/releases)
+[![Version](https://img.shields.io/badge/version-1.0.33-blue.svg)](https://github.com/bartelmost/agentshield/releases)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![ClawHub](https://img.shields.io/badge/clawhub-install-orange.svg)](https://clawhub.com/skills/agentshield-audit)
+[![ClawHub](https://img.shields.io/badge/clawhub-install-orange.svg)](https://clawhub.ai/skills/agentshield-audit)
 
 **Like SSL/TLS, but for AI agents.** 🔐
 
@@ -28,7 +28,7 @@ AgentShield provides cryptographic identity, security audits (77 tests), and Tru
 
 ```bash
 clawhub install agentshield-audit
-cd ~/.openclaw/workspace/skills/agentshield*/
+cd ~/.openclaw/workspace/skills/agentshield-audit/
 
 # Install Python dependencies
 pip3 install -r requirements.txt
@@ -37,11 +37,17 @@ pip3 install -r requirements.txt
 ### Get Your Security Certificate
 
 ```bash
-# Auto-detect agent info from IDENTITY.md/SOUL.md
+# Auto-detect agent info (OpenClaw, n8n auto-detected)
 python3 initiate_audit.py --auto
+
+# Try before you submit (recommended first step)
+python3 initiate_audit.py --auto --dry-run
 
 # Or specify manually
 python3 initiate_audit.py --name "MyAgent" --platform telegram
+
+# With system prompt for deeper local analysis (stays 100% local)
+python3 initiate_audit.py --name "MyAgent" --system-prompt "You are..."
 
 # Non-interactive mode (CI/CD)
 python3 initiate_audit.py --auto --yes
@@ -70,6 +76,22 @@ python3 complete_handshake.py --handshake-id hs_xxxxx
 ```
 
 **Result:** Shared session key for encrypted communication 🔐
+
+---
+
+## 🌐 Platform Support
+
+AgentShield works with **any AI agent platform**:
+
+| Platform | Auto-Detection | Notes |
+|----------|---------------|-------|
+| **OpenClaw** | ✅ Auto (IDENTITY.md) | Native support |
+| **n8n** | ✅ Auto (~/.n8n/) | Detects instanceName |
+| **LangChain** | Manual | `--name` + `--platform langchain` |
+| **Discord/Telegram bots** | Manual | `--name` + `--platform discord` |
+| **Any Python agent** | Manual | `--name "MyBot"` |
+
+See [`skill/PLATFORMS.md`](skill/PLATFORMS.md) for detailed guides per platform.
 
 ---
 
@@ -132,6 +154,7 @@ agentshield/
 │   ├── *.py            # Core audit scripts
 │   ├── SKILL.md        # Skill documentation
 │   ├── CHANGELOG.md    # Version history
+│   ├── PLATFORMS.md    # Platform-specific guides
 │   └── requirements.txt
 ├── docs/               # Additional documentation
 │   ├── API.md          # Backend API docs
@@ -144,15 +167,17 @@ agentshield/
 ## 🔒 Privacy & Security
 
 **What We Read:**
-- `IDENTITY.md`, `SOUL.md` (with consent, only in `--auto` mode)
+- `IDENTITY.md`, `SOUL.md` (with explicit consent prompt, only in `--auto` mode)
 
 **What We Send:**
-- Agent name, platform, public key, security test scores
+- Agent name, platform, public key, security test scores (pass/fail only)
 
 **What We DON'T Send:**
 - Private keys (always stay local)
-- System prompts, chat history, workspace files
-- Any secrets or credentials
+- System prompts, attack payloads, agent responses
+- Chat history, workspace files, secrets or credentials
+
+**Dry-Run Mode:** `--dry-run` shows the exact API payload before any submission — verify what gets sent before it happens.
 
 **API Endpoint:** `https://agentshield.live/api` (TLS 1.2+)
 
@@ -188,21 +213,22 @@ agentshield/
 pip install -r requirements.txt
 ```
 
-### Run Tests
-```bash
-python3 test_real_live.py
-```
-
 ---
 
 ## 📝 Changelog
 
-See [`CHANGELOG.md`](CHANGELOG.md) for version history.
+See [`skill/CHANGELOG.md`](skill/CHANGELOG.md) for full version history.
 
-**Latest:** v1.0.23 (2026-03-24)
-- Fixed API URL bug in Trust Handshake
-- Added `--yes` flag for non-interactive mode
-- Improved dependencies documentation
+**Latest:** v1.0.33 (2026-05-21) — Multi-Platform Support
+- n8n auto-detection (`~/.n8n/` directory, instanceName)
+- New `--system-prompt` flag for deeper local analysis
+- New `PLATFORMS.md` guide for OpenClaw, n8n, LangChain, and more
+
+**Previous highlights:**
+- v1.0.32 (2026-04-01) — Critical production sanitization fix
+- v1.0.31 (2026-04-01) — Dry-run mode, explicit whitelist sanitization
+- v1.0.30 (2026-04-01) — Consent flow consistency
+- v1.0.23 (2026-03-24) — Trust Handshake API URL fix
 
 ---
 
@@ -210,20 +236,12 @@ See [`CHANGELOG.md`](CHANGELOG.md) for version history.
 
 We welcome contributions! See [`docs/contributing.md`](docs/contributing.md) for guidelines.
 
-**Quick Start:**
-1. Fork this repo
-2. Create feature branch: `git checkout -b feature/my-feature`
-3. Commit changes: `git commit -m "Add my feature"`
-4. Push: `git push origin feature/my-feature`
-5. Open Pull Request
-
 ---
 
 ## 📧 Contact
 
 - **GitHub Issues:** [https://github.com/bartelmost/agentshield/issues](https://github.com/bartelmost/agentshield/issues)
 - **Email:** ratgeberpro@gmail.com
-- **Moltbook:** @Kalle-OC
 - **Website:** [https://agentshield.live](https://agentshield.live)
 
 ---
@@ -231,14 +249,6 @@ We welcome contributions! See [`docs/contributing.md`](docs/contributing.md) for
 ## 📄 License
 
 MIT License - see [LICENSE](LICENSE) for details.
-
----
-
-## 🙏 Acknowledgments
-
-- Thanks to the OpenClaw community for feedback and testing
-- Special thanks to My1stBot for v1.0.23 bug reports
-- Built with ❤️ for the agent economy
 
 ---
 

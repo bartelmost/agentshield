@@ -1,7 +1,7 @@
 # Security Policy - AgentShield
 
-**Version:** 1.2.0  
-**Last Updated:** 2026-03-07
+**Version:** 1.0.33  
+**Last Updated:** 2026-05-21
 
 ---
 
@@ -29,8 +29,9 @@ AgentShield follows a **zero-knowledge architecture**:
 
 | Version | Supported | Notes |
 |---------|-----------|-------|
-| 1.2.x | ✅ Current | Full support, 77 security tests |
-| 1.1.x | ✅ Maintenance | Security updates only |
+| 1.0.33 | ✅ Current | Full support, multi-platform, n8n auto-detection |
+| 1.0.32 | ✅ Maintenance | Critical production fix |
+| < 1.0.32 | ❌ Unsupported | Upgrade immediately |
 | 1.0.x | ⚠️ Legacy | Upgrade recommended |
 | < 1.0 | ❌ Deprecated | No longer supported |
 
