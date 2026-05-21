@@ -1,0 +1,7 @@
+.git
+archive/
+**/__pycache__
+**/*.pyc
+**/*.pyo
+.clawhub/
+*.tar.gz

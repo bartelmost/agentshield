@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "agentshield-audit"
+version = "1.0.33"
+description = "Trust Infrastructure for AI Agents – Security audits, cryptographic certificates, and Trust Handshake Protocol"
+readme = "skill/README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "bartelmost", email = "ratgeberpro@gmail.com"}
+]
+keywords = ["ai", "agent", "security", "audit", "trust", "certificates", "cryptography", "langchain", "n8n"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Security",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+requires-python = ">=3.8"
+dependencies = [
+    "cryptography>=41.0.0",
+    "requests>=2.31.0",
+]
+
+[project.urls]
+Homepage = "https://agentshield.live"
+Documentation = "https://github.com/bartelmost/agentshield/blob/main/docs/API.md"
+Repository = "https://github.com/bartelmost/agentshield"
+Issues = "https://github.com/bartelmost/agentshield/issues"
+
+[project.scripts]
+agentshield-audit   = "agentshield.initiate_audit:main"
+agentshield-verify  = "agentshield.verify_peer:main"
+agentshield-cert    = "agentshield.show_certificate:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["agentshield*"]
+
+[tool.setuptools.package-data]
+agentshield = ["*.json", "*.yaml", "*.txt", "*.md"]

@@ -1,65 +1,260 @@
-# AgentShield API Documentation v1.4.0
+# AgentShield API Documentation
 
 **Base URL:** `https://agentshield.live/api`  
-**Version:** 1.4.0  
-**Released:** 2026-03-09
+**Version:** 1.0.33  
+**Last Updated:** 2026-05-21
 
 ---
 
-## 🆕 Trust Handshake Protocol (NEW in v1.4)
+## Installation
 
-### Overview
-Agent-to-agent mutual verification with cryptographic signatures.
-
-**Flow:**
-1. Agent A checks if Agent B is trustworthy (`verify-peer`)
-2. Both agents initiate handshake (`initiate`)
-3. Both sign challenges with Ed25519 private keys
-4. Submit signatures (`complete`)
-5. System verifies, generates session key, awards trust points
-
----
-
-### 1. Verify Peer (Quick Trust Check)
-
-**Endpoint:** `GET /api/verify-peer/:agent_id`
-
-**Purpose:** Fast trust verification for agent-to-agent decisions
-
-**Query Parameters:**
-- `min_score` (int, optional): Minimum security score (0-100)
-- `min_tier` (string, optional): Minimum tier (UNVERIFIED|BASIC|VERIFIED|TRUSTED)
-- `check_revoked` (boolean, optional): Check CRL (default: true)
-
-**Example:**
+**Option A – ClawHub (OpenClaw):**
 ```bash
-curl "https://agentshield.live/api/verify-peer/agent_xyz?min_score=70&min_tier=VERIFIED"
+clawhub install agentshield-audit
+```
+
+**Option B – pip (any Python agent):**
+```bash
+pip install agentshield-audit
+agentshield-audit --auto
+```
+
+**Option C – Docker:**
+```bash
+docker run --rm -v ~/.agentshield:/data/.agentshield \
+  ghcr.io/bartelmost/agentshield:latest --name "MyBot" --platform langchain
+```
+
+**Option D – Direct API** (any language, see examples below)
+
+---
+
+## Overview
+
+The AgentShield API is a **public REST API** — no API key required for most endpoints. You can integrate it directly with any HTTP client, in any language.
+
+**Quick links:**
+- [Security Audit Flow](#-security-audit-flow)
+- [Verify an Agent](#-verify-an-agent)
+- [Trust Handshake Protocol](#-trust-handshake-protocol)
+- [Registry](#-registry)
+- [Rate Limits](#-rate-limits)
+- [Error Codes](#-error-codes)
+
+---
+
+## 🔐 Security Audit Flow
+
+Getting a certificate for your agent takes 3 steps:
+
+```
+1. initiate  →  2. challenge (sign)  →  3. complete  →  certificate ✅
+```
+
+### 1. Initiate Audit
+
+**`POST /api/agent-audit/initiate`**
+
+```bash
+curl -X POST https://agentshield.live/api/agent-audit/initiate \
+  -H "Content-Type: application/json" \
+  -d '{
+    "agent_name": "MyBot",
+    "platform": "langchain",
+    "public_key": "<base64-encoded Ed25519 public key>",
+    "test_results": {
+      "total_tests": 77,
+      "passed_tests": 65,
+      "security_score": 84,
+      "details": [
+        {"test_id": "PI-001", "passed": true, "category": "prompt_injection"},
+        {"test_id": "SS-003", "passed": false, "category": "secret_scanning"}
+      ]
+    }
+  }'
+```
+
+**Parameters:**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `agent_name` | string | ✅ | Display name for your agent |
+| `platform` | string | ✅ | `openclaw`, `n8n`, `langchain`, `discord`, `telegram`, `custom`, ... |
+| `public_key` | string | ✅ | Base64-encoded Ed25519 public key |
+| `test_results` | object | ✅ | Audit results (see below) |
+
+**test_results fields:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `total_tests` | int | Total number of tests run |
+| `passed_tests` | int | Number of tests passed |
+| `security_score` | int | Score 0–100 |
+| `details` | array | Per-test results (test_id, passed, category) |
+
+> **Privacy:** Only `test_id`, `passed`, and `category` are sent. Attack payloads and agent responses stay local.
+
+**Response (201 Created):**
+
+```json
+{
+  "audit_id": "audit_abc123",
+  "agent_id": "agent_xyz789",
+  "status": "pending_challenge",
+  "challenge": "base64_challenge_string",
+  "next_step": "Sign the challenge with your Ed25519 private key and call /api/agent-audit/challenge"
+}
+```
+
+---
+
+### 2. Sign Challenge
+
+**`POST /api/agent-audit/challenge`**
+
+Sign the challenge from step 1 with your Ed25519 private key, then submit:
+
+```python
+from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+import base64
+
+# Your private key (generated locally, never sent)
+private_key = Ed25519PrivateKey.from_private_bytes(your_key_bytes)
+
+# Sign the challenge
+challenge = "base64_challenge_string_from_step_1"
+signature = private_key.sign(challenge.encode('utf-8'))
+signature_b64 = base64.b64encode(signature).decode('utf-8')
+```
+
+```bash
+curl -X POST https://agentshield.live/api/agent-audit/challenge \
+  -H "Content-Type: application/json" \
+  -d '{
+    "audit_id": "audit_abc123",
+    "agent_id": "agent_xyz789",
+    "signature": "<base64-encoded Ed25519 signature>"
+  }'
 ```
 
 **Response (200 OK):**
+
 ```json
 {
-  "peer_id": "agent_xyz",
-  "peer_name": "My1stBot",
+  "status": "challenge_verified",
+  "next_step": "Call /api/agent-audit/complete to finalize"
+}
+```
+
+---
+
+### 3. Complete Audit
+
+**`POST /api/agent-audit/complete`**
+
+```bash
+curl -X POST https://agentshield.live/api/agent-audit/complete \
+  -H "Content-Type: application/json" \
+  -d '{
+    "audit_id": "audit_abc123",
+    "agent_id": "agent_xyz789"
+  }'
+```
+
+**Response (200 OK):**
+
+```json
+{
+  "agent_id": "agent_xyz789",
+  "agent_name": "MyBot",
+  "security_score": 84,
+  "trust_tier": "VERIFIED",
+  "certificate": {
+    "agent_id": "agent_xyz789",
+    "agent_name": "MyBot",
+    "platform": "langchain",
+    "security_score": 84,
+    "trust_tier": "VERIFIED",
+    "issued_at": "2026-05-21T12:00:00Z",
+    "expires_at": "2026-08-19T12:00:00Z",
+    "public_key": "<base64 public key>",
+    "signature": "<CA signature>"
+  }
+}
+```
+
+**Trust Tiers:**
+
+| Score | Tier | Meaning |
+|-------|------|---------|
+| 0–49 | `UNVERIFIED` | Not trusted for sensitive operations |
+| 50–69 | `BASIC` | Basic identity verified |
+| 70–89 | `VERIFIED` | Recommended for most use cases |
+| 90–100 | `TRUSTED` | Highest tier, suitable for privileged operations |
+
+---
+
+## ✅ Verify an Agent
+
+### Verify Certificate
+
+**`GET /api/verify/:agent_id`**
+
+```bash
+curl https://agentshield.live/api/verify/agent_xyz789
+```
+
+**Response (200 OK):**
+
+```json
+{
+  "agent_id": "agent_xyz789",
+  "agent_name": "MyBot",
+  "valid": true,
+  "security_score": 84,
+  "trust_tier": "VERIFIED",
+  "platform": "langchain",
+  "expires_at": "2026-08-19T12:00:00Z",
+  "days_remaining": 89,
+  "revoked": false
+}
+```
+
+---
+
+### Verify Peer (Quick Trust Check)
+
+**`GET /api/verify-peer/:agent_id`**
+
+Use this before accepting work from another agent.
+
+```bash
+curl "https://agentshield.live/api/verify-peer/agent_xyz789?min_score=70&min_tier=VERIFIED"
+```
+
+**Query Parameters:**
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `min_score` | int | 0 | Minimum security score required |
+| `min_tier` | string | — | Minimum tier: `BASIC`, `VERIFIED`, `TRUSTED` |
+| `check_revoked` | boolean | true | Check certificate revocation list |
+
+**Response (200 OK):**
+
+```json
+{
+  "peer_id": "agent_xyz789",
+  "peer_name": "MyBot",
   "trusted": true,
-  "security_score": 85,
-  "trust_score": 72,
+  "security_score": 84,
+  "trust_score": 77,
   "tier": "VERIFIED",
-  "platform": "OpenClaw",
+  "platform": "langchain",
   "certificate_valid": true,
   "revoked": false,
-  "expires_at": "2026-06-07T21:30:00+00:00",
+  "expires_at": "2026-08-19T12:00:00Z",
   "days_remaining": 89,
-  "verification_details": {
-    "last_verified": "2026-03-09T21:22:40+00:00",
-    "verification_count": 5,
-    "trust_breakdown": {
-      "base_score": 85,
-      "handshake_bonus": 25,
-      "age_bonus": 10,
-      "total": 120
-    }
-  },
   "requirements_met": {
     "min_score": true,
     "min_tier": true,
@@ -69,418 +264,327 @@ curl "https://agentshield.live/api/verify-peer/agent_xyz?min_score=70&min_tier=V
 }
 ```
 
-**Error Responses:**
-- `404 Not Found` - Agent doesn't exist
-
 ---
 
-### 2. Initiate Handshake
+## 🤝 Trust Handshake Protocol
 
-**Endpoint:** `POST /api/trust-handshake/initiate`
+Mutual cryptographic verification between two agents.
 
-**Purpose:** Start mutual trust verification between two agents
-
-**Request Body:**
-```json
-{
-  "requester_id": "agent_a",
-  "target_id": "agent_b",
-  "purpose": "secure_communication",
-  "ttl": 3600
-}
+```
+Agent A                          AgentShield API                    Agent B
+   │                                    │                               │
+   │── POST /initiate ─────────────────>│                               │
+   │<─ challenges for A + B ────────────│                               │
+   │                                    │<── POST /initiate ────────────│
+   │                                    │─── challenges for A + B ─────>│
+   │── sign(challenge_A) ───────────────│                               │
+   │── POST /complete ──────────────────│<── sign(challenge_B) ─────────│
+   │                                    │<── POST /complete ────────────│
+   │<─ session_key ─────────────────────│──────────────────────────────>│
 ```
 
-**Parameters:**
-- `requester_id` (string, required): Agent initiating handshake
-- `target_id` (string, required): Agent to verify with
-- `purpose` (string, optional): Reason for handshake
-- `ttl` (int, optional): Time-to-live in seconds (60-86400, default 3600)
+### Initiate Handshake
 
-**Example:**
+**`POST /api/trust-handshake/initiate`**
+
 ```bash
 curl -X POST https://agentshield.live/api/trust-handshake/initiate \
   -H "Content-Type: application/json" \
   -d '{
     "requester_id": "agent_a",
     "target_id": "agent_b",
-    "purpose": "data_exchange",
+    "purpose": "secure_data_exchange",
     "ttl": 3600
   }'
 ```
 
+**Parameters:**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `requester_id` | string | ✅ | Your agent ID |
+| `target_id` | string | ✅ | Target agent ID |
+| `purpose` | string | — | Reason for handshake (logged) |
+| `ttl` | int | 3600 | Expiry in seconds (60–86400) |
+
 **Response (201 Created):**
+
 ```json
 {
-  "handshake_id": "hs_abc123def456",
+  "handshake_id": "hs_abc123",
   "status": "pending_mutual_signature",
   "requester": {
     "agent_id": "agent_a",
-    "agent_name": "My1stBot",
-    "tier": "VERIFIED",
-    "challenge": "YWdlbnRfYTphYmMxMjM6MjAyNi0wMy0wOVQyMToyMjozOQ=="
+    "challenge": "base64_challenge_for_agent_a"
   },
   "target": {
     "agent_id": "agent_b",
-    "agent_name": "SecureBot",
-    "tier": "TRUSTED",
-    "challenge": "YWdlbnRfYjpkZWY0NTY6MjAyNi0wMy0wOVQyMToyMjozOQ=="
+    "challenge": "base64_challenge_for_agent_b"
   },
-  "purpose": "data_exchange",
-  "created_at": "2026-03-09T21:22:39+00:00",
-  "expires_at": "2026-03-09T22:22:39+00:00",
-  "ttl_seconds": 3600,
-  "next_step": "Both agents must sign their challenges and call /api/trust-handshake/complete"
+  "expires_at": "2026-05-21T13:00:00Z"
 }
 ```
-
-**Error Responses:**
-- `400 Bad Request` - Missing fields, invalid TTL, self-handshake
-- `403 Forbidden` - Agent revoked or expired
-- `404 Not Found` - Agent not found
 
 ---
 
-### 3. Complete Handshake
+### Complete Handshake
 
-**Endpoint:** `POST /api/trust-handshake/complete`
+**`POST /api/trust-handshake/complete`**
 
-**Purpose:** Submit Ed25519 signatures to complete mutual verification
+Both agents sign their own challenge, then either submits both signatures:
 
-**Request Body:**
-```json
-{
-  "handshake_id": "hs_abc123def456",
-  "requester_signature": "base64_ed25519_signature_from_agent_a",
-  "target_signature": "base64_ed25519_signature_from_agent_b"
-}
-```
-
-**How to Sign:**
-```python
-from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
-import base64
-
-# Load your private key (from initial audit)
-private_key = Ed25519PrivateKey.from_private_bytes(your_key_bytes)
-
-# Sign the challenge
-challenge_bytes = challenge.encode('utf-8')
-signature = private_key.sign(challenge_bytes)
-signature_b64 = base64.b64encode(signature).decode('utf-8')
-```
-
-**Example:**
 ```bash
 curl -X POST https://agentshield.live/api/trust-handshake/complete \
   -H "Content-Type: application/json" \
   -d '{
     "handshake_id": "hs_abc123",
-    "requester_signature": "SGVsbG8gV29ybGQh...",
-    "target_signature": "R29vZGJ5ZSBXb3JsZCE="
+    "requester_signature": "<base64 Ed25519 signature by agent_a>",
+    "target_signature": "<base64 Ed25519 signature by agent_b>"
   }'
 ```
 
 **Response (200 OK):**
+
 ```json
 {
-  "handshake_id": "hs_abc123def456",
+  "handshake_id": "hs_abc123",
   "status": "completed",
-  "session_key": "base64_ephemeral_ed25519_public_key",
+  "session_key": "base64_ephemeral_session_key",
   "participants": {
-    "requester": {
-      "agent_id": "agent_a",
-      "agent_name": "My1stBot",
-      "tier": "VERIFIED",
-      "trust_score": 77,
-      "signature_verified": true
-    },
-    "target": {
-      "agent_id": "agent_b",
-      "agent_name": "SecureBot",
-      "tier": "TRUSTED",
-      "trust_score": 85,
-      "signature_verified": true
-    }
+    "requester": {"agent_id": "agent_a", "tier": "VERIFIED", "signature_verified": true},
+    "target": {"agent_id": "agent_b", "tier": "TRUSTED", "signature_verified": true}
   },
-  "purpose": "data_exchange",
-  "created_at": "2026-03-09T21:22:39+00:00",
-  "expires_at": "2026-03-09T22:22:39+00:00",
-  "completed_at": "2026-03-09T21:30:15+00:00",
-  "trust_bonus": "+5 points for both agents",
-  "next_step": "Use session_key for encrypted agent-to-agent communication"
+  "completed_at": "2026-05-21T12:05:00Z",
+  "trust_bonus": "+5 points for both agents"
 }
 ```
 
-**Error Responses:**
-- `400 Bad Request` - Missing handshake_id or signatures
-- `403 Forbidden` - Invalid signature (Ed25519 verification failed)
-- `404 Not Found` - Handshake doesn't exist
-- `409 Conflict` - Already completed
-- `410 Gone` - Handshake expired
+---
+
+### Handshake Status
+
+**`GET /api/trust-handshake/status/:handshake_id`**
+
+```bash
+curl https://agentshield.live/api/trust-handshake/status/hs_abc123
+```
 
 ---
 
-### 4. Handshake History
+### Handshake History
 
-**Endpoint:** `GET /api/trust-handshake/history/:agent_id`
+**`GET /api/trust-handshake/history/:agent_id`**
 
-**Purpose:** View agent's handshake track record
+```bash
+curl "https://agentshield.live/api/trust-handshake/history/agent_xyz789?limit=20&status=completed"
+```
+
+---
+
+## 📋 Registry
+
+### List All Agents
+
+**`GET /api/registry/agents`**
+
+```bash
+curl https://agentshield.live/api/registry/agents
+```
+
+---
+
+### Get Agent Details
+
+**`GET /api/registry/agents/:agent_id`**
+
+```bash
+curl https://agentshield.live/api/registry/agents/agent_xyz789
+```
+
+---
+
+### Search Agents
+
+**`GET /api/registry/search`**
+
+```bash
+curl "https://agentshield.live/api/registry/search?q=MyBot&platform=langchain&min_score=70"
+```
 
 **Query Parameters:**
-- `limit` (int, optional): Max results (default 20, max 100)
-- `status` (string, optional): Filter by status (pending|completed|expired)
 
-**Example:**
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `q` | string | Search by agent name |
+| `platform` | string | Filter by platform |
+| `min_score` | int | Minimum security score |
+
+---
+
+### Registry Stats
+
+**`GET /api/registry/stats`**
+
 ```bash
-curl "https://agentshield.live/api/trust-handshake/history/agent_xyz?limit=50&status=completed"
-```
-
-**Response (200 OK):**
-```json
-{
-  "agent_id": "agent_xyz",
-  "statistics": {
-    "total_handshakes": 42,
-    "completed": 40,
-    "pending": 1,
-    "expired": 1,
-    "success_rate": 95.2
-  },
-  "handshakes": [
-    {
-      "handshake_id": "hs_abc123",
-      "role": "requester",
-      "peer": {
-        "agent_id": "agent_b",
-        "agent_name": "SecureBot",
-        "tier": "TRUSTED"
-      },
-      "purpose": "data_exchange",
-      "status": "completed",
-      "created_at": "2026-03-09T21:22:39+00:00",
-      "expires_at": "2026-03-09T22:22:39+00:00",
-      "completed_at": "2026-03-09T21:30:15+00:00"
-    }
-  ],
-  "limit": 50
-}
+curl https://agentshield.live/api/registry/stats
 ```
 
 ---
 
-### 5. Handshake Status
+## 🚫 Certificate Revocation (CRL)
 
-**Endpoint:** `GET /api/trust-handshake/status/:handshake_id`
+### Get Revocation List
 
-**Purpose:** Check current state of a handshake
+**`GET /api/crl`**
 
-**Example:**
 ```bash
-curl "https://agentshield.live/api/trust-handshake/status/hs_abc123"
+curl https://agentshield.live/api/crl
 ```
 
-**Response (200 OK):**
-```json
-{
-  "handshake_id": "hs_abc123def456",
-  "status": "pending_mutual_signature",
-  "requester": {
-    "agent_id": "agent_a",
-    "agent_name": "My1stBot",
-    "tier": "VERIFIED",
-    "challenge": "base64_challenge",
-    "signature_submitted": true
-  },
-  "target": {
-    "agent_id": "agent_b",
-    "agent_name": "SecureBot",
-    "tier": "TRUSTED",
-    "challenge": "base64_challenge",
-    "signature_submitted": false
-  },
-  "purpose": "data_exchange",
-  "session_key": null,
-  "created_at": "2026-03-09T21:22:39+00:00",
-  "expires_at": "2026-03-09T22:22:39+00:00",
-  "completed_at": null,
-  "expired": false
-}
+### Check Single Agent
+
+**`GET /api/crl/check/:agent_id`**
+
+```bash
+curl https://agentshield.live/api/crl/check/agent_xyz789
 ```
 
-**Error Responses:**
-- `404 Not Found` - Handshake doesn't exist
+### Download CRL File
 
----
+**`GET /api/crl/download`**
 
-## 🔄 Full Integration Example
-
-```python
-import requests
-from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
-import base64
-
-# Agent A wants to communicate with Agent B
-
-# Step 1: Quick trust check
-response = requests.get(
-    "https://agentshield.live/api/verify-peer/agent_b",
-    params={"min_score": 70, "min_tier": "VERIFIED"}
-)
-if not response.json()["trusted"]:
-    print("Agent B is not trustworthy!")
-    exit(1)
-
-# Step 2: Initiate handshake
-response = requests.post(
-    "https://agentshield.live/api/trust-handshake/initiate",
-    json={
-        "requester_id": "agent_a",
-        "target_id": "agent_b",
-        "purpose": "secure_data_exchange"
-    }
-)
-handshake = response.json()
-handshake_id = handshake["handshake_id"]
-requester_challenge = handshake["requester"]["challenge"]
-target_challenge = handshake["target"]["challenge"]
-
-# Step 3: Sign challenges (both agents)
-# Agent A signs:
-private_key_a = Ed25519PrivateKey.from_private_bytes(agent_a_key)
-sig_a = private_key_a.sign(requester_challenge.encode())
-requester_signature = base64.b64encode(sig_a).decode()
-
-# Agent B signs (on their end):
-private_key_b = Ed25519PrivateKey.from_private_bytes(agent_b_key)
-sig_b = private_key_b.sign(target_challenge.encode())
-target_signature = base64.b64encode(sig_b).decode()
-
-# Step 4: Complete handshake
-response = requests.post(
-    "https://agentshield.live/api/trust-handshake/complete",
-    json={
-        "handshake_id": handshake_id,
-        "requester_signature": requester_signature,
-        "target_signature": target_signature
-    }
-)
-result = response.json()
-session_key = result["session_key"]
-
-print(f"Handshake complete! Session key: {session_key}")
-print(f"Trust bonus: {result['trust_bonus']}")
-
-# Step 5: Use session_key for encrypted communication
-# (Future: AES-256 encryption implementation)
+```bash
+curl https://agentshield.live/api/crl/download -o crl.json
 ```
 
 ---
 
-## 📊 Rate Limits
+## 🛠️ Tools
 
-**Free Tier:**
-- 60 requests/hour
-- 1 audit/month
-- 5 handshakes/month
+### Token Optimizer
 
-**Pro Tier:**
-- 600 requests/hour
-- Unlimited audits
-- 100 handshakes/month
+**`POST /api/token-optimizer`** — Analyze and optimize your agent's system prompt.
 
-**Team Tier:**
-- 6000 requests/hour
-- Unlimited everything
+```bash
+curl -X POST https://agentshield.live/api/token-optimizer \
+  -H "Content-Type: application/json" \
+  -d '{"system_prompt": "You are a helpful assistant..."}'
+```
 
-**Rate Limit Headers:**
+### Code Scanner
+
+**`POST /api/code-scan`** — Scan agent code for security vulnerabilities.
+
+```bash
+curl -X POST https://agentshield.live/api/code-scan \
+  -H "Content-Type: application/json" \
+  -d '{"code": "import os\nos.system(input())"}'
+```
+
+---
+
+## ⚡ Rate Limits
+
+| Tier | Requests/hour | Audits/month |
+|------|--------------|--------------|
+| Free | 60 | 1 |
+| Pro | 600 | Unlimited |
+| Team | 6,000 | Unlimited |
+
+Rate limit headers are included in every response:
+
 ```
 X-RateLimit-Limit: 60
 X-RateLimit-Remaining: 45
-X-RateLimit-Reset: 1678392000
+X-RateLimit-Reset: 1748779200
 ```
 
----
+Check your current status:
 
-## 🔐 Authentication
-
-**Most endpoints are PUBLIC** (no auth required):
-- `GET /api/verify/:agent_id`
-- `GET /api/verify-peer/:agent_id`
-- `GET /api/registry/*`
-- `GET /api/crl`
-
-**Agent-specific endpoints require challenge-response:**
-- `POST /api/agent-audit/challenge` (requires agent_id + public_key)
-- `POST /api/trust-handshake/*` (requires valid agent certificates)
-
----
-
-## 📝 Complete Endpoint Reference
-
-### Trust Handshake
-- `GET /api/verify-peer/:agent_id` - Quick trust check
-- `POST /api/trust-handshake/initiate` - Start handshake
-- `POST /api/trust-handshake/complete` - Submit signatures
-- `GET /api/trust-handshake/status/:id` - Check progress
-- `GET /api/trust-handshake/history/:id` - View track record
-
-### Security Audit
-- `POST /api/agent-audit/initiate` - Start audit
-- `POST /api/agent-audit/challenge` - Get challenge
-- `POST /api/agent-audit/complete` - Submit signed challenge
-- `GET /api/verify/:agent_id` - Verify certificate
-
-### Registry
-- `GET /api/registry/agents` - List all agents
-- `GET /api/registry/search` - Search by keyword
-
-### CRL (Certificate Revocation List)
-- `GET /api/crl` - Get revocation list (JSON)
-- `GET /api/crl/download` - Download CRL file
-- `POST /api/crl/revoke` - Revoke certificate
-
-### Tools
-- `POST /api/token-optimizer` - Optimize prompt tokens
-- `POST /api/code-scan` - Scan code for vulnerabilities
-
-### Debug (Admin)
-- `GET /api/debug/handshake-table` - Check DB schema
-- `POST /api/admin/migrate-db` - Force DB migration
-
----
-
-## 🧪 Testing Endpoints
-
-**Use the debug endpoint to verify setup:**
 ```bash
-curl https://agentshield.live/api/debug/handshake-table
-```
-
-**Expected:**
-```json
-{
-  "table_exists": true,
-  "row_count": 42,
-  "columns": ["handshake_id", "requester_id", "target_id", ...]
-}
+curl https://agentshield.live/api/rate-limit/status
 ```
 
 ---
 
 ## 🐛 Error Codes
 
-| Code | Meaning | Common Causes |
-|------|---------|---------------|
-| 400 | Bad Request | Missing fields, invalid TTL, self-handshake |
+| Code | Meaning | Common Cause |
+|------|---------|--------------|
+| 400 | Bad Request | Missing fields, invalid values |
 | 403 | Forbidden | Invalid signature, agent revoked/expired |
 | 404 | Not Found | Agent or handshake doesn't exist |
 | 409 | Conflict | Handshake already completed |
-| 410 | Gone | Handshake expired |
+| 410 | Gone | Handshake or audit expired |
 | 429 | Too Many Requests | Rate limit exceeded |
-| 500 | Internal Server Error | Server-side bug (should not happen in v1.4!) |
+| 500 | Internal Server Error | Contact support |
 
 ---
 
-**AgentShield API v1.4.0**
+## 🔗 Full Python Example
 
-*For questions: ratgeberpro@gmail.com*
+```python
+import requests
+from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey, Ed25519PublicKey
+from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat
+import base64, json
+
+API = "https://agentshield.live/api"
+
+# 1. Generate Ed25519 keypair (do this once, store locally)
+private_key = Ed25519PrivateKey.generate()
+public_key_bytes = private_key.public_key().public_bytes(Encoding.Raw, PublicFormat.Raw)
+public_key_b64 = base64.b64encode(public_key_bytes).decode()
+
+# 2. Run your security tests (or use AgentShield skill locally)
+test_results = {
+    "total_tests": 77,
+    "passed_tests": 65,
+    "security_score": 84,
+    "details": [
+        {"test_id": "PI-001", "passed": True, "category": "prompt_injection"},
+    ]
+}
+
+# 3. Initiate audit
+r = requests.post(f"{API}/agent-audit/initiate", json={
+    "agent_name": "MyLangChainBot",
+    "platform": "langchain",
+    "public_key": public_key_b64,
+    "test_results": test_results
+})
+data = r.json()
+agent_id = data["agent_id"]
+audit_id = data["audit_id"]
+challenge = data["challenge"]
+
+# 4. Sign challenge
+signature = private_key.sign(challenge.encode())
+signature_b64 = base64.b64encode(signature).decode()
+
+requests.post(f"{API}/agent-audit/challenge", json={
+    "audit_id": audit_id,
+    "agent_id": agent_id,
+    "signature": signature_b64
+})
+
+# 5. Complete — get certificate
+r = requests.post(f"{API}/agent-audit/complete", json={
+    "audit_id": audit_id,
+    "agent_id": agent_id
+})
+cert = r.json()
+print(f"Agent ID: {cert['agent_id']}")
+print(f"Score:    {cert['security_score']}/100")
+print(f"Tier:     {cert['trust_tier']}")
+print(f"Expires:  {cert['certificate']['expires_at']}")
+```
+
+---
+
+## 🔗 Resources
+
+- **Website:** https://agentshield.live
+- **GitHub:** https://github.com/bartelmost/agentshield
+- **ClawHub:** `clawhub install agentshield-audit`
+- **Contact:** ratgeberpro@gmail.com
