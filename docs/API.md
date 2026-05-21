@@ -22,7 +22,7 @@ agentshield-audit --auto
 **Option C – Docker:**
 ```bash
 docker run --rm -v ~/.agentshield:/data/.agentshield \
-  ghcr.io/bartelmost/agentshield:latest --name "MyBot" --platform langchain
+  bartelmost/agentshield:latest --name "MyBot" --platform langchain
 ```
 
 **Option D – Direct API** (any language, see examples below)
