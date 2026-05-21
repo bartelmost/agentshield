@@ -1,5 +1,7 @@
 # AgentShield Audit - Installation Guide
 
+> **Using n8n, LangChain, or another platform?** → See [PLATFORMS.md](PLATFORMS.md) for platform-specific guides.
+
 ## 📦 ClawHub Installation (Recommended)
 
 ### One-Command Install
