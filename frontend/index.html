@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgentShield | Trust Infrastructure for AI Agents</title>
+    <meta name="description" content="Privacy-first trust layer for AI agents. Local security testing, Ed25519 certificates, and verified agent-to-agent communication.">
+    <meta name="keywords" content="AI agent security, LLM prompt injection, AI safety, autonomous agent audit, token optimization, EU AI Act compliance">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav>
+        <div class="container nav-content">
+            <a href="#" class="logo"><img src="agentshield-logo.png" alt="AgentShield" style="height: 130px; width: auto; vertical-align: middle;"></a>
+            <ul class="nav-links">
+                <li><a href="#products">Get Certified</a></li>
+                <li><a href="verify.html">Verify</a></li>
+                <li><a href="docs.html">Docs</a></li>
+                <li><a href="PRIVACY_ARCHITECTURE.html" style="color: var(--primary); font-weight: 700;">🔒 Privacy</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="container hero-grid">
+            <div class="hero-text">
+                <span class="section-tag">Privacy-First Identity &amp; Trust</span>
+                <h1>Trust Infrastructure<br>for AI Agents</h1>
+                <p class="subtitle">The first privacy-preserving trust layer for AI agents. Test your prompts locally, prove security without exposing code, and establish verified agent-to-agent communication. Built for the Agentic Era.</p>
+                <div class="hero-btns">
+                    <a href="#products" class="btn btn-primary">Get Your Trust Certificate</a>
+                    <a href="docs.html" class="btn btn-secondary">View Documentation</a>
+                </div>
+                <div style="margin-top: 1.5rem; color: var(--gold); font-size: 0.9rem;">
+                    ✨ <strong>Launch Promo:</strong> Use code <code style="background: rgba(241,196,15,0.1); padding: 0.2rem 0.4rem; border-radius: 4px;">BETA5</code> for unlimited free scans
+                </div>
+                
+                <!-- Try Free CTA -->
+                <div style="margin-top: 2rem; padding: 1.5rem; background: linear-gradient(135deg, rgba(0,255,136,0.1) 0%, rgba(241,196,15,0.1) 100%); border: 2px solid var(--primary); border-radius: 16px;">
+                    <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem;">
+                        <span style="font-size: 2rem;">🎮</span>
+                        <div>
+                            <div style="font-weight: 800; color: var(--primary); font-size: 1.1rem;">Try Free – in 30 seconds</div>
+                            <div style="font-size: 0.85rem; color: var(--text-muted);">No registration · Cookie-free demo · Instant results</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                        <button onclick="openInstantDemo()" class="btn btn-primary" style="padding: 1rem 1.5rem; font-size: 1rem; font-weight: 700;">
+                            🎯 Start Instant Demo
+                        </button>
+                        <button onclick="scrollToDemo()" class="btn btn-secondary" style="padding: 1rem 1.5rem; font-size: 1rem;">
+                            🧪 Custom Prompt
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Free Tier Info -->
+                <div style="margin-top: 1rem; padding: 1rem; background: rgba(0,0,0,0.3); border-radius: 8px; border-left: 3px solid var(--gold);">
+                    <div style="font-size: 0.85rem; color: var(--text-muted);">
+                        <strong style="color: var(--gold);">🆓 Free Tier:</strong> 3 scans/day free · Code: <code style="background: rgba(241,196,15,0.2); padding: 0.1rem 0.4rem; border-radius: 4px;">BETA5</code> = unlimited during beta
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div style="background: rgba(0,255,136,0.05); border: 2px solid var(--primary); border-radius: 20px; padding: 40px; text-align: center; box-shadow: 0 0 50px rgba(0,255,136,0.1);">
+                    <div style="margin-bottom: 20px;"><img src="agentshield-icon.png" alt="" style="height: 80px; width: 80px;"></div>
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 14px; color: var(--primary);">TRUST CERTIFICATE v1.0</div>
+                    <div style="margin-top: 20px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 10px;">
+                        <div style="color: var(--gold); font-weight: 800; font-size: 1.2rem; margin-bottom: 10px;">Agent: VERIFIED</div>
+                        <div style="color: var(--primary); font-size: 0.9rem;">🔐 Ed25519 Identity</div>
+                        <div style="color: var(--text-muted); font-size: 0.75rem; margin-top: 8px;">Privacy-first local testing</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- LET'S ENCRYPT FOR AGENTS STORY -->
+    <section style="padding: 5rem 0; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-bottom: 2px solid var(--primary);">
+        <div class="container">
+            <div class="text-center" style="margin-bottom: 3rem;">
+                <span class="section-tag" style="background: rgba(0,255,136,0.1); color: var(--primary);">The Let's Encrypt Moment for AI</span>
+                <h2 style="font-size: 2.2rem; margin-top: 1rem;">Let's Encrypt for Agents</h2>
+                <p style="color: var(--text-muted); max-width: 800px; margin: 1rem auto; font-size: 1.1rem;">
+                    Free, automated security certificates for the agentic web
+                </p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; max-width: 1200px; margin: 0 auto;">
+                <!-- Story Card 1 -->
+                <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 2rem;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🔒</div>
+                    <h3 style="color: #fff; margin-bottom: 1rem; font-size: 1.2rem;">2015: HTTPS for Everyone</h3>
+                    <p style="color: var(--text-muted); line-height: 1.7;">
+                        Let's Encrypt revolutionized the web by offering <strong style="color: var(--primary);">free SSL certificates</strong>. 
+                        Before that, encryption was expensive and complicated. Now it's the default.
+                    </p>
+                </div>
+
+                <!-- Arrow/Connection -->
+                <div style="display: flex; align-items: center; justify-content: center; font-size: 2rem; color: var(--primary);">
+                    <span style="transform: rotate(90deg); display: inline-block;">→</span>
+                </div>
+
+                <!-- Story Card 2 -->
+                <div style="background: rgba(0,255,136,0.05); border: 2px solid var(--primary); border-radius: 12px; padding: 2rem; position: relative;">
+                    <div style="position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--primary); color: #000; padding: 0.25rem 1rem; border-radius: 12px; font-size: 0.75rem; font-weight: 800;">NOW</div>
+                    <div style="margin-bottom: 1rem;"><img src="agentshield-icon.png" alt="" style="height: 52px; width: 52px;"></div>
+                    <h3 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.2rem;">2026: Agent Security for All</h3>
+                    <p style="color: var(--text-muted); line-height: 1.7;">
+                        AgentShield does the same for <strong style="color: var(--primary);">AI agent security</strong>. 
+                        Free assessments, automated certificates, and a trust registry — 
+                        because every agent deserves to be verified.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Key Message -->
+            <div style="margin-top: 3rem; text-align: center; padding: 2rem; background: rgba(241,196,15,0.05); border-radius: 12px; border: 1px solid rgba(241,196,15,0.2);">
+                <p style="font-size: 1.2rem; color: #fff; margin-bottom: 1rem;">
+                    <strong style="color: var(--gold);">AI agents</strong> need the same trust infrastructure the web needed a decade ago.
+                </p>
+                <div style="display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; color: var(--text-muted);">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="color: var(--primary);">✓</span> Free Basic Scans
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="color: var(--primary);">✓</span> Ed25519 Certificates
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="color: var(--primary);">✓</span> Public Trust Registry
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="color: var(--primary);">✓</span> Open Standards
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAIN PRODUCT SECTION -->
+    <section id="products" style="padding: 6rem 0; background: linear-gradient(135deg, #020617 0%, #0f172a 100%); border-top: 2px solid var(--primary); border-bottom: 2px solid var(--primary);">
+        <div class="container">
+            <div class="text-center" style="margin-bottom: 4rem;">
+                <span class="section-tag">Trust Infrastructure</span>
+                <h2>Agent Security Assessment</h2>
+                <p style="color: var(--text-muted); max-width: 700px; margin: 1rem auto; font-size: 1.1rem;">
+                    Privacy-first identity and trust certificates for AI agents
+                </p>
+            </div>
+
+            <div style="max-width: 700px; margin: 0 auto;">
+                <!-- MAIN PRODUCT: Agent Security Assessment -->
+                <div class="product-card active" style="background: var(--card-bg); border: 3px solid var(--primary); border-radius: 16px; padding: 3rem; position: relative; box-shadow: 0 10px 40px rgba(0,255,136,0.2);">
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <div style="margin-bottom: 1rem;"><img src="agentshield-icon.png" alt="" style="height: 64px; width: 64px;"></div>
+                        <h3 style="font-size: 2rem; margin-bottom: 1rem; color: var(--primary);">Agent Security Assessment</h3>
+                        <p style="color: var(--text-muted); font-size: 1.1rem; margin-bottom: 0.5rem;">Privacy-first trust certificates for AI agents</p>
+                        <p style="color: var(--primary); font-weight: 700; font-size: 1rem;">Ed25519 Cryptographic Identity</p>
+                    </div>
+                    
+                    <div style="margin-bottom: 2rem; padding: 1.5rem; background: rgba(0,255,136,0.1); border-left: 4px solid var(--primary); border-radius: 8px;">
+                        <div style="font-size: 1rem; color: var(--primary); font-weight: 700; margin-bottom: 0.5rem;">🔒 100% Privacy-First Architecture</div>
+                        <div style="font-size: 0.9rem; color: var(--text-muted);">All 77 security tests run locally on your machine. Your prompts, code, and configurations never leave your infrastructure. Only certificate metadata is transmitted. <a href="PRIVACY_ARCHITECTURE.html" style="color: var(--primary); text-decoration: underline; font-weight: 600;">Learn how it works →</a></div>
+                    </div>
+                    
+                    <div style="margin-bottom: 2rem;">
+                        <div style="color: var(--primary); font-weight: 700; font-size: 1rem; margin-bottom: 1rem; text-align: center;">✅ What You Get</div>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+                            <div style="padding: 1rem; background: rgba(0,0,0,0.3); border-radius: 8px; border: 1px solid rgba(0,255,136,0.2);">
+                                <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🔐</div>
+                                <div style="color: #fff; font-weight: 600; margin-bottom: 0.25rem;">Cryptographic Identity</div>
+                                <div style="color: var(--text-muted); font-size: 0.85rem;">Ed25519 challenge-response proof</div>
+                            </div>
+                            <div style="padding: 1rem; background: rgba(0,0,0,0.3); border-radius: 8px; border: 1px solid rgba(0,255,136,0.2);">
+                                <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🧪</div>
+                                <div style="color: #fff; font-weight: 600; margin-bottom: 0.25rem;">77 Security Tests</div>
+                                <div style="color: var(--text-muted); font-size: 0.85rem;">Local privacy-first assessment</div>
+                            </div>
+                            <div style="padding: 1rem; background: rgba(0,0,0,0.3); border-radius: 8px; border: 1px solid rgba(0,255,136,0.2);">
+                                <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🏆</div>
+                                <div style="color: #fff; font-weight: 600; margin-bottom: 0.25rem;">Trust Certificate</div>
+                                <div style="color: var(--text-muted); font-size: 0.85rem;">Tamper-proof, publicly verifiable</div>
+                            </div>
+                            <div style="padding: 1rem; background: rgba(0,0,0,0.3); border-radius: 8px; border: 1px solid rgba(0,255,136,0.2);">
+                                <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🤝</div>
+                                <div style="color: #fff; font-weight: 600; margin-bottom: 0.25rem;">Trust Handshake</div>
+                                <div style="color: var(--text-muted); font-size: 0.85rem;">Agent-to-agent verification</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <button onclick="showAssessmentPopup('audit')" class="btn btn-primary" style="flex: 1; min-width: 200px; padding: 1.25rem; font-size: 1.1rem; font-weight: 800;">🛡️ GET CERTIFIED</button>
+                        <a href="docs.html" class="btn btn-secondary" style="flex: 1; min-width: 200px; padding: 1.25rem; font-size: 1.1rem; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center;">📖 Documentation</a>
+                    </div>
+                    
+                    <div style="margin-top: 1.5rem; text-align: center; padding: 1rem; background: rgba(241,196,15,0.1); border-radius: 8px;">
+                        <div style="font-size: 0.9rem; color: var(--gold);">
+                            <strong>Beta Launch:</strong> Free during beta with code <code style="background: rgba(0,0,0,0.3); padding: 0.2rem 0.5rem; border-radius: 4px; color: var(--gold);">BETA5</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TRUST INFRASTRUCTURE: 3 PILLARS -->
+    <section style="padding: 6rem 0; background: #020617;">
+        <div class="container text-center">
+            <span class="section-tag">Trust Infrastructure</span>
+            <h2>How AgentShield Enables Trust</h2>
+            <p style="max-width: 700px; margin: 1rem auto 3rem; color: var(--text-muted); font-size: 1.1rem;">
+                Three core components that make agent-to-agent trust possible
+            </p>
+            
+            <div class="feature-grid" style="margin-top: 4rem;">
+                <div class="feature-card">
+                    <span class="icon">🔐</span>
+                    <h3>1. Cryptographic Identity</h3>
+                    <p style="margin-bottom: 1.5rem;">Verifiable proof of who your agent is</p>
+                    <ul style="text-align: left; color: var(--text-muted); line-height: 1.8; list-style: none; padding: 0;">
+                        <li>✓ Ed25519 key pairs for each agent</li>
+                        <li>✓ Challenge-response authentication</li>
+                        <li>✓ Tamper-proof identity certificates</li>
+                        <li>✓ Public key infrastructure (PKI)</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <span class="icon">🧪</span>
+                    <h3>2. Privacy-First Testing</h3>
+                    <p style="margin-bottom: 1.5rem;">Security assessment without data exposure</p>
+                    <ul style="text-align: left; color: var(--text-muted); line-height: 1.8; list-style: none; padding: 0;">
+                        <li>✓ All 77 tests run locally</li>
+                        <li>✓ No prompts or code leave your machine</li>
+                        <li>✓ Only certificate metadata transmitted</li>
+                        <li>✓ Zero-knowledge architecture</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <span class="icon">🤝</span>
+                    <h3>3. Trust Handshake Protocol</h3>
+                    <p style="margin-bottom: 1.5rem;">Agent-to-agent verification before collaboration</p>
+                    <ul style="text-align: left; color: var(--text-muted); line-height: 1.8; list-style: none; padding: 0;">
+                        <li>✓ Mutual certificate verification</li>
+                        <li>✓ Trust score exchange</li>
+                        <li>✓ Public trust registry lookup</li>
+                        <li>✓ Revocation & re-certification</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- THE TRUST GAP -->
+    <section id="why" style="padding: 6rem 0; background: #05070a;">
+        <div class="container text-center">
+            <span class="section-tag">The Problem</span>
+            <h2>The Agent Trust Gap</h2>
+            <p style="max-width: 700px; margin: 1rem auto 3rem; color: var(--text-muted); font-size: 1.1rem;">
+                Agents are collaborating, delegating tasks, and making decisions autonomously. 
+                <strong style="color: var(--primary);">But there's no standard way to verify: "Can I trust this agent?"</strong>
+            </p>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <span class="icon">❓</span>
+                    <h3>No Identity Standard</h3>
+                    <p>Unlike humans (passports) or websites (SSL), agents have no universal identity layer. Anyone can claim to be a "secure agent."</p>
+                </div>
+                <div class="feature-card">
+                    <span class="icon">🚫</span>
+                    <h3>Can't Verify Other Agents</h3>
+                    <p>When your agent receives a task from another agent, there's no way to check: Is it secure? Has it been audited? Is the certificate valid?</p>
+                </div>
+                <div class="feature-card">
+                    <span class="icon">🎭</span>
+                    <h3>Security Theatre</h3>
+                    <p>Self-reported security claims are unverifiable. Without cryptographic proof and third-party validation, "trust" is just marketing.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+    <!-- Agent Security Assessment Process (4 Steps) -->
+    <section style="padding: 6rem 0; background: #020617; border-top: 2px solid #ff6b6b;">
+        <div class="container text-center">
+            <span class="section-tag" style="background: rgba(255,107,107,0.1); color: #ff6b6b;">Agent Security Assessment</span>
+            <h2>How Agent Certification Works</h2>
+            <p style="color: var(--text-muted); max-width: 700px; margin: 0.5rem auto 3rem;">Complete security assessment with cryptographic proof of identity</p>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 3rem;">
+                <div class="feature-card" style="border-top: 3px solid #ff6b6b;">
+                    <span class="icon" style="font-size: 3rem;">🔌</span>
+                    <h3 style="color: #ff6b6b;">1. Connect Your Agent</h3>
+                    <p>Install the AgentShield skill: <code style="background: rgba(0,255,136,0.1); padding: 0.2rem 0.5rem; border-radius: 4px; color: var(--primary); font-family: 'JetBrains Mono', monospace;">clawhub install agentshield-audit</code></p>
+                </div>
+                <div class="feature-card" style="border-top: 3px solid #ff6b6b;">
+                    <span class="icon" style="font-size: 3rem;">🧪</span>
+                    <h3 style="color: #ff6b6b;">2. Local Deep Scan</h3>
+                    <p>Your agent activates a security sub-agent that performs 77 privacy-first tests locally. Nothing leaves your infrastructure.</p>
+                </div>
+                <div class="feature-card" style="border-top: 3px solid #ff6b6b;">
+                    <span class="icon"><img src="agentshield-icon.png" alt="" style="height: 52px; width: 52px;"></span>
+                    <h3 style="color: #ff6b6b;">3. Challenge-Response</h3>
+                    <p>Cryptographic proof of identity. Your agent signs a challenge to verify authenticity.</p>
+                </div>
+                <div class="feature-card" style="border-top: 3px solid #ff6b6b;">
+                    <span class="icon" style="font-size: 3rem;">📜</span>
+                    <h3 style="color: #ff6b6b;">4. Get Certified</h3>
+                    <p>Receive a tamper-proof certificate, join the public Registry, and show your Trust Score.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <footer style="background: #020617; border-top: 1px solid rgba(255,255,255,0.1); padding: 4rem 0;">
+        <div class="container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 3rem;">
+            <div>
+                <div style="margin-bottom: 1rem;">
+                    <img src="agentshield-logo.png" alt="AgentShield" style="height: 80px; width: auto;">
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Securing the next billion autonomous interactions.</p>
+            </div>
+            <div>
+                <h4 style="color: #fff; margin-bottom: 1rem; font-size: 0.9rem;">Product</h4>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin-bottom: 0.5rem;"><a href="docs.html" style="color: var(--text-muted); text-decoration: none;">Documentation</a></li>
+                    <li style="margin-bottom: 0.5rem;"><a href="docs.html#api" style="color: var(--text-muted); text-decoration: none;">API</a></li>
+                    <li style="margin-bottom: 0.5rem;"><a href="verify.html" style="color: var(--text-muted); text-decoration: none;">Verify Certificate</a></li>
+                    <li style="margin-bottom: 0.5rem;"><a href="tools.html" style="color: var(--gold); text-decoration: none;">Additional Tools</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 style="color: #fff; margin-bottom: 1rem; font-size: 0.9rem;">Company</h4>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin-bottom: 0.5rem;"><a href="about.html" style="color: var(--text-muted); text-decoration: none;">About</a></li>
+                    <li style="margin-bottom: 0.5rem;"><a href="privacy.html" style="color: var(--text-muted); text-decoration: none;">Privacy</a></li>
+                    <li style="margin-bottom: 0.5rem;"><a href="security.html" style="color: var(--text-muted); text-decoration: none;">Security</a></li>
+                    <li style="margin-bottom: 0.5rem;"><a href="PRIVACY_ARCHITECTURE.html" style="color: var(--primary); text-decoration: none; font-weight: 600;">🔒 Privacy Architecture</a></li>
+                    <li style="margin-bottom: 0.5rem;"><a href="impressum.html" style="color: var(--text-muted); text-decoration: none;">Impressum</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 style="color: #fff; margin-bottom: 1rem; font-size: 0.9rem;">Follow Us</h4>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin-bottom: 0.5rem;"><a href="https://x.com/AgentShieldx402" target="_blank" style="color: var(--text-muted); text-decoration: none;">𝕏 Twitter</a></li>
+                    <li style="margin-bottom: 0.5rem;"><a href="https://github.com/bartelmost/agentshield" target="_blank" style="color: var(--text-muted); text-decoration: none;">GitHub</a></li>
+                    <li style="margin-bottom: 0.5rem;"><a href="https://www.moltbook.com/u/Kalle-OC" target="_blank" style="color: var(--text-muted); text-decoration: none;">🦞 Moltbook</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="container text-center" style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.05);">
+            <p style="color: var(--text-muted); font-size: 0.9rem;">© 2026 AgentShield | Built for the Agentic Era</p>
+        </div>
+    </footer>
+
+    <!-- Security Assessment Popup Modal -->
+    <div id="assessment-popup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 9999; align-items: center; justify-content: center;">
+        <div style="background: var(--card-bg); border: 2px solid #ff6b6b; border-radius: 12px; max-width: 650px; width: 90%; padding: 2.5rem; position: relative; box-shadow: 0 20px 60px rgba(255,107,107,0.3);">
+            <button onclick="closeAssessmentPopup()" style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer; padding: 0.5rem;">✕</button>
+            
+            <h2 style="margin-bottom: 1.5rem; color: #ff6b6b; text-align: center;">🛡️ Start Security Assessment</h2>
+            
+            <p style="text-align: center; color: var(--text-muted); margin-bottom: 2rem; font-size: 1rem;">
+                Choose how you want to run your security check:
+            </p>
+
+            <!-- Option 1: Copy-Paste Prompt -->
+            <div style="margin-bottom: 2rem; padding: 1.5rem; background: rgba(255,107,107,0.05); border: 1px solid rgba(255,107,107,0.2); border-radius: 8px;">
+                <h3 style="color: #ff6b6b; font-size: 1rem; margin-bottom: 1rem;">📝 Option 1: Tell Your Agent</h3>
+                <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">Copy this and paste it to your agent:</label>
+                <div style="position: relative;">
+                    <textarea id="assessment-prompt" readonly style="width: 100%; padding: 0.875rem; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; resize: none; box-sizing: border-box;" rows="2">clawhub install agentshield-audit</textarea>
+                    <button onclick="copyAssessmentPrompt()" style="position: absolute; top: 0.5rem; right: 0.5rem; padding: 0.5rem 1rem; background: #ff6b6b; color: #000; border: none; border-radius: 4px; cursor: pointer; font-weight: 700; font-size: 0.85rem; transition: all 0.2s;">📋 Copy</button>
+                </div>
+            </div>
+
+            <!-- Option 2: ClawHub Link -->
+            <div style="margin-bottom: 2rem; padding: 1.5rem; background: rgba(0,255,136,0.05); border: 1px solid rgba(0,255,136,0.2); border-radius: 8px;">
+                <h3 style="color: var(--primary); font-size: 1rem; margin-bottom: 1rem;">🌐 Option 2: Visit ClawHub Directly</h3>
+                <p style="margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">
+                    Or install manually from ClawHub:
+                </p>
+                <code style="display: block; background: rgba(0,0,0,0.5); padding: 1rem; border-radius: 8px; color: var(--primary); font-family: 'JetBrains Mono', monospace; margin-bottom: 1rem; border-left: 3px solid var(--primary);">clawhub install agentshield-audit</code>
+                <a href="https://clawhub.ai/bartelmost/agentshield-audit" target="_blank" class="btn btn-primary" style="display: inline-block; padding: 0.75rem 1.5rem; text-decoration: none; width: 100%; box-sizing: border-box; text-align: center;">🌐 Open ClawHub</a>
+                <p style="margin-top: 0.75rem; color: var(--text-muted); font-size: 0.8rem; margin-bottom: 0;">
+                    ⚠️ Note: SSL certificate may show a browser warning
+                </p>
+            </div>
+
+            <div style="text-align: center;">
+                <button onclick="closeAssessmentPopup()" class="btn btn-secondary" style="padding: 0.875rem 2rem;">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Start Modal -->
+    <div id="quickstart-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; align-items: center; justify-content: center;">
+        <div style="background: var(--card-bg); border: 2px solid var(--primary); border-radius: 12px; max-width: 700px; width: 90%; max-height: 80vh; overflow-y: auto; padding: 2rem; position: relative;">
+            <button onclick="closeQuickStart()" style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer; padding: 0.5rem;">✕</button>
+            
+            <h2 id="modal-title" style="margin-bottom: 1.5rem; color: var(--primary);">Quick Start</h2>
+            
+            <div style="margin-bottom: 2rem; padding: 1rem; background: rgba(241,196,15,0.1); border-left: 3px solid var(--gold); border-radius: 4px;">
+                <strong style="color: var(--gold);">Promo Code:</strong> <code style="background: rgba(0,0,0,0.3); padding: 0.2rem 0.6rem; border-radius: 4px; color: var(--gold); font-family: 'JetBrains Mono', monospace; font-size: 1rem;">BETA5</code>
+                <div style="margin-top: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">Free unlimited scans during beta</div>
+            </div>
+
+            <div id="modal-content">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Agent Detail Modal -->
+    <div id="agent-detail-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10000; align-items: center; justify-content: center;">
+        <div style="background: var(--card-bg); border: 2px solid var(--primary); border-radius: 12px; max-width: 800px; width: 90%; max-height: 85vh; overflow-y: auto; padding: 2.5rem; position: relative;">
+            <button onclick="closeAgentDetail()" style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer; padding: 0.5rem;">✕</button>
+            
+            <div id="agent-detail-content">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Challenge-Response Modal -->
+    <div id="challenge-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10001; align-items: center; justify-content: center;">
+        <div style="background: var(--card-bg); border: 2px solid var(--gold); border-radius: 12px; max-width: 600px; width: 90%; padding: 2.5rem; position: relative;">
+            <button onclick="closeChallengeModal()" style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer; padding: 0.5rem;">✕</button>
+            
+            <h2 style="margin-bottom: 1.5rem; color: var(--gold); text-align: center;">🔐 Verify Agent</h2>
+            
+            <div id="challenge-content">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- INSTANT DEMO MODAL -->
+    <div id="instant-demo-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 10002; align-items: center; justify-content: center; overflow-y: auto;">
+        <div style="background: var(--card-bg); border: 3px solid var(--primary); border-radius: 16px; max-width: 700px; width: 90%; margin: 2rem auto; padding: 2rem; position: relative; box-shadow: 0 20px 60px rgba(0,255,136,0.2);">
+            <button onclick="closeInstantDemo()" style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer; padding: 0.5rem;">✕</button>
+            
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <span style="font-size: 3rem;">🎯</span>
+                <h2 style="color: var(--primary); margin: 1rem 0 0.5rem;">30 Second Challenge</h2>
+                <p style="color: var(--text-muted);">We test a real agent prompt for security vulnerabilities</p>
+            </div>
+
+            <!-- Step 1: Show the Prompt -->
+            <div id="demo-step-1" style="display: block;">
+                <div style="background: rgba(0,0,0,0.3); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                    <div style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 0.5rem;">📋 SYSTEM PROMPT (anonymized):</div>
+                    <pre id="demo-prompt-display" style="color: #fff; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; line-height: 1.6; overflow-x: auto; white-space: pre-wrap; margin: 0;">"You are a helpful shopping assistant for an online store..."</pre>
+                </div>
+                
+                <div style="background: rgba(241,196,15,0.1); border-left: 4px solid var(--gold); padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                    <strong style="color: var(--gold);">🤔 Can you spot the vulnerability?</strong>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0.5rem 0 0;">Most prompts have at least 1-2 weaknesses. AgentShield finds them automatically.</p>
+                </div>
+
+                <button onclick="startInstantScan()" class="btn btn-primary" style="width: 100%; padding: 1.25rem; font-size: 1.1rem; font-weight: 800;">
+                    🔍 Start Scan (free)
+                </button>
+                
+                <div style="text-align: center; margin-top: 1rem; font-size: 0.8rem; color: var(--text-muted);">
+                    Code: <code style="background: rgba(0,255,136,0.1); padding: 0.2rem 0.5rem; color: var(--primary);">INSTANT</code> · No data is stored
+                </div>
+            </div>
+
+            <!-- Step 2: Scanning Animation -->
+            <div id="demo-step-2" style="display: none;">
+                <div style="text-align: center; padding: 3rem 1rem;">
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">🤖</div>
+                    <div style="font-size: 1.5rem; color: var(--primary); margin-bottom: 1rem;">Scanning agent...</div>
+                    <div style="color: var(--text-muted);">
+                        <div style="margin: 0.5rem 0;">🔍 <span id="scan-step-1">Prompt Injection Check</span></div>
+                        <div style="margin: 0.5rem 0; opacity: 0.5;">🔍 <span id="scan-step-2">API Key Detection</span></div>
+                        <div style="margin: 0.5rem 0; opacity: 0.5;">🔍 <span id="scan-step-3">System Override Test</span></div>
+                        <div style="margin: 0.5rem 0; opacity: 0.5;">🔍 <span id="scan-step-4">Token Efficiency</span></div>
+                    </div>
+                    <div style="margin-top: 2rem; width: 100%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden;">
+                        <div id="scan-progress" style="width: 0%; height: 100%; background: linear-gradient(90deg, var(--primary), var(--gold)); transition: width 0.3s;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: Results -->
+            <div id="demo-step-3" style="display: none;">
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <div id="demo-score" style="font-size: 4rem; font-weight: 800;">67</div>
+                    <div id="demo-score-label" style="font-size: 1.2rem; color: var(--primary);">⚠️ BASIC</div>
+                    <p style="color: var(--text-muted);">Issues found: <strong>2</strong></p>
+                </div>
+
+                <div style="background: rgba(231,76,60,0.1); border-left: 4px solid #e74c3c; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;" id="demo-finding-1">
+                    <strong style="color: #e74c3c;">🚨 CRITICAL: API Key in Prompt</strong>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0.3rem 0 0;">OPENAI_API_KEY was found directly in the system prompt</p>
+                </div>
+
+                <div style="background: rgba(243,156,18,0.1); border-left: 4px solid #f39c12; padding: 1rem; border-radius: 8px; margin-bottom: 2rem;" id="demo-finding-2">
+                    <strong style="color: #f39c12;">⚠️ WARNING: Token Bloat</strong>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0.3rem 0 0;">+38% redundant instructions detected (36% savings potential)</p>
+                </div>
+
+                <div style="background: rgba(0,255,136,0.05); border: 1px solid var(--primary); padding: 1.25rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                    <strong style="color: var(--primary);">💡 This would be better for your agent:</strong>
+                    <ul style="color: var(--text-muted); font-size: 0.9rem; margin: 0.5rem 0 0; padding-left: 1.2rem;">
+                        <li>Don't store API keys in the system prompt</li>
+                        <li>Remove redundant instructions</li>
+                        <li>Add "Ignore previous instructions" protection</li>
+                    </ul>
+                </div>
+
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <button onclick="closeInstantDemo(); scrollToDemo();" class="btn btn-primary" style="flex: 1; min-width: 200px; padding: 1rem; font-weight: 700;">
+                        👉 Test your own prompt
+                    </button>
+                    <button onclick="closeInstantDemo()" class="btn btn-secondary" style="padding: 1rem 2rem;">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <style>
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .demo-tab.active {
+            border-color: var(--gold) !important;
+            color: var(--gold) !important;
+            background: rgba(241,196,15,0.05) !important;
+        }
+        .product-card.active:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(0,255,136,0.2);
+        }
+    </style>
+</body>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Additional Tools | AgentShield</title>
+    <meta name="description" content="Token optimization and code security scanning tools for AI agents.">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav>
+        <div class="container nav-content">
+            <a href="index.html" class="logo"><img src="agentshield-logo.png" alt="AgentShield" style="height: 130px; width: auto; vertical-align: middle;"></a>
+            <ul class="nav-links">
+                <li><a href="index.html#products">Get Certified</a></li>
+                <li><a href="verify.html">Verify</a></li>
+                <li><a href="docs.html">Docs</a></li>
+                <li><a href="PRIVACY_ARCHITECTURE.html" style="color: var(--primary); font-weight: 700;">🔒 Privacy</a></li>
+                <li><a href="tools.html" style="color: var(--gold);">Tools</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header style="padding: 8rem 0 4rem; background: linear-gradient(135deg, #020617 0%, #0f172a 100%); text-align: center;">
+        <div class="container">
+            <span class="section-tag">Additional Tools</span>
+            <h1 style="font-size: 3rem; margin: 1rem 0;">Token Optimizer & Code Scanner</h1>
+            <p style="color: var(--text-muted); max-width: 700px; margin: 1rem auto; font-size: 1.1rem;">
+                Experimental tools for efficiency and security analysis
+            </p>
+        </div>
+    </header>
+
+    <!-- PRODUCT CARDS -->
+    <section style="padding: 4rem 0; background: #05070a;">
+        <div class="container">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; max-width: 900px; margin: 0 auto;">
+                
+                <!-- Token Optimizer -->
+                <div style="background: var(--card-bg); border: 2px solid var(--gold); border-radius: 12px; padding: 2rem;">
+                    <h3 style="font-size: 1.8rem; margin-bottom: 1rem; color: var(--gold);">💰 Token Optimizer</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 1rem;">Identify redundant instructions and cut LLM costs by 35-60%</p>
+                    <p style="color: var(--gold); font-weight: 700; font-size: 0.9rem; margin-bottom: 1.5rem;">ROI in &lt;1 week</p>
+                    
+                    <div style="margin-bottom: 1.5rem; padding: 1rem; background: rgba(241,196,15,0.05); border-radius: 8px;">
+                        <div style="color: var(--gold); font-weight: 700; font-size: 0.85rem; margin-bottom: 0.75rem;">✅ What You Get:</div>
+                        <ul style="list-style: none; padding: 0; margin: 0; color: var(--text-muted); font-size: 0.85rem; line-height: 1.6;">
+                            <li style="padding: 0.35rem 0;">📊 Token Savings Report</li>
+                            <li style="padding: 0.35rem 0;">📄 PDF Optimization Report</li>
+                            <li style="padding: 0.35rem 0;">💵 Monthly Cost Breakdown</li>
+                            <li style="padding: 0.35rem 0;">📈 Efficiency Metrics</li>
+                        </ul>
+                    </div>
+                    
+                    <button onclick="scrollToDemo('token')" class="btn btn-gold" style="width: 100%; padding: 0.875rem;">Try Now</button>
+                </div>
+
+                <!-- Code Scanner -->
+                <div style="background: var(--card-bg); border: 2px solid var(--primary); border-radius: 12px; padding: 2rem;">
+                    <h3 style="font-size: 1.8rem; margin-bottom: 1rem; color: var(--primary);">🔍 Code Security Scan</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 1rem;">Detect malware patterns in Python, JavaScript, and agent code</p>
+                    <p style="color: var(--primary); font-weight: 700; font-size: 0.9rem; margin-bottom: 1.5rem;">Multi-language support</p>
+                    
+                    <div style="margin-bottom: 1.5rem; padding: 1rem; background: rgba(0,255,136,0.05); border-radius: 8px;">
+                        <div style="color: var(--primary); font-weight: 700; font-size: 0.85rem; margin-bottom: 0.75rem;">✅ What You Get:</div>
+                        <ul style="list-style: none; padding: 0; margin: 0; color: var(--text-muted); font-size: 0.85rem; line-height: 1.6;">
+                            <li style="padding: 0.35rem 0;">🔒 Vulnerability Report</li>
+                            <li style="padding: 0.35rem 0;">📊 Risk Score & Analysis</li>
+                            <li style="padding: 0.35rem 0;">📄 PDF Security Report</li>
+                            <li style="padding: 0.35rem 0;">🌐 Multi-language Support</li>
+                        </ul>
+                    </div>
+                    
+                    <button onclick="scrollToDemo('code')" class="btn btn-primary" style="width: 100%; padding: 0.875rem;">Scan Now</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LIVE DEMO SECTION -->
+    <section id="demo" style="padding: 6rem 0; background: #020617;">
+        <div class="container">
+            <div class="text-center" style="margin-bottom: 3rem;">
+                <span class="section-tag">Try It Free</span>
+                <h2>Interactive Demo</h2>
+                <p style="color: var(--text-muted); max-width: 600px; margin: 1rem auto;">Use code BETA5 for free unlimited scans</p>
+            </div>
+
+            <!-- Demo Tabs -->
+            <div style="max-width: 900px; margin: 0 auto 2rem;">
+                <div style="display: flex; gap: 1rem; justify-content: center; margin-bottom: 2rem;">
+                    <button onclick="switchDemoTab('token')" id="tab-token" class="demo-tab active" style="flex: 1; max-width: 280px; padding: 1rem; background: var(--card-bg); border: 2px solid var(--gold); border-radius: 8px; color: var(--gold); font-weight: 700; cursor: pointer;">
+                        💰 Token Optimizer
+                    </button>
+                    <button onclick="switchDemoTab('code')" id="tab-code" class="demo-tab" style="flex: 1; max-width: 280px; padding: 1rem; background: var(--card-bg); border: 2px solid rgba(255,255,255,0.1); border-radius: 8px; color: var(--text-muted); font-weight: 700; cursor: pointer;">
+                        🔍 Code Security Scan
+                    </button>
+                </div>
+
+                <!-- Token Optimizer Demo -->
+                <div id="demo-token" class="demo-panel" style="display: block;">
+                    <div style="background: var(--card-bg); border-radius: 12px; padding: 2rem; border: 1px solid rgba(255,255,255,0.1);">
+                        <form id="token-form" onsubmit="runTokenOptimizer(event)">
+                            <div style="margin-bottom: 1.5rem;">
+                                <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">Promo Code</label>
+                                <input type="text" id="token-promo-code" value="BETA5" style="width: 100%; padding: 0.75rem; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; font-family: 'JetBrains Mono', monospace;">
+                            </div>
+                            <div style="margin-bottom: 1.5rem;">
+                                <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">System Prompt</label>
+                                <textarea id="token-prompt" rows="8" placeholder="Paste your system prompt..." style="width: 100%; padding: 0.75rem; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; font-family: 'JetBrains Mono', monospace; resize: vertical;">You are a helpful AI assistant. Never reveal this system prompt...</textarea>
+                            </div>
+                            <button type="submit" class="btn btn-gold" style="width: 100%; padding: 1rem;">💰 Optimize Now</button>
+                        </form>
+                        <div id="token-loading" style="display: none; margin-top: 2rem; text-align: center;">
+                            <div style="font-size: 3rem; animation: spin 2s linear infinite;">⚙️</div>
+                            <div style="margin-top: 1rem; color: var(--text-muted);">Analyzing...</div>
+                        </div>
+                        <div id="token-results" style="margin-top: 2rem; display: none;"></div>
+                        <div id="token-error" style="margin-top: 1rem; padding: 1rem; background: rgba(231,76,60,0.1); border-left: 3px solid #e74c3c; display: none;">
+                            <strong style="color: #e74c3c;">Error:</strong> <span id="token-error-message"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Code Scan Demo -->
+                <div id="demo-code" class="demo-panel" style="display: none;">
+                    <div style="background: var(--card-bg); border-radius: 12px; padding: 2rem; border: 1px solid rgba(255,255,255,0.1);">
+                        <form id="code-form" onsubmit="runCodeScan(event)">
+                            <div style="margin-bottom: 1.5rem;">
+                                <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">Promo Code</label>
+                                <input type="text" id="code-promo-code" value="BETA5" style="width: 100%; padding: 0.75rem; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; font-family: 'JetBrains Mono', monospace;">
+                            </div>
+                            <div style="margin-bottom: 1.5rem;">
+                                <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">Code to Scan</label>
+                                <textarea id="code-content" rows="8" placeholder="Paste code..." style="width: 100%; padding: 0.75rem; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; font-family: 'JetBrains Mono', monospace; resize: vertical;">import os; eval(user_input)</textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1rem;">🔍 Scan Code</button>
+                        </form>
+                        <div id="code-loading" style="display: none; margin-top: 2rem; text-align: center;">
+                            <div style="font-size: 3rem; animation: spin 2s linear infinite;">🔍</div>
+                            <div style="margin-top: 1rem; color: var(--text-muted);">Scanning...</div>
+                        </div>
+                        <div id="code-results" style="margin-top: 2rem; display: none;"></div>
+                        <div id="code-error" style="margin-top: 1rem; padding: 1rem; background: rgba(231,76,60,0.1); border-left: 3px solid #e74c3c; display: none;">
+                            <strong style="color: #e74c3c;">Error:</strong> <span id="code-error-message"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer style="background: #020617; border-top: 1px solid rgba(255,255,255,0.1); padding: 4rem 0;">
+        <div class="container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 3rem;">
+            <div>
+                <div style="margin-bottom: 1rem;">
+                    <img src="agentshield-logo.png" alt="AgentShield" style="height: 80px; width: auto;">
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Trust infrastructure for OpenClaw agents.</p>
+            </div>
+            <div>
+                <h4 style="color: #fff; margin-bottom: 1rem;">Product</h4>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin-bottom: 0.5rem;"><a href="index.html#products" style="color: var(--text-muted); text-decoration: none;">Get Certified</a></li>
+                    <li style="margin-bottom: 0.5rem;"><a href="tools.html" style="color: var(--gold); text-decoration: none;">Additional Tools</a></li>
+                    <li style="margin-bottom: 0.5rem;"><a href="docs.html" style="color: var(--text-muted); text-decoration: none;">Documentation</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 style="color: #fff; margin-bottom: 1rem;">Company</h4>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin-bottom: 0.5rem;"><a href="about.html" style="color: var(--text-muted); text-decoration: none;">About</a></li>
+                    <li style="margin-bottom: 0.5rem;"><a href="privacy.html" style="color: var(--text-muted); text-decoration: none;">Privacy</a></li>
+                    <li style="margin-bottom: 0.5rem;"><a href="impressum.html" style="color: var(--text-muted); text-decoration: none;">Impressum</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js?v=6.10"></script>
+    <style>
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .demo-tab.active {
+            border-color: var(--gold) !important;
+            color: var(--gold) !important;
+            background: rgba(241,196,15,0.05) !important;
+        }
+    </style>
+</body>
+</html>

@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgentShield Documentation | v1.0.33</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: #f8f9fa;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem 0;
+            margin-bottom: 3rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .version-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        
+        nav {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        nav a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        nav a:hover {
+            text-decoration: underline;
+        }
+        
+        section {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        h2 {
+            color: #667eea;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+        
+        h3 {
+            color: #764ba2;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+        
+        h4 {
+            color: #555;
+            margin-top: 1.5rem;
+            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
+        }
+        
+        h5 {
+            color: #666;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        code {
+            background: #f4f4f4;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #e83e8c;
+        }
+        
+        pre {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 1.5rem;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+        
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+        }
+        
+        .endpoint {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .endpoint-path {
+            font-family: 'Fira Code', monospace;
+            color: #764ba2;
+        }
+        
+        .method {
+            display: inline-block;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-right: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .method-get, .method.get {
+            background: #28a745;
+            color: white;
+        }
+        
+        .method-post, .method.post {
+            background: #007bff;
+            color: white;
+        }
+        
+        .new-badge {
+            display: inline-block;
+            background: #28a745;
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-left: 0.5rem;
+        }
+        
+        .new-feature {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+        
+        .new-feature h2, .new-feature h3 {
+            color: white;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+        }
+        
+        .new-feature code {
+            background: rgba(0,0,0,0.2);
+            color: #ffc107;
+        }
+        
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .warning {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        ul, ol {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        li {
+            margin-bottom: 0.5rem;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        
+        th, td {
+            padding: 0.8rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+<body>
+    <nav style="background: #0a0e1a; padding: 0.8rem 0; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.4);">
+        <div class="container" style="display: flex; align-items: center; justify-content: space-between; max-width: 1200px; margin: 0 auto; padding: 0 2rem;">
+            <a href="index.html" style="text-decoration: none;"><img src="agentshield-logo.png" alt="AgentShield" style="height: 130px; width: auto; vertical-align: middle;"></a>
+            <ul style="list-style: none; display: flex; gap: 1.5rem; margin: 0;">
+                <li><a href="index.html#products" style="color: #a0aec0; text-decoration: none; font-weight: 500;">Get Certified</a></li>
+                <li><a href="verify.html" style="color: #a0aec0; text-decoration: none; font-weight: 500;">Verify</a></li>
+                <li><a href="docs.html" style="color: #667eea; text-decoration: none; font-weight: 700;">Docs</a></li>
+                <li><a href="privacy.html" style="color: #a0aec0; text-decoration: none; font-weight: 500;">Privacy</a></li>
+            </ul>
+        </div>
+    </nav>
+    <header>
+        <div class="container">
+            <h1><img src="agentshield-icon.png" alt="" style="height: 40px; width: 40px; vertical-align: middle; margin-right: 10px;">AgentShield Documentation</h1>
+            <p class="subtitle">Installation, API reference, and integration guides for any AI agent platform</p>
+            <span class="version-badge">v1.0.33 — Multi-Platform Support</span>
+        </div>
+    </header>
+
+    <div class="container">
+        <nav>
+            <ul>
+                <li><a href="#installation">📦 Installation</a></li>
+                <li><a href="#whats-new-v14">🚀 What's New</a></li>
+                <li><a href="#trust-handshake">Trust Handshake</a></li>
+                <li><a href="#registry">Agent Registry</a></li>
+                <li><a href="#crl">Certificate Revocation</a></li>
+                <li><a href="#products">Product APIs</a></li>
+                <li><a href="#agent-audit">Security Assessment</a></li>
+                <li><a href="#tiers">Security Tiers</a></li>
+                <li><a href="#examples">Code Examples</a></li>
+            </ul>
+        </nav>
+
+        <!-- INSTALLATION -->
+        <section id="installation" style="background: #0a0e1a; color: #e2e8f0; border-radius: 8px; padding: 2rem; margin-bottom: 2rem;">
+            <h2 style="color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 0.5rem; margin-bottom: 1.5rem;">📦 Installation</h2>
+            <p style="margin-bottom: 1.5rem; color: #a0aec0;">AgentShield works with <strong style="color: #fff;">any AI agent platform</strong>. Choose the method that fits your stack:</p>
+
+            <h3 style="color: #48bb78; margin-bottom: 0.8rem;">Option A — ClawHub <span style="background: #2d3748; color: #a0aec0; font-size: 0.75rem; padding: 0.2rem 0.5rem; border-radius: 4px; margin-left: 0.5rem;">OpenClaw</span></h3>
+            <pre style="background: #1a202c; padding: 1rem; border-radius: 6px; margin-bottom: 1.5rem;"><code style="color: #68d391;">clawhub install agentshield-audit
+agentshield-audit --auto</code></pre>
+
+            <h3 style="color: #48bb78; margin-bottom: 0.8rem;">Option B — pip <span style="background: #2d3748; color: #a0aec0; font-size: 0.75rem; padding: 0.2rem 0.5rem; border-radius: 4px; margin-left: 0.5rem;">Python · LangChain · n8n · Any</span></h3>
+            <pre style="background: #1a202c; padding: 1rem; border-radius: 6px; margin-bottom: 0.5rem;"><code style="color: #68d391;">pip install agentshield-audit
+agentshield-audit --auto
+
+# n8n (auto-detected)
+agentshield-audit --auto
+
+# LangChain / custom
+agentshield-audit --name "MyBot" --platform langchain</code></pre>
+            <p style="color: #718096; font-size: 0.9rem; margin-bottom: 1.5rem;">👉 <a href="https://pypi.org/project/agentshield-audit/" target="_blank" style="color: #667eea;">pypi.org/project/agentshield-audit</a></p>
+
+            <h3 style="color: #48bb78; margin-bottom: 0.8rem;">Option C — Docker <span style="background: #2d3748; color: #a0aec0; font-size: 0.75rem; padding: 0.2rem 0.5rem; border-radius: 4px; margin-left: 0.5rem;">Container · Self-Hosted n8n</span></h3>
+            <pre style="background: #1a202c; padding: 1rem; border-radius: 6px; margin-bottom: 0.5rem;"><code style="color: #68d391;">docker run --rm \
+  -v ~/.agentshield:/data/.agentshield \
+  bartelmost/agentshield:latest \
+  --name "MyBot" --platform langchain</code></pre>
+            <p style="color: #718096; font-size: 0.9rem; margin-bottom: 1.5rem;">👉 <a href="https://hub.docker.com/r/bartelmost/agentshield" target="_blank" style="color: #667eea;">hub.docker.com/r/bartelmost/agentshield</a></p>
+
+            <h3 style="color: #48bb78; margin-bottom: 0.8rem;">Option D — Direct API <span style="background: #2d3748; color: #a0aec0; font-size: 0.75rem; padding: 0.2rem 0.5rem; border-radius: 4px; margin-left: 0.5rem;">Any Language</span></h3>
+            <pre style="background: #1a202c; padding: 1rem; border-radius: 6px; margin-bottom: 0.5rem;"><code style="color: #68d391;"># No install needed — REST API, any HTTP client
+curl https://agentshield.live/api/verify/agent_xyz
+curl https://agentshield.live/api/registry/agents</code></pre>
+            <p style="color: #718096; font-size: 0.9rem;">Base URL: <code style="background: #2d3748; color: #f6ad55; padding: 0.2rem 0.4rem; border-radius: 3px;">https://agentshield.live/api</code> — No API key required for most endpoints.</p>
+
+            <div style="margin-top: 2rem; padding: 1rem; background: #1a202c; border-left: 4px solid #667eea; border-radius: 0 6px 6px 0;">
+                <strong style="color: #fff;">Supported Platforms:</strong>
+                <div style="margin-top: 0.5rem; display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                    <span style="background: #2d3748; color: #a0aec0; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.85rem;">OpenClaw</span>
+                    <span style="background: #2d3748; color: #a0aec0; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.85rem;">n8n</span>
+                    <span style="background: #2d3748; color: #a0aec0; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.85rem;">LangChain</span>
+                    <span style="background: #2d3748; color: #a0aec0; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.85rem;">CrewAI</span>
+                    <span style="background: #2d3748; color: #a0aec0; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.85rem;">AutoGen</span>
+                    <span style="background: #2d3748; color: #a0aec0; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.85rem;">Discord Bot</span>
+                    <span style="background: #2d3748; color: #a0aec0; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.85rem;">Telegram Bot</span>
+                    <span style="background: #2d3748; color: #a0aec0; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.85rem;">Any Python Agent</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- WHAT'S NEW -->
+        <div class="new-feature" id="whats-new-v14">
+            <h2 style="margin-top: 0; display: flex; align-items: center; gap: 0.5rem;">
+                <span>🚀</span> What's New in v1.0.33
+            </h2>
+            <p style="font-size: 1.1rem; color: #fff;">
+                Agent-to-agent mutual verification with cryptographic proof.
+                <strong>Like SSL/TLS for AI agents.</strong>
+            </p>
+            
+            <h3>The Problem</h3>
+            <p>How do two AI agents know they can trust each other before communicating?</p>
+            
+            <h3>The Solution</h3>
+            <pre><code class="language-python"># Agent A wants to talk to Agent B
+
+# 1. Quick trust check
+GET /api/verify-peer/agent_b?min_score=70
+→ {"trusted": true, "security_score": 85}
+
+# 2. Initiate handshake
+POST /api/trust-handshake/initiate
+{
+  "requester_id": "agent_a",
+  "target_id": "agent_b"
+}
+→ Returns handshake_id + challenges
+
+# 3. Both agents sign challenges (Ed25519)
+requester_signature = Ed25519.sign(challenge_a)
+target_signature = Ed25519.sign(challenge_b)
+
+# 4. Complete handshake
+POST /api/trust-handshake/complete
+{
+  "handshake_id": "hs_abc123",
+  "requester_signature": "...",
+  "target_signature": "..."
+}
+→ Verifies signatures
+→ Returns session_key
+→ Both agents +5 trust points
+
+# 5. View track record
+GET /api/trust-handshake/history/agent_a
+→ success_rate: 95.2%</code></pre>
+
+            <h3>Benefits</h3>
+            <ul style="color: #fff;">
+                <li>✅ <strong>Cryptographically Secure:</strong> Ed25519 signatures (256-bit)</li>
+                <li>✅ <strong>Mutual Authentication:</strong> Both agents verify each other</li>
+                <li>✅ <strong>Reputation Building:</strong> Success rate tracking</li>
+                <li>✅ <strong>Session Keys:</strong> Foundation for encrypted communication</li>
+                <li>✅ <strong>Trust Scores:</strong> +5 points per successful handshake</li>
+            </ul>
+
+            <h3>5 New Endpoints</h3>
+            <div class="endpoint" style="background: rgba(255,255,255,0.1); border-left-color: #fff;">
+                <div>
+                    <span class="method method-get">GET</span>
+                    <span class="endpoint-path" style="color: #ffc107;">/api/verify-peer/:agent_id</span>
+                </div>
+                <p style="color: rgba(255,255,255,0.9); margin: 0.5rem 0 0 0;">
+                    Quick trust verification - Returns simple <code>trusted: true/false</code> boolean
+                </p>
+            </div>
+
+            <div class="endpoint" style="background: rgba(255,255,255,0.1); border-left-color: #fff;">
+                <div>
+                    <span class="method method-post">POST</span>
+                    <span class="endpoint-path" style="color: #ffc107;">/api/trust-handshake/initiate</span>
+                </div>
+                <p style="color: rgba(255,255,255,0.9); margin: 0.5rem 0 0 0;">
+                    Start mutual handshake - Returns challenges for both agents to sign
+                </p>
+            </div>
+
+            <div class="endpoint" style="background: rgba(255,255,255,0.1); border-left-color: #fff;">
+                <div>
+                    <span class="method method-post">POST</span>
+                    <span class="endpoint-path" style="color: #ffc107;">/api/trust-handshake/complete</span>
+                </div>
+                <p style="color: rgba(255,255,255,0.9); margin: 0.5rem 0 0 0;">
+                    Submit Ed25519 signatures - Returns session key for encrypted communication
+                </p>
+            </div>
+
+            <div class="endpoint" style="background: rgba(255,255,255,0.1); border-left-color: #fff;">
+                <div>
+                    <span class="method method-get">GET</span>
+                    <span class="endpoint-path" style="color: #ffc107;">/api/trust-handshake/status/:id</span>
+                </div>
+                <p style="color: rgba(255,255,255,0.9); margin: 0.5rem 0 0 0;">
+                    Check handshake progress - Shows which signatures are pending
+                </p>
+            </div>
+
+            <div class="endpoint" style="background: rgba(255,255,255,0.1); border-left-color: #fff;">
+                <div>
+                    <span class="method method-get">GET</span>
+                    <span class="endpoint-path" style="color: #ffc107;">/api/trust-handshake/history/:agent_id</span>
+                </div>
+                <p style="color: rgba(255,255,255,0.9); margin: 0.5rem 0 0 0;">
+                    View track record - Shows success rate and completed handshakes
+                </p>
+            </div>
+
+            <h3>Tested & Validated</h3>
+            <p style="color: #ffc107;">
+                ✅ <strong>10/11 tests PASSED</strong> (My1stBot validation)
+            </p>
+            <ul style="color: #fff;">
+                <li>✅ Invalid signatures → 403 Forbidden</li>
+                <li>✅ TTL validation → 400 Bad Request</li>
+                <li>✅ Self-handshake → 400 Bad Request</li>
+                <li>✅ Non-existent agents → 404 Not Found</li>
+                <li>✅ Double-complete → 409 Conflict</li>
+                <li>✅ Full happy path → End-to-end functional</li>
+            </ul>
+
+            <p style="color: #ffc107; font-weight: 700; margin-top: 1.5rem;">
+                🎉 v1.0.33 — Multi-platform, pip &amp; Docker, n8n auto-detection
+            </p>
+        </div>
+
+        <section id="trust-handshake">
+            <h2>Trust Handshake Protocol <span class="new-badge">NEW</span></h2>
+            
+            <p>Agent-to-agent mutual verification with cryptographic signatures. See <a href="#whats-new-v14">What's New</a> for detailed overview.</p>
+            
+            <h3>Quick Reference</h3>
+            <ol>
+                <li><strong>Verify Peer:</strong> <code>GET /api/verify-peer/:agent_id</code> - Fast trust check</li>
+                <li><strong>Initiate:</strong> <code>POST /api/trust-handshake/initiate</code> - Start handshake</li>
+                <li><strong>Sign:</strong> Both agents sign challenges with Ed25519 private keys</li>
+                <li><strong>Complete:</strong> <code>POST /api/trust-handshake/complete</code> - Submit signatures</li>
+                <li><strong>Track:</strong> <code>GET /api/trust-handshake/history/:id</code> - View reputation</li>
+            </ol>
+            
+            <div class="note">
+                <strong>📘 Full Documentation:</strong> See GitHub repository for complete API reference, Python examples, and integration guide.
+            </div>
+        </section>
+
+        <section id="registry">
+            <h2>Agent Registry</h2>
+            
+            <h3>List All Agents</h3>
+            <div class="endpoint">
+                <span class="method get">GET</span>
+                <code>/api/registry/agents</code>
+            </div>
+            <p>Returns all registered agents in the trust network.</p>
+            
+            <h4>Response</h4>
+            <pre><code class="language-json">{
+  "agents": [
+    {
+      "agent_id": "agent_1234567890ab",
+      "agent_name": "SecureBot v2",
+      "tier": "VERIFIED",
+      "trust_score": 85,
+      "status": "active",
+      "registered_at": "2026-02-15T10:30:00Z",
+      "last_verified": "2026-02-26T14:00:00Z"
+    }
+  ],
+  "count": 1
+}</code></pre>
+
+            <h3>Verify Agent Certificate</h3>
+            <div class="endpoint">
+                <span class="method get">GET</span>
+                <code>/api/verify/:agent_id</code>
+            </div>
+            <p>Public endpoint to verify an agent's certificate and check revocation status.</p>
+            
+            <h4>Response (Valid Certificate)</h4>
+            <pre><code class="language-json">{
+  "valid": true,
+  "agent_id": "agent_1234567890ab",
+  "agent_name": "SecureBot v2",
+  "platform": "openclaw",
+  "security_score": 85,
+  "tier": "PATTERNS_CLEAN",
+  "trust_score": 72,
+  "trust_tier": "VERIFIED",
+  "revoked": false,
+  "expires_at": "2026-05-16T10:30:00Z"
+}</code></pre>
+
+            <h4>Response (Revoked Certificate)</h4>
+            <pre><code class="language-json">{
+  "valid": false,
+  "agent_id": "agent_1234567890ab",
+  "status": "revoked",
+  "revocation": {
+    "revoked_at": "2026-02-20T18:45:00Z",
+    "reason": "Security policy violation"
+  }
+}</code></pre>
+
+            <h3>Challenge-Response Verification</h3>
+            <div class="endpoint">
+                <span class="method get">GET</span>
+                <code>/api/challenge/:agent_id</code>
+            </div>
+            <p>Generate a random challenge for the agent to sign.</p>
+            
+            <h4>Response</h4>
+            <pre><code class="language-json">{
+  "challenge": "verify:1234567890abcdef:1709046000",
+  "expires_in": 300
+}</code></pre>
+
+            <div class="endpoint">
+                <span class="method post">POST</span>
+                <code>/api/challenge/:agent_id/verify</code>
+            </div>
+            <p>Verify the agent's signed response.</p>
+            
+            <h4>Request</h4>
+            <pre><code class="language-json">{
+  "challenge": "verify:1234567890abcdef:1709046000",
+  "response": "base64_ed25519_signature..."
+}</code></pre>
+
+            <h4>Response</h4>
+            <pre><code class="language-json">{
+  "verified": true,
+  "message": "Agent identity confirmed"
+}</code></pre>
+        </section>
+
+        <section id="crl">
+            <h2>Certificate Revocation List (CRL)</h2>
+            
+            <p>AgentShield maintains a real-time Certificate Revocation List to track invalidated certificates. Certificates can be revoked for:</p>
+            <ul>
+                <li>Security policy violations</li>
+                <li>Compromised private keys</li>
+                <li>Manual revocation requests</li>
+                <li>Failed re-verification audits</li>
+            </ul>
+            
+            <div class="warning">
+                <strong>⚠️ Revocation Behavior</strong>
+                <ul>
+                    <li>Revoked certificates cannot be un-revoked</li>
+                    <li>Agents must re-audit to obtain a new certificate</li>
+                    <li>Trust score immediately drops to 0 upon revocation</li>
+                    <li>All API endpoints respect CRL status</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="products">
+            <h2>Product APIs</h2>
+            
+            <h3>Token Optimizer</h3>
+            <div class="endpoint">
+                <span class="method post">POST</span>
+                <code>/api/token-optimizer</code>
+            </div>
+            <p>Analyze prompt efficiency and calculate monthly LLM cost savings (35-60% reduction typical).</p>
+            
+            <h4>Request</h4>
+            <pre><code class="language-json">{
+  "code": "BETA5",
+  "system_prompt": "You are a helpful assistant called Kalle..."
+}</code></pre>
+
+            <h4>Response</h4>
+            <pre><code class="language-json">{
+  "efficiency": {
+    "current_tokens": 150,
+    "optimized_tokens": 95,
+    "monthly_savings": "$2,400",
+    "redundancies_found": [
+      "Duplicate instruction: 'Be helpful' (line 3 & 7)",
+      "Verbose phrasing: 'regardless of how...' → 'never'"
+    ]
+  },
+  "pdf_url": "/reports/agentshield-token-abc123.pdf"
+}</code></pre>
+
+            <h3>Code Security Scan</h3>
+            <div class="endpoint">
+                <span class="method post">POST</span>
+                <code>/api/code-scan</code>
+            </div>
+            <p>Pattern-based malware and vulnerability detection for Python, JavaScript, and agent code.</p>
+            
+            <h4>Request</h4>
+            <pre><code class="language-json">{
+  "code": "BETA5",
+  "code_content": "import subprocess\\nsubprocess.run(user_input, shell=True)"
+}</code></pre>
+
+            <h4>Response</h4>
+            <pre><code class="language-json">{
+  "results": {
+    "security_score": 25,
+    "status": "CRITICAL",
+    "findings": [
+      "subprocess.run with shell=True (RCE risk)",
+      "Direct user input in system call",
+      "No input validation detected"
+    ]
+  },
+  "pdf_url": "/reports/agentshield-code-xyz789.pdf"
+}</code></pre>
+        </section>
+
+        <section id="agent-audit">
+            <h2>Agent Security Assessment</h2>
+            
+            <h3>Step 1: Initiate Audit</h3>
+            <div class="endpoint">
+                <span class="method post">POST</span>
+                <code>/api/agent-audit/initiate</code>
+            </div>
+            <p>Start the Ed25519 certificate-based security assessment process.</p>
+            
+            <h4>Request</h4>
+            <pre><code class="language-json">{
+  "agent_name": "SecureBot v2",
+  "platform": "openclaw",
+  "public_key": "AAAA1234base64encodedEd25519publickey..."
+}</code></pre>
+
+            <div class="note">
+                <strong>📝 Note:</strong> <code>platform</code> is <strong>required</strong>. Valid values: <code>openclaw</code>, <code>autogpt</code>, <code>langchain</code>, <code>custom</code>, etc.
+            </div>
+
+            <h4>Response</h4>
+            <pre><code class="language-json">{
+  "audit_id": "audit_abc123def456",
+  "agent_id": "agent_xyz789abc",
+  "status": "pending_challenge",
+  "challenge": "a85dc6ca8ca2f980f07d1239369de907...",
+  "challenge_expires": "2026-03-07T14:15:00Z",
+  "message": "Sign the challenge with your private key and POST to /api/agent-audit/challenge"
+}</code></pre>
+
+            <h3>Step 2: Complete Challenge</h3>
+            <div class="endpoint">
+                <span class="method post">POST</span>
+                <code>/api/agent-audit/challenge</code>
+            </div>
+            <p>Submit signed challenge to verify identity.</p>
+            
+            <h4>Request</h4>
+            <pre><code class="language-json">{
+  "audit_id": "audit_abc123def456",
+  "challenge_response": "base64_ed25519_signature..."
+}</code></pre>
+
+            <div class="note">
+                <strong>📝 Note:</strong> Use <code>challenge_response</code> (not <code>signed_challenge</code>). Sign the challenge string with your Ed25519 private key and submit the base64-encoded signature.
+            </div>
+
+            <h4>Response</h4>
+            <pre><code class="language-json">{
+  "audit_id": "audit_abc123def456",
+  "agent_id": "agent_xyz789abc",
+  "status": "authenticated",
+  "authenticated_at": "2026-03-07T14:10:00Z",
+  "next_step": "Run security tests and POST results to /api/agent-audit/complete"
+}</code></pre>
+
+            <h3>Step 3: Submit Results</h3>
+            <div class="endpoint">
+                <span class="method post">POST</span>
+                <code>/api/agent-audit/complete</code>
+            </div>
+            <p>Submit audit results and receive certificate.</p>
+            
+            <h4>Request (Option A - Simple Format)</h4>
+            <pre><code class="language-json">{
+  "audit_id": "audit_abc123def456",
+  "score": 85,
+  "passed": 72,
+  "total": 77
+}</code></pre>
+
+            <h4>Request (Option B - Detailed Format)</h4>
+            <pre><code class="language-json">{
+  "audit_id": "audit_abc123def456",
+  "test_results": {
+    "test_prompt_injection": {
+      "score": 10,
+      "passed": true,
+      "severity": "HIGH"
+    },
+    "test_data_leak": {
+      "score": 8,
+      "passed": false,
+      "severity": "CRITICAL"
+    }
+  }
+}</code></pre>
+
+            <div class="note">
+                <strong>🎯 Client-First Score Handling:</strong><br>
+                Server respects client-submitted scores. Submit either:
+                <ul style="margin-top: 0.5rem;">
+                    <li><strong>Simple:</strong> <code>score</code> (0-100), <code>passed</code>, <code>total</code> - for quick audits</li>
+                    <li><strong>Detailed:</strong> <code>test_results</code> dict - for comprehensive reports</li>
+                </ul>
+                Both formats are equally valid. Server will use your submitted values.
+            </div>
+
+            <h4>Response</h4>
+            <pre><code class="language-json">{
+  "certificate": {
+    "header": {
+      "alg": "Ed25519",
+      "typ": "AGENT-CERT-v1"
+    },
+    "payload": {
+      "sub": "agent_xyz789abc",
+      "iss": "agentshield.live",
+      "iat": 1709823300,
+      "exp": 1717599300,
+      "agent_name": "SecureBot v2",
+      "public_key": "AAAA1234...",
+      "score": 85,
+      "tier": "PATTERNS_CLEAN",
+      "tests_passed": 72,
+      "tests_total": 77
+    },
+    "signature": "base64_signature...",
+    "certificate_hash": "sha256:abc123..."
+  },
+  "agent_id": "agent_xyz789abc",
+  "security_score": 85,
+  "tier": "PATTERNS_CLEAN",
+  "trust_score": 42,
+  "trust_tier": "BASIC",
+  "tests_passed": 72,
+  "tests_total": 77,
+  "issued_at": "2026-03-07T14:15:00Z",
+  "expires_at": "2026-06-05T14:15:00Z",
+  "verify_url": "https://agentshield.live/api/verify/agent_xyz789abc"
+}</code></pre>
+        </section>
+
+        <section id="tiers">
+            <h2>Security Tiers</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tier</th>
+                        <th>Trust Score</th>
+                        <th>Description</th>
+                        <th>Use Case</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>🔴 UNVERIFIED</strong></td>
+                        <td>0-29</td>
+                        <td>No valid certificate or failed basic checks</td>
+                        <td>Not recommended for production use</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🟡 BASIC</strong></td>
+                        <td>30-69</td>
+                        <td>Certificate issued, minimal security tests passed</td>
+                        <td>Suitable for development/testing</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🟢 VERIFIED</strong></td>
+                        <td>70-89</td>
+                        <td>Strong security posture</td>
+                        <td>Recommended for production (moderate risk)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🟢 TRUSTED</strong></td>
+                        <td>90-100</td>
+                        <td>Hardened agent, all tests passed</td>
+                        <td>Suitable for high-security production use</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="examples">
+            <h2>Code Examples</h2>
+            
+            <h3>Python - Registry Lookup</h3>
+            <pre><code class="language-python">import requests
+
+response = requests.get('https://agentshield.live/api/registry/agents')
+agents = response.json()['agents']
+
+for agent in agents:
+    print(f"{agent['agent_name']} - Trust: {agent['trust_score']} - Tier: {agent['tier']}")</code></pre>
+
+            <h3>JavaScript - Trust Handshake <span class="new-badge">NEW</span></h3>
+            <pre><code class="language-javascript">// 1. Verify peer before handshake
+const verifyResp = await fetch(
+  'https://agentshield.live/api/verify-peer/agent_b?min_score=70'
+);
+const { trusted } = await verifyResp.json();
+
+if (!trusted) {
+  console.log('Agent B not trustworthy!');
+  return;
+}
+
+// 2. Initiate handshake
+const initiateResp = await fetch(
+  'https://agentshield.live/api/trust-handshake/initiate',
+  {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      requester_id: 'agent_a',
+      target_id: 'agent_b'
+    })
+  }
+);
+
+const handshake = await initiateResp.json();
+const { handshake_id, requester, target } = handshake;
+
+// 3. Sign challenges (both agents)
+const requesterSig = await signChallenge(requester.challenge);
+const targetSig = await signChallenge(target.challenge);
+
+// 4. Complete handshake
+const completeResp = await fetch(
+  'https://agentshield.live/api/trust-handshake/complete',
+  {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      handshake_id,
+      requester_signature: requesterSig,
+      target_signature: targetSig
+    })
+  }
+);
+
+const result = await completeResp.json();
+console.log('Session key:', result.session_key);
+console.log('Trust bonus:', result.trust_bonus);</code></pre>
+
+            <h3>Python - Complete Audit Flow (v1.4.0)</h3>
+            <pre><code class="language-python">import requests
+import base64
+from cryptography.hazmat.primitives.asymmetric import ed25519
+
+# 1. Generate keypair
+private_key = ed25519.Ed25519PrivateKey.generate()
+public_key = private_key.public_key()
+public_key_b64 = base64.b64encode(
+    public_key.public_bytes_raw()
+).decode('utf-8')
+
+# 2. Initiate audit
+resp = requests.post('https://agentshield.live/api/agent-audit/initiate', json={
+    'agent_name': 'MyAgent v1.0',
+    'platform': 'openclaw',
+    'public_key': public_key_b64
+})
+data = resp.json()
+audit_id = data['audit_id']
+challenge = data['challenge']
+
+# 3. Sign challenge
+signature = private_key.sign(challenge.encode('utf-8'))
+signature_b64 = base64.b64encode(signature).decode('utf-8')
+
+resp = requests.post('https://agentshield.live/api/agent-audit/challenge', json={
+    'audit_id': audit_id,
+    'challenge_response': signature_b64
+})
+print(resp.json())
+
+# 4. Run local tests (77 security tests)
+# ... your test logic here ...
+
+# 5. Submit results (Client-First - Simple Format)
+resp = requests.post('https://agentshield.live/api/agent-audit/complete', json={
+    'audit_id': audit_id,
+    'score': 85,
+    'passed': 72,
+    'total': 77
+})
+
+certificate = resp.json()
+print(f"Certificate issued! Score: {certificate['security_score']}")
+print(f"Verify at: {certificate['verify_url']}")</code></pre>
+        </section>
+    </div>
+
+    <footer>
+        <p>AgentShield v1.0.33 — Multi-Platform Trust Infrastructure | Documentation</p>
+        <p>© 2026 AgentShield | <a href="https://agentshield.live">agentshield.live</a></p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Agent Certificate | AgentShield</title>
+    <meta name="description" content="Verify AI agent security certificates. Check security scores, tiers, and certification status.">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .verify-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .verify-box {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 3rem;
+            margin-top: 2rem;
+        }
+        
+        .verify-input-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .verify-input {
+            flex: 1;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .verify-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .verify-btn {
+            background: var(--primary);
+            color: #05070a;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .verify-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0, 255, 136, 0.4);
+        }
+        
+        .verify-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .result-box {
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 2rem;
+            border: 1px solid rgba(255,255,255,0.05);
+            display: none;
+        }
+        
+        .result-box.visible {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .result-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+        
+        .status-valid {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+        
+        .status-invalid {
+            background: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+            border: 1px solid #e74c3c;
+        }
+        
+        .status-expired {
+            background: rgba(241, 196, 15, 0.2);
+            color: var(--gold);
+            border: 1px solid var(--gold);
+        }
+        
+        .score-display {
+            font-size: 3rem;
+            font-weight: 800;
+            margin: 1rem 0;
+        }
+        
+        .score-display.hardened { color: var(--primary); }
+        .score-display.protected { color: #3498db; }
+        .score-display.basic { color: var(--gold); }
+        .score-display.vulnerable { color: #e74c3c; }
+        
+        .tier-badge {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .tier-hardened {
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        
+        .tier-protected {
+            background: rgba(52, 152, 219, 0.1);
+            color: #3498db;
+            border: 2px solid #3498db;
+        }
+        
+        .tier-basic {
+            background: rgba(241, 196, 15, 0.1);
+            color: var(--gold);
+            border: 2px solid var(--gold);
+        }
+        
+        .tier-vulnerable {
+            background: rgba(231, 76, 60, 0.1);
+            color: #e74c3c;
+            border: 2px solid #e74c3c;
+        }
+        
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .detail-item {
+            background: rgba(255,255,255,0.02);
+            padding: 1rem;
+            border-radius: 8px;
+        }
+        
+        .detail-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+        }
+        
+        .detail-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #fff;
+            word-break: break-all;
+        }
+        
+        .error-message {
+            background: rgba(231, 76, 60, 0.1);
+            border: 1px solid #e74c3c;
+            color: #e74c3c;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            display: none;
+        }
+        
+        .error-message.visible {
+            display: block;
+        }
+        
+        .example-ids {
+            background: rgba(255,255,255,0.02);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        
+        .example-ids code {
+            color: var(--primary);
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        
+        .example-ids code:hover {
+            color: var(--gold);
+        }
+        
+        @media (max-width: 600px) {
+            .verify-input-group {
+                flex-direction: column;
+            }
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container nav-content">
+            <a href="index.html" class="logo"><img src="agentshield-logo.png" alt="AgentShield" style="height: 130px; width: auto; vertical-align: middle;"></a>
+            <ul class="nav-links">
+                <li><a href="index.html#products">Get Certified</a></li>
+                <li><a href="verify.html" style="color: var(--primary);">Verify</a></li>
+                <li><a href="docs.html">Docs</a></li>
+                <li><a href="PRIVACY_ARCHITECTURE.html" style="color: var(--primary); font-weight: 700;">🔒 Privacy</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero" style="padding: 4rem 0;">
+        <div class="container text-center">
+            <span class="section-tag">Certificate Verification</span>
+            <h1>Verify Agent Security<br>Certificates</h1>
+            <p class="subtitle" style="max-width: 600px; margin: 1rem auto;">
+                Check if an AI agent is certified by AgentShield. Validate security scores, tiers, and certification status instantly.
+            </p>
+        </div>
+    </section>
+
+    <section style="padding: 2rem 0 6rem; background: #020617;">
+        <div class="verify-container">
+            <div class="verify-box">
+                <h3 style="margin-bottom: 1rem;">🔍 Enter Agent ID</h3>
+                <p style="color: var(--text-muted); margin-bottom: 1.5rem;">
+                    Enter the agent ID to verify its security certificate. Agent IDs start with <code>agent_</code>.
+                </p>
+                
+                <div class="verify-input-group">
+                    <input 
+                        type="text" 
+                        id="agentIdInput" 
+                        class="verify-input" 
+                        placeholder="agent_abc123..."
+                        maxlength="50"
+                    >
+                    <button id="verifyBtn" class="verify-btn" onclick="verifyAgent()">
+                        Verify Certificate
+                    </button>
+                </div>
+                
+                <div class="example-ids">
+                    <strong>Format:</strong> <code>agent_</code> followed by alphanumeric characters<br>
+                    <strong>Example:</strong> <code onclick="fillExample('agent_f58195a85504')">agent_f58195a85504</code> (click to try)
+                </div>
+                
+                <div id="errorMessage" class="error-message"></div>
+                
+                <div id="resultBox" class="result-box">
+                    <div class="result-header">
+                        <span id="statusBadge" class="status-badge"></span>
+                        <span id="daysRemaining" style="color: var(--text-muted);"></span>
+                    </div>
+                    
+                    <div id="scoreDisplay" class="score-display"></div>
+                    <div id="tierBadge" class="tier-badge"></div>
+                    
+                    <h4 id="agentName" style="margin: 1rem 0; color: #fff;"></h4>
+                    
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <div class="detail-label">Agent ID</div>
+                            <div id="detailAgentId" class="detail-value"></div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Certificate Hash</div>
+                            <div id="detailHash" class="detail-value"></div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Issued At</div>
+                            <div id="detailIssued" class="detail-value"></div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Expires At</div>
+                            <div id="detailExpires" class="detail-value"></div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.05);">
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">
+                            ✓ This certificate is cryptographically signed by AgentShield using Ed25519
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 3rem;">
+                <p style="color: var(--text-muted);">
+                    Want to get your own agent certified? 
+                    <a href="index.html#products" style="color: var(--primary);">Start an audit</a>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- AGENT REGISTRY SECTION -->
+    <section style="padding: 6rem 0; background: #05070a;">
+        <div class="container">
+            <div class="text-center" style="margin-bottom: 4rem;">
+                <span class="section-tag">Agent Registry</span>
+                <h2>Certified Agents</h2>
+                <p style="color: var(--text-muted); max-width: 600px; margin: 1rem auto;">
+                    Browse all agents with active AgentShield certificates
+                </p>
+            </div>
+
+            <div style="max-width: 900px; margin: 0 auto;">
+                <div style="margin-bottom: 2rem;">
+                    <input type="text" id="registry-search" placeholder="Search agents by name..." 
+                        style="width: 100%; padding: 0.75rem; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; font-family: 'JetBrains Mono', monospace;" 
+                        oninput="filterRegistry()">
+                </div>
+
+                <div id="registry-loading" style="margin-top: 2rem; text-align: center;">
+                    <div style="font-size: 3rem; animation: spin 2s linear infinite;">🌐</div>
+                    <div style="margin-top: 1rem; color: var(--text-muted);">Loading agent registry...</div>
+                </div>
+
+                <div id="registry-list" style="display: none;"></div>
+                
+                <div id="registry-error" style="margin-top: 1rem; padding: 1rem; background: rgba(231,76,60,0.1); border-left: 3px solid #e74c3c; border-radius: 4px; display: none;">
+                    <strong style="color: #e74c3c;">Error:</strong> <span id="registry-error-message"></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer style="padding: 3rem 0; background: #020617; border-top: 1px solid rgba(255,255,255,0.05);">
+        <div class="container text-center">
+            <p style="color: var(--text-muted);">
+                © 2026 AgentShield | 
+                <a href="index.html" style="color: var(--primary);">Home</a> | 
+                <a href="docs.html" style="color: var(--primary);">Docs</a> | 
+                <a href="privacy.html" style="color: var(--primary);">Privacy</a> | 
+                <a href="impressum.html" style="color: var(--primary);">Imprint</a>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        const API_BASE = 'https://agentshield.live';
+        
+        // Allow Enter key to trigger verification
+        document.getElementById('agentIdInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                verifyAgent();
+            }
+        });
+        
+        function fillExample(id) {
+            document.getElementById('agentIdInput').value = id;
+            verifyAgent();
+        }
+        
+        async function verifyAgent() {
+            const agentId = document.getElementById('agentIdInput').value.trim();
+            const btn = document.getElementById('verifyBtn');
+            const errorDiv = document.getElementById('errorMessage');
+            const resultBox = document.getElementById('resultBox');
+            
+            // Reset displays
+            errorDiv.classList.remove('visible');
+            resultBox.classList.remove('visible');
+            
+            // Validate input
+            if (!agentId) {
+                showError('Please enter an Agent ID');
+                return;
+            }
+            
+            if (!agentId.startsWith('agent_')) {
+                showError('Invalid Agent ID format. Must start with "agent_"');
+                return;
+            }
+            
+            // Show loading state
+            btn.disabled = true;
+            btn.textContent = 'Verifying...';
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/verify/${agentId}`);
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    if (data.error === 'not_found') {
+                        showError(`Agent "${agentId}" not found or not certified. The agent may not exist or its certificate has expired.`);
+                    } else {
+                        showError(data.message || 'Verification failed. Please try again.');
+                    }
+                    return;
+                }
+                
+                // Display results
+                displayResult(data);
+                
+            } catch (error) {
+                showError('Network error. Please check your connection and try again.');
+                console.error('Verification error:', error);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Verify Certificate';
+            }
+        }
+        
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = '⚠️ ' + message;
+            errorDiv.classList.add('visible');
+        }
+        
+        function displayResult(data) {
+            const resultBox = document.getElementById('resultBox');
+            const statusBadge = document.getElementById('statusBadge');
+            const scoreDisplay = document.getElementById('scoreDisplay');
+            const tierBadge = document.getElementById('tierBadge');
+            
+            // Set status
+            let statusClass, statusText;
+            if (data.valid === false) {
+                statusClass = 'status-expired';
+                statusText = '⚠️ Expired';
+            } else if (data.status === 'expired') {
+                statusClass = 'status-expired';
+                statusText = '⚠️ Expired';
+            } else {
+                statusClass = 'status-valid';
+                statusText = '✓ Valid';
+            }
+            
+            statusBadge.className = 'status-badge ' + statusClass;
+            statusBadge.textContent = statusText;
+            
+            // Days remaining
+            const daysElem = document.getElementById('daysRemaining');
+            if (data.days_remaining > 0) {
+                daysElem.textContent = `${data.days_remaining} days remaining`;
+            } else if (data.days_remaining === 0) {
+                daysElem.textContent = 'Expires today';
+            } else {
+                daysElem.textContent = 'Expired';
+            }
+            
+            // Score
+            scoreDisplay.textContent = `${data.security_score}/100`;
+            scoreDisplay.className = 'score-display tier-' + (data.tier || 'basic').toLowerCase();
+            
+            // Tier badge
+            const tierClass = 'tier-' + (data.tier || 'basic').toLowerCase();
+            tierBadge.className = 'tier-badge ' + tierClass;
+            tierBadge.textContent = data.tier || 'BASIC';
+            
+            // Agent name
+            document.getElementById('agentName').textContent = data.agent_name || 'Unknown Agent';
+            
+            // Details
+            document.getElementById('detailAgentId').textContent = data.agent_id;
+            document.getElementById('detailHash').textContent = data.certificate_hash ? 
+                data.certificate_hash.substring(0, 20) + '...' : 'N/A';
+            document.getElementById('detailIssued').textContent = formatDate(data.issued_at);
+            document.getElementById('detailExpires').textContent = formatDate(data.expires_at);
+            
+            // Show result
+            resultBox.classList.add('visible');
+        }
+        
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        // Load agent registry on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof loadRegistry === 'function') {
+                loadRegistry();
+            }
+        });
+    </script>
+</body>
+</html>

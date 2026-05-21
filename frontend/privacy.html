@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy | AgentShield</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav>
+        <div class="container nav-content">
+            <a href="index.html" class="logo"><img src="agentshield-logo.png" alt="AgentShield" style="height: 130px; width: auto; vertical-align: middle;"></a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="docs.html">Docs</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container" style="padding: 6rem 0; max-width: 900px;">
+        <span class="section-tag">Legal</span>
+        <h1>Privacy Policy</h1>
+        <p class="text-muted">Effective Date: February 16, 2026</p>
+        
+        <section style="margin-top: 3rem;">
+            <h2>1. Introduction</h2>
+            <p>At AgentShield ("we," "our," or "us"), privacy is not an afterthought—it is the foundation of our security mission. As an AI-first security provider, we understand the critical nature of the logic and data powering your autonomous systems. This policy outlines our rigorous standards for data handling.</p>
+
+            <h2>2. The Principle of Zero-Persistence</h2>
+            <p>Our core technical architecture is built on <strong>ephemeral execution</strong>. We believe that what we don't store, cannot be breached.
+            <ul>
+                <li><strong>Raw Logic Purge:</strong> When you submit agent code or system prompts for analysis, the data resides only in volatile memory within an isolated execution sandbox.</li>
+                <li><strong>Immediate Deletion:</strong> Once the security scan is completed and the report is transmitted to you, all raw input data is permanently purged from our active systems. We do not maintain unencrypted caches of your proprietary logic.</li>
+            </ul>
+            </p>
+
+            <h2>3. Information We Collect</h2>
+            <h3>A. Scan Metadata</h3>
+            <p>To operate and improve AgentShield, we log objective metadata including:
+            <ul>
+                <li>Timestamp and duration of the scan.</li>
+                <li>The scan tier requested (Basic, Full, or Bundle).</li>
+                <li>Standard HTTP headers (User-Agent, IP address) for rate-limiting and DDoS prevention.</li>
+                <li>Success or failure status of the analysis.</li>
+            </ul>
+            </p>
+            <h3>B. Certification Records</h3>
+            <p>If you choose to generate a public <strong>Certification Badge</strong>, we store:
+            <ul>
+                <li>A unique Certification ID (e.g., AS-XXXXXX).</li>
+                <li>A sanitized summary of the security findings (e.g., "SAFE", "Score: 85").</li>
+                <li>The date of the last audit.</li>
+            </ul>
+            This information is made available via our public verification API so third parties can confirm your agent's security status.</p>
+
+            <h2>4. Data Usage and LLM Training</h2>
+            <p><strong>Strict Non-Training Guarantee:</strong> We never use your submitted code, logic, or prompts to train, fine-tune, or improve any underlying Large Language Models (LLMs) or our own proprietary security algorithms. Your intellectual property remains yours alone.</p>
+
+            <h2>5. Payments and Financial Data</h2>
+            <p>We leverage decentralized payment protocols (Solana, Base, Lightning Network) to handle transactions.
+            <ul>
+                <li><strong>No Credit Card Storage:</strong> We do not ask for or store traditional payment card information (CVV, expiry, etc.).</li>
+                <li><strong>Cryptographic Verification:</strong> All payments are verified on-chain. Your wallet address is processed according to the transparent nature of the respective blockchain.</li>
+            </ul>
+            </p>
+
+            <h2>6. Third-Party Links</h2>
+            <p>Our website may contain links to external sites (e.g., X, GitHub, Moltbook). We are not responsible for the privacy practices of these platforms. We encourage you to read the privacy statements of any site that collects personally identifiable information.</p>
+
+            <h2>7. Updates to this Policy</h2>
+            <p>We may update this Privacy Policy to reflect changes in our technology or legal requirements. Significant changes will be announced on our Twitter/X account (@AgentShield_Live).</p>
+
+            <h2>8. Contact Us</h2>
+            <p>For questions regarding this policy or to request the deletion of your public certification records, please contact us at: <br>
+            <strong>Email:</strong> support@agentshield.live</p>
+        </section>
+        
+        <div style="margin-top: 4rem; text-align: center;">
+            <a href="index.html" class="btn btn-primary">Back to Home</a>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container" style="text-align: center; padding: 2rem 0; border-top: 1px solid rgba(255, 255, 255, 0.05);">
+            <p>&copy; 2026 AgentShield by Johannes with ❤️. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

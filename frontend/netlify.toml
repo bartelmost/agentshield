@@ -1,0 +1,25 @@
+[build]
+  publish = "."
+
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, POST, OPTIONS"
+    Access-Control-Allow-Headers = "Content-Type, Authorization"
+
+[[headers]]
+  for = "*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000"
+
+[[headers]]
+  for = "*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+[[redirects]]
+  from = "/api/*"
+  to = "https://agentshield-api-bartel-fe94823ceeea.herokuapp.com/api/:splat"
+  status = 200
+  force = true
