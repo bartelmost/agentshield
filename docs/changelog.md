@@ -2,6 +2,14 @@
 
 All notable changes to AgentShield will be documented in this file.
 
+## v1.5.0 — 2026-06-03
+
+### Added
+- **MCP Server** — AgentShield now available as a Model Context Protocol server at `https://agentshield.live/mcp`
+- MCP tools: `audit_agent`, `verify_agent`, `search_registry`, `check_revocation`, `agentshield_status`
+- Works with Claude Desktop, Cursor, VS Code Copilot, Continue.dev — one config line, no install required
+- Netlify proxy route `/mcp` → backend
+- MCP documentation in `docs.html` and `api.html`
 ## [1.0.0] - 2026-02-20
 
 ### Added
