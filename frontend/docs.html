@@ -246,12 +246,12 @@
 <body>
     <nav style="background: #0a0e1a; padding: 0.8rem 0; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.4);">
         <div class="container" style="display: flex; align-items: center; justify-content: space-between; max-width: 1200px; margin: 0 auto; padding: 0 2rem;">
-            <a href="index.html" style="text-decoration: none;"><img src="agentshield-logo.png" alt="AgentShield" style="height: 130px; width: auto; vertical-align: middle;"></a>
+            <a href='/' style='text-decoration: none;'><img src="agentshield-logo.png" alt="AgentShield" style="height: 130px; width: auto; vertical-align: middle;"></a>
             <ul style="list-style: none; display: flex; gap: 1.5rem; margin: 0;">
-                <li><a href="index.html#products" style="color: #a0aec0; text-decoration: none; font-weight: 500;">Get Certified</a></li>
-                <li><a href="verify.html" style="color: #a0aec0; text-decoration: none; font-weight: 500;">Verify</a></li>
-                <li><a href="docs.html" style="color: #667eea; text-decoration: none; font-weight: 700;">Docs</a></li>
-                <li><a href="privacy.html" style="color: #a0aec0; text-decoration: none; font-weight: 500;">Privacy</a></li>
+                <li><a href='/#products' style='color: #a0aec0; text-decoration: none; font-weight: 500;'>Get Certified</a></li>
+                <li><a href='/verify' style='color: #a0aec0; text-decoration: none; font-weight: 500;'>Verify</a></li>
+                <li><a href='/docs' style='color: #667eea; text-decoration: none; font-weight: 700;'>Docs</a></li>
+                <li><a href='/privacy' style='color: #a0aec0; text-decoration: none; font-weight: 500;'>Privacy</a></li>
             </ul>
         </div>
     </nav>
@@ -259,7 +259,7 @@
         <div class="container">
             <h1><img src="agentshield-icon.png" alt="" style="height: 40px; width: 40px; vertical-align: middle; margin-right: 10px;">AgentShield Documentation</h1>
             <p class="subtitle">Installation, API reference, and integration guides for any AI agent platform</p>
-            <span class="version-badge">v1.0.33 — Multi-Platform Support</span>
+            <span class="version-badge">v1.0.35 — Hermes Agent Support</span>
         </div>
     </header>
 
@@ -275,6 +275,7 @@
                 <li><a href="#agent-audit">Security Assessment</a></li>
                 <li><a href="#tiers">Security Tiers</a></li>
                 <li><a href="#examples">Code Examples</a></li>
+                <li><a href="#mcp">🔌 MCP Server</a></li>
             </ul>
         </nav>
 
@@ -283,7 +284,7 @@
             <h2 style="color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 0.5rem; margin-bottom: 1.5rem;">📦 Installation</h2>
             <p style="margin-bottom: 1.5rem; color: #a0aec0;">AgentShield works with <strong style="color: #fff;">any AI agent platform</strong>. Choose the method that fits your stack:</p>
 
-            <h3 style="color: #48bb78; margin-bottom: 0.8rem;">Option A — ClawHub <span style="background: #2d3748; color: #a0aec0; font-size: 0.75rem; padding: 0.2rem 0.5rem; border-radius: 4px; margin-left: 0.5rem;">OpenClaw</span></h3>
+            <h3 style="color: #48bb78; margin-bottom: 0.8rem;">Option A — ClawHub <span style="background: #2d3748; color: #a0aec0; font-size: 0.75rem; padding: 0.2rem 0.5rem; border-radius: 4px; margin-left: 0.5rem;">OpenClaw &#183; Hermes Agent</span></h3>
             <pre style="background: #1a202c; padding: 1rem; border-radius: 6px; margin-bottom: 1.5rem;"><code style="color: #68d391;">clawhub install agentshield-audit
 agentshield-audit --auto</code></pre>
 
@@ -311,10 +312,22 @@ curl https://agentshield.live/api/verify/agent_xyz
 curl https://agentshield.live/api/registry/agents</code></pre>
             <p style="color: #718096; font-size: 0.9rem;">Base URL: <code style="background: #2d3748; color: #f6ad55; padding: 0.2rem 0.4rem; border-radius: 3px;">https://agentshield.live/api</code> — No API key required for most endpoints.</p>
 
+            <h3 style="color: #48bb78; margin-bottom: 0.8rem;">Option E — MCP Server <span style="background: #2d3748; color: #f6ad55; font-size: 0.75rem; padding: 0.2rem 0.5rem; border-radius: 4px; margin-left: 0.5rem;">Claude Desktop · Cursor · VS Code · Continue.dev</span></h3>
+            <pre style="background: #1a202c; padding: 1rem; border-radius: 6px; margin-bottom: 0.5rem;"><code style="color: #68d391;">// claude_desktop_config.json  (also works in Cursor, Continue.dev)
+{
+  "mcpServers": {
+    "agentshield": {
+      "url": "https://agentshield.live/mcp"
+    }
+  }
+}</code></pre>
+            <p style="color: #718096; font-size: 0.9rem; margin-bottom: 0;">No install, no API key — one config line and AgentShield tools are available in your AI client. <a href="#mcp" style="color: #667eea;">See full MCP docs ↓</a></p>
+
             <div style="margin-top: 2rem; padding: 1rem; background: #1a202c; border-left: 4px solid #667eea; border-radius: 0 6px 6px 0;">
                 <strong style="color: #fff;">Supported Platforms:</strong>
                 <div style="margin-top: 0.5rem; display: flex; flex-wrap: wrap; gap: 0.5rem;">
                     <span style="background: #2d3748; color: #a0aec0; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.85rem;">OpenClaw</span>
+                    <span style="background: #2d3748; color: #48bb78; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.85rem; border: 1px solid #48bb78;">Hermes Agent ✓</span>
                     <span style="background: #2d3748; color: #a0aec0; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.85rem;">n8n</span>
                     <span style="background: #2d3748; color: #a0aec0; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.85rem;">LangChain</span>
                     <span style="background: #2d3748; color: #a0aec0; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.85rem;">CrewAI</span>
@@ -447,7 +460,7 @@ GET /api/trust-handshake/history/agent_a
             </ul>
 
             <p style="color: #ffc107; font-weight: 700; margin-top: 1.5rem;">
-                🎉 v1.0.33 — Multi-platform, pip &amp; Docker, n8n auto-detection
+                🎉 v1.0.35 — Hermes Agent support (auto-detection for ~/.hermes/), Framework Compatibility table<br>🎉 v1.0.33 — Multi-platform, pip &amp; Docker, n8n auto-detection
             </p>
         </div>
 
@@ -925,6 +938,90 @@ print(f"Certificate issued! Score: {certificate['security_score']}")
 print(f"Verify at: {certificate['verify_url']}")</code></pre>
         </section>
     </div>
+
+        <section id="mcp" style="background: #0a0e1a; color: #e2e8f0; border-radius: 8px; padding: 2rem; margin-bottom: 2rem;">
+            <h2 style="color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 0.5rem; margin-bottom: 1.5rem;">🔌 MCP Server</h2>
+            <p style="margin-bottom: 1.5rem; color: #a0aec0;">AgentShield is available as a <strong style="color: #fff;">Model Context Protocol (MCP) server</strong> — no installation required. Any MCP-compatible AI client can use AgentShield tools directly.</p>
+
+            <h3 style="color: #48bb78; margin-bottom: 0.8rem;">Quick Setup</h3>
+            <p style="color: #a0aec0; margin-bottom: 0.8rem;">Add to your client config — that's it. No API key required.</p>
+
+            <p style="color: #a0aec0; margin-bottom: 0.4rem; font-size: 0.9rem;"><strong style="color: #fff;">Claude Desktop</strong> — <code style="color: #718096;">%APPDATA%\Claude\claude_desktop_config.json</code></p>
+            <pre style="background: #1a202c; padding: 1rem; border-radius: 6px; margin-bottom: 1.5rem;"><code style="color: #68d391;">{
+  "mcpServers": {
+    "agentshield": {
+      "url": "https://agentshield.live/mcp"
+    }
+  }
+}</code></pre>
+
+            <p style="color: #a0aec0; margin-bottom: 0.4rem; font-size: 0.9rem;"><strong style="color: #fff;">Cursor</strong> — <code style="color: #718096;">~/.cursor/mcp.json</code></p>
+            <pre style="background: #1a202c; padding: 1rem; border-radius: 6px; margin-bottom: 1.5rem;"><code style="color: #68d391;">{
+  "mcpServers": {
+    "agentshield": {
+      "url": "https://agentshield.live/mcp"
+    }
+  }
+}</code></pre>
+
+            <p style="color: #a0aec0; margin-bottom: 0.4rem; font-size: 0.9rem;"><strong style="color: #fff;">VS Code (GitHub Copilot / Continue.dev)</strong> — <code style="color: #718096;">.vscode/mcp.json</code></p>
+            <pre style="background: #1a202c; padding: 1rem; border-radius: 6px; margin-bottom: 1.5rem;"><code style="color: #68d391;">{
+  "servers": {
+    "agentshield": {
+      "url": "https://agentshield.live/mcp"
+    }
+  }
+}</code></pre>
+
+            <h3 style="color: #48bb78; margin-bottom: 0.8rem; margin-top: 1.5rem;">Available Tools</h3>
+            <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+                <thead>
+                    <tr style="border-bottom: 1px solid #2d3748;">
+                        <th style="text-align: left; padding: 0.6rem 1rem; color: #667eea;">Tool</th>
+                        <th style="text-align: left; padding: 0.6rem 1rem; color: #667eea;">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid #1a202c;">
+                        <td style="padding: 0.6rem 1rem;"><code style="color: #68d391;">audit_agent</code></td>
+                        <td style="padding: 0.6rem 1rem; color: #a0aec0;">Start a 77-test security audit — returns challenge to sign</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #1a202c;">
+                        <td style="padding: 0.6rem 1rem;"><code style="color: #68d391;">verify_agent</code></td>
+                        <td style="padding: 0.6rem 1rem; color: #a0aec0;">Check another agent's trust score and certificate validity</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #1a202c;">
+                        <td style="padding: 0.6rem 1rem;"><code style="color: #68d391;">search_registry</code></td>
+                        <td style="padding: 0.6rem 1rem; color: #a0aec0;">Browse the public trust registry, filter by score or platform</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #1a202c;">
+                        <td style="padding: 0.6rem 1rem;"><code style="color: #68d391;">check_revocation</code></td>
+                        <td style="padding: 0.6rem 1rem; color: #a0aec0;">Check if an agent's certificate has been revoked</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.6rem 1rem;"><code style="color: #68d391;">agentshield_status</code></td>
+                        <td style="padding: 0.6rem 1rem; color: #a0aec0;">Check API health, version, and available features</td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+
+            <h3 style="color: #48bb78; margin-bottom: 0.8rem; margin-top: 1.5rem;">Example Prompts</h3>
+            <p style="color: #a0aec0; margin-bottom: 0.8rem;">Once configured, ask your AI client:</p>
+            <div style="background: #1a202c; padding: 1rem; border-radius: 6px; font-size: 0.9rem;">
+                <p style="color: #68d391; margin: 0 0 0.5rem;">&#8220;Verify agent_abc123 before I share data with it&#8221;</p>
+                <p style="color: #68d391; margin: 0 0 0.5rem;">&#8220;Search the registry for agents with a score above 80&#8221;</p>
+                <p style="color: #68d391; margin: 0 0 0.5rem;">&#8220;Start a security audit for my agent named ProductionBot&#8221;</p>
+                <p style="color: #68d391; margin: 0;">&#8220;Check if certificate AS-1234-5678 has been revoked&#8221;</p>
+            </div>
+
+            <div style="margin-top: 1.5rem; padding: 1rem; background: #1a202c; border-left: 4px solid #f6ad55; border-radius: 0 6px 6px 0;">
+                <strong style="color: #f6ad55;">MCP Endpoint:</strong>
+                <code style="background: #2d3748; color: #68d391; padding: 0.2rem 0.6rem; border-radius: 3px; margin-left: 0.5rem;">https://agentshield.live/mcp</code>
+                <span style="color: #718096; font-size: 0.85rem; margin-left: 1rem;">JSON-RPC 2.0 · Streamable HTTP · No auth required</span>
+            </div>
+        </section>
 
     <footer>
         <p>AgentShield v1.0.33 — Multi-Platform Trust Infrastructure | Documentation</p>
