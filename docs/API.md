@@ -510,6 +510,42 @@ See [examples/curl-examples.sh](../examples/curl-examples.sh)
 - Certificate revoked
 - Trust score updated
 
+
+---
+
+## 🔌 MCP Server
+
+AgentShield is available as a **Model Context Protocol (MCP) server** — no install, no API key required.
+
+**Endpoint:** `https://agentshield.live/mcp`  
+**Protocol:** JSON-RPC 2.0 · Streamable HTTP
+
+### Quick Setup
+
+Add to your client config:
+
+```json
+{
+  "mcpServers": {
+    "agentshield": {
+      "url": "https://agentshield.live/mcp"
+    }
+  }
+}
+```
+
+Works with: **Claude Desktop** · **Cursor** · **VS Code (Copilot/Continue.dev)** · any MCP-compatible client.
+
+### Available Tools
+
+| Tool | Description |
+|------|-------------|
+| `audit_agent` | Initiate a 77-test security audit |
+| `verify_agent` | Check an agent's trust score and certificate |
+| `search_registry` | Browse the public trust registry |
+| `check_revocation` | Check if a certificate has been revoked |
+| `agentshield_status` | API health and available features |
+
 ---
 
 ## Support
@@ -520,5 +556,5 @@ See [examples/curl-examples.sh](../examples/curl-examples.sh)
 
 ---
 
-*Last Updated: 2026-02-26*  
-*API Version: v6.4*
+*Last Updated: 2026-06-03*  
+*API Version: v1.5.0*
