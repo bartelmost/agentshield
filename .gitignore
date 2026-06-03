@@ -1,0 +1,34 @@
+# Deployment configs (sensitive infrastructure)
+frontend/_redirects
+frontend/netlify.toml
+**/netlify.toml
+**/_redirects
+
+# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+
+# Local secrets
+.env
+*.env
+secrets.env
+*.key
+*.pem
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/settings.json
+.idea/
+
+# Internal docs (not for public)
+docs/OPENCLAW_REGISTRY.md
+docs/REGISTRY_SUBMISSION.md

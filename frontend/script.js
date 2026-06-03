@@ -1,6 +1,6 @@
 // AgentShield v6.4 - Registry + CRL + Challenge-Response
 
-const API_BASE = 'https://agentshield-api-bartel-fe94823ceeea.herokuapp.com';
+const API_BASE = '';  // Relative URLs via Netlify proxy
 
 let registryData = [];
 let filteredData = [];
