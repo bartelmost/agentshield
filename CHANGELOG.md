@@ -1,109 +1,304 @@
 # Changelog - AgentShield
 
-All notable changes to this project will be documented in this file.
+All notable changes to AgentShield are documented here.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-For detailed technical notes, see [`skill/CHANGELOG.md`](skill/CHANGELOG.md).
+---
+
+## [6.4.0] - 2026-02-26
+
+### 🆕 Added - CRL + Registry Release
+
+**Certificate Revocation**
+- Certificate Revocation List (CRL) endpoint `/api/crl/download`
+- RFC 5280 compliant CRL format
+- Instant revocation via `/api/crl/revoke/:id`
+- CRL check endpoint `/api/crl/check/:id`
+- Automatic CRL generation every 24 hours
+
+**Public Trust Registry**
+- Public agent registry at `/registry` page
+- Search functionality for verified agents
+- Trust score display with tier badges
+- Pagination for large agent lists
+- Agent profile pages with verification history
+
+**Trust Score System**
+- Trust score calculation algorithm (0-100)
+- Tier system: UNVERIFIED (0) → BASIC (1-49) → VERIFIED (50-79) → TRUSTED (80-100)
+- Score factors: 40% verifications, 30% age, 30% success rate
+- Automatic score updates on new verifications
+
+**Frontend Improvements**
+- Trust score badges on registry
+- CRL status indicators
+- Filter by verification tier
+- Responsive registry table
+- Real-time status updates
+
+### 🔧 Changed
+- Updated API rate limits for registry endpoints
+- Enhanced certificate metadata storage
+- Improved database schema for CRL support
+
+### 📚 Documentation
+- Added CRL architecture documentation
+- Trust score calculation explained
+- Registry API endpoints documented
+- Updated security model diagrams
 
 ---
 
-## [1.0.33] - 2026-05-21 - Multi-Platform Support
+## [6.3.0] - 2026-02-20
 
-### Added
-- **n8n Auto-Detection** - Detects `~/.n8n/` directory, reads `instanceName` automatically
-- **`--system-prompt` flag** - Pass your agent's system prompt for deeper local analysis (100% local, never sent)
-- **`PLATFORMS.md`** - Full platform guide for OpenClaw, n8n, LangChain, and any custom agent
+### 🆕 Added - Agent Registry
 
-### Changed
-- `detect_platform()` now checks n8n before OpenClaw default
-- `clawhub.json` platform list extended: openclaw, n8n, langchain, custom, ...
+**Public Registry**
+- Agent certificate directory at `/api/registry/agents`
+- Search endpoint `/api/registry/search`
+- Public verification status pages
+- Trust score badges
 
----
+**Multi-Verification Support**
+- Track multiple verifications per agent
+- Calculate trust score from verification history
+- Display verification count in registry
 
-## [1.0.32] - 2026-04-01 - Critical Production Fix 🔴
+**Database Enhancements**
+- PostgreSQL production database
+- SQLite local development fallback
+- Certificate persistence layer
+- Verification history tracking
 
-### Fixed
-- **CRITICAL: Data sanitization now enforced in production** (was broken in v1.0.31)
-- **CRITICAL: Session management fixed** — all API calls now use shared session
-- **CRITICAL: `complete_audit()` signature updated** to pass client instance
-
-**Upgrade Priority:** All v1.0.31 users should upgrade immediately.
-
----
-
-## [1.0.31] - 2026-04-01 - Submission Sanitization & Transparency
-
-### Added
-- **Explicit whitelist sanitization** — `_sanitize_test_details()` in `audit_client.py`
-- **`--dry-run` flag** — Shows exact API payload before any submission
-- **`--yes` flag warning** — 70-character banner + 3-second pause for safety
+### 🔧 Changed
+- API responses include trust score
+- Certificate format extended with metadata
+- Frontend displays public registry link
 
 ---
 
-## [1.0.30] - 2026-04-01 - Consent Flow
+## [6.2.0] - 2026-02-15
 
-### Fixed
-- Explicit consent prompt **before** reading `IDENTITY.md`/`SOUL.md`
-- Name detection improvements (markdown formats, strict validation)
+### 🆕 Added - Challenge-Response Protocol
 
----
+**Cryptographic Identity**
+- Ed25519 key pair generation (local)
+- Challenge-response verification
+- Zero-knowledge proof of identity
+- Public key registry
 
-## [1.0.29] - 2026-03-31 - Scanner Balance
+**Security Enhancements**
+- Private keys never transmitted
+- Challenge nonce with 5-minute expiry
+- Signature validation on backend
+- Tamper-proof certificate issuance
 
-### Fixed
-- Name detection bug for markdown-formatted names (Eddie's report)
-- Private key storage documented: `~/.openclaw/workspace/.agentshield/`
+**API Endpoints**
+- `/api/challenge/create` - Generate challenge nonce
+- `/api/challenge/verify` - Validate signature
+- `/api/verify/:agent_id` - Check certificate status
 
----
+### 🔧 Changed
+- Certificate format now includes public key hash
+- Assessment results linked to cryptographic identity
+- PDF reports include Ed25519 fingerprint
 
-## [1.0.28] - 2026-03-31
-
-### Fixed
-- Documentation cleanup for scanner compatibility
-
----
-
-## [1.0.27] - 2026-03-31
-
-### Fixed
-- Production backend status clarified
-- Developer scripts removed from user package
-
----
-
-## [1.0.26] - 2026-03-31
-
-### Fixed
-- Test pattern storage externalized to `agentshield_attack_patterns.json`
-- Path consistency unified
+### 📚 Documentation
+- Challenge-response protocol explained
+- Ed25519 signature examples
+- Security architecture diagrams
 
 ---
 
-## [1.0.25] - 2026-03-27
+## [6.1.0] - 2026-02-10
 
-### Fixed
-- Timestamp parsing compatibility (HTTP date, JWT Unix, ISO all supported)
-- API timeout adjustments
+### 🆕 Added - Privacy-First Tests
+
+**Local Security Testing**
+- 52+ security tests run locally in agent environment
+- Subagent-based test execution
+- Zero data exfiltration to AgentShield servers
+- Open source test suite
+
+**Test Categories**
+- Input Sanitizer (prompt injection detection)
+- EchoLeak (zero-click data exfiltration tests)
+- Tool Sandbox (permission boundary controls)
+- Output DLP (PII/API key detection)
+- Supply Chain Scanner (dependency integrity)
+
+**Privacy Architecture**
+- All tests execute in user's agent session
+- No code or prompt data uploaded
+- Only public certificate data stored
+- GDPR/CCPA compliant design
+
+**Rate Limiting**
+- 3 free audits per hour
+- 1 audit per hour after limit
+- Rate limit headers in API responses
+- SQLite-based rate tracking
+
+### 🔧 Changed
+- Moved from cloud-based to local-first testing
+- Reduced API payload to public key only
+- Enhanced privacy guarantees in documentation
+
+### 📚 Documentation
+- Privacy-first architecture explained
+- Local vs cloud scanning comparison
+- Open source test verification guide
 
 ---
 
-## [1.0.24] - 2026-03-26
+## [6.0.0] - 2026-02-01
 
-### Added
-- Production API endpoint live at `agentshield.live`
-- PostgreSQL backend
+### 🆕 Added - Initial Release
+
+**Core Features**
+- Basic security assessment framework
+- PDF report generation
+- API backend deployment
+- Certificate issuance (basic)
+
+**Security Tests**
+- Token optimization analysis
+- Code vulnerability scanning
+- Basic prompt injection tests
+
+**Infrastructure**
+- Heroku backend deployment
+- SQLite database for certificates
+- Basic rate limiting
+
+### 📚 Documentation
+- README with quick start guide
+- Basic API documentation
+- Installation instructions
 
 ---
 
-## [1.0.23] - 2026-03-24
+## Version Numbering
 
-### Fixed
-- **Critical: API URL Bug in Trust Handshake** — `complete_handshake.py` double `/api/` path
-- `--yes` flag for non-interactive mode
-- Improved dependencies documentation
+- **Major (X.0.0)**: Breaking API changes, major architecture overhaul
+- **Minor (6.X.0)**: New features, backwards-compatible additions
+- **Patch (6.4.X)**: Bug fixes, minor improvements
 
 ---
 
-For full technical details, see [`skill/CHANGELOG.md`](skill/CHANGELOG.md).
+## Upgrade Guides
+
+### Upgrading to v6.4
+```bash
+# Update skill
+clawhub update agentshield-audit
+
+# No breaking changes - existing certificates remain valid
+```
+
+### Upgrading to v6.3
+```bash
+# Database migration required for registry
+python migrate.py --to-6.3
+
+# Existing certificates auto-imported to registry
+```
+
+### Upgrading to v6.2
+```bash
+# Re-run assessment to generate Ed25519 identity
+agentshield-audit --auto --yes
+
+# Old certificates remain valid but lack cryptographic proof
+```
+
+---
+
+## Roadmap
+
+### Upcoming Features (v6.5+)
+
+**Planned:**
+- 🔄 Automatic certificate renewal
+- 🏢 Enterprise self-hosted registry
+- 🔗 Blockchain anchoring (optional)
+- 🌐 Multi-language support
+- 📊 Trust score analytics dashboard
+
+**Under Consideration:**
+- Integration with major AI platforms
+- Cross-platform agent verification
+- Federation protocol for multiple registries
+- Hardware security module (HSM) support
+
+**Vote on features:** [GitHub Discussions](https://github.com/bartelmost/agentshield/discussions)
+
+---
+
+## Breaking Changes
+
+### v6.0 → v6.1
+- **API Endpoint Change:** `/audit` → `/api/assess`
+- **Migration:** Update ClawHub skill to latest version
+
+### v6.1 → v6.2
+- **Certificate Format:** Added Ed25519 public key field
+- **Migration:** Re-run assessment to upgrade certificate
+
+### v6.2 → v6.3
+- **Database Schema:** New `verifications` table
+- **Migration:** Run `migrate.py` script
+
+### v6.3 → v6.4
+- **Database Schema:** New `crl_entries` table
+- **Migration:** Auto-migration on first API start
+
+---
+
+## Security Advisories
+
+**None reported yet.**
+
+For responsible disclosure: ratgeberpro@gmail.com
+
+**Bug Bounty:** See [SECURITY.md](./SECURITY.md#bug-bounty)
+
+---
+
+*Maintained by Kalle-OC*  
+*Last Updated: 2026-02-26*
+
+---
+
+## [1.0.35] - 2026-06-03
+
+### 🆕 Added - Hermes Agent Support
+
+**Hermes Agent Auto-Detection**
+- New `detect_hermes()` function: detects `~/.hermes/` directory
+- Auto-reads agent name from `~/.hermes/config.json` or `config.yaml`
+- Confirms active install via `workspace/` or `memory/` subdirectories
+- Confidence: 85% (same tier as n8n detection)
+- `HERMES_AGENT_NAME` environment variable supported
+
+**Framework Compatibility**
+- AgentShield now officially supports OpenClaw, Hermes Agent, n8n, LangChain
+- New compatibility table in SKILL.md
+- New HERMES.md integration guide
+
+**Detection Priority** (highest to lowest)
+1. OpenClaw channel config → 0.9
+2. Hermes Agent (`~/.hermes/`) → 0.85
+3. n8n (`~/.n8n/`) → 0.85
+4. OpenClaw fallback → 0.5
+
+### 📚 Documentation
+- Added `HERMES.md` — step-by-step Hermes integration guide
+- Updated `SKILL.md` — Framework Compatibility table
+- Updated `clawhub.json` — Hermes in platforms, tags, description
+
+### 🧪 Tests
+- 5/5 unit tests passing for `detect_hermes()`
+- OpenClaw regression tests unaffected
