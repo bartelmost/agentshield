@@ -372,8 +372,47 @@
         </div>
     </div>
 
+    <div style="max-width: 900px; margin: 0 auto 40px; padding: 0 20px;">
+        <h2 style="margin: 40px 0 20px; color: #4ade80;">🔌 MCP Server</h2>
+        <p style="color: #94a3b8; margin-bottom: 20px;">AgentShield is available as a <strong style="color: #fff;">Model Context Protocol (MCP) server</strong>. Add one line to your client config &mdash; no install, no API key required.</p>
+
+        <div style="background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+            <h3 style="color: #4ade80; margin: 0 0 12px;">Endpoint</h3>
+            <code style="background: #0f172a; color: #4ade80; padding: 8px 14px; border-radius: 6px; font-size: 1rem; display: inline-block;">https://agentshield.live/mcp</code>
+            <p style="color: #64748b; margin: 10px 0 0; font-size: 0.9rem;">JSON-RPC 2.0 &middot; Streamable HTTP &middot; No auth required</p>
+        </div>
+
+        <div style="background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+            <h3 style="color: #4ade80; margin: 0 0 12px;">Config (Claude Desktop / Cursor / Continue.dev)</h3>
+            <pre style="background: #0f172a; padding: 1rem; border-radius: 6px; margin: 0; overflow-x: auto;"><code style="color: #4ade80;">{
+  "mcpServers": {
+    "agentshield": {
+      "url": "https://agentshield.live/mcp"
+    }
+  }
+}</code></pre>
+        </div>
+
+        <div style="background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 20px;">
+            <h3 style="color: #4ade80; margin: 0 0 12px;">Available Tools</h3>
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+                <thead><tr style="border-bottom: 1px solid #334155;">
+                    <th style="text-align: left; padding: 8px 12px; color: #94a3b8;">Tool</th>
+                    <th style="text-align: left; padding: 8px 12px; color: #94a3b8;">Description</th>
+                </tr></thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid #1e293b;"><td style="padding: 8px 12px;"><code style="color: #4ade80;">audit_agent</code></td><td style="padding: 8px 12px; color: #94a3b8;">Initiate a 77-test security audit</td></tr>
+                    <tr style="border-bottom: 1px solid #1e293b;"><td style="padding: 8px 12px;"><code style="color: #4ade80;">verify_agent</code></td><td style="padding: 8px 12px; color: #94a3b8;">Check an agent&rsquo;s trust score and certificate</td></tr>
+                    <tr style="border-bottom: 1px solid #1e293b;"><td style="padding: 8px 12px;"><code style="color: #4ade80;">search_registry</code></td><td style="padding: 8px 12px; color: #94a3b8;">Browse the public trust registry</td></tr>
+                    <tr style="border-bottom: 1px solid #1e293b;"><td style="padding: 8px 12px;"><code style="color: #4ade80;">check_revocation</code></td><td style="padding: 8px 12px; color: #94a3b8;">Check if a certificate has been revoked</td></tr>
+                    <tr><td style="padding: 8px 12px;"><code style="color: #4ade80;">agentshield_status</code></td><td style="padding: 8px 12px; color: #94a3b8;">API health and available features</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
     <footer>
-        <p>AgentShield API v1.4.9 | <a href="https://agentshield.live" style="color: #4ade80;">Home</a> | <a href="https://github.com/bartelmost/agentshield" style="color: #4ade80;">GitHub</a></p>
+        <p>AgentShield API v1.5.0 | <a href="https://agentshield.live" style="color: #4ade80;">Home</a> | <a href="https://github.com/bartelmost/agentshield" style="color: #4ade80;">GitHub</a></p>
         <p style="margin-top: 10px; font-size: 0.9em;">Trust infrastructure for AI agents — Zero data, maximum security</p>
     </footer>
 
