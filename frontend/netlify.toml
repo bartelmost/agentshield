@@ -23,3 +23,9 @@
   to = "https://agentshield-api-bartel-fe94823ceeea.herokuapp.com/api/:splat"
   status = 200
   force = true
+
+[[redirects]]
+  from = "/mcp"
+  to = "https://agentshield-api-bartel-fe94823ceeea.herokuapp.com/mcp"
+  status = 200
+  force = true
