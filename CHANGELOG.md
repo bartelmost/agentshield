@@ -15,6 +15,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Works with Claude Desktop, Cursor, VS Code Copilot, Continue.dev — one config line, no install required
 - Netlify proxy route `/mcp` → backend
 - MCP documentation in `docs.html` and `api.html`
+- Improved REST API docs (`docs/API.md`) — Health endpoint, MCP section, Rate Limits, Error Codes, npm Coming Soon
+- Frontend `docs.html` updated to v1.5.0 — version badge, changelog entry, footer
+
+### Fixed
+- Backend `/api/health` version string corrected to `v1.5.0` (was `v6.4-CRL`)
 ## [6.4.0] - 2026-02-26
 
 ### 🆕 Added - CRL + Registry Release

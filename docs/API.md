@@ -1,8 +1,38 @@
 # API Documentation - AgentShield
 
-> **Base URL:** `https://agentshield.live/api`
+> **Base URL:** `https://agentshield.live/api`  
+> **MCP Endpoint:** `https://agentshield.live/mcp`  
+> **Version:** v1.5.0 · [Changelog](../CHANGELOG.md)
 
 All endpoints return JSON unless otherwise specified.
+
+---
+
+## 🚀 Quick Start
+
+**30-second curl test – no auth required:**
+
+```bash
+# Check API health
+curl https://agentshield.live/api/health
+
+# Search registry
+curl "https://agentshield.live/api/registry/search?q=myagent"
+
+# Verify a certificate
+curl https://agentshield.live/api/verify/YOUR_AGENT_ID
+```
+
+---
+
+## 📦 Installation
+
+| Method | Command |
+|--------|---------|
+| **Python (pip)** | `pip install agentshield-audit` |
+| **OpenClaw** | `clawhub install agentshield-audit` |
+| **Docker** | `docker pull bartelmost/agentshield:latest` |
+| **MCP** | See [MCP section](#-mcp-server) below |
 
 ---
 
@@ -14,12 +44,43 @@ Most endpoints are **public** (read-only). Write operations require API key.
 # Public endpoints (no auth required)
 curl https://agentshield.live/api/verify/agent_abc123
 
-# Authenticated endpoints (require API key)
+# Authenticated endpoints
 curl -H "Authorization: Bearer YOUR_API_KEY" \
      https://agentshield.live/api/crl/revoke/cert_xyz
 ```
 
-**Get API Key:** Contact enterprise@agentshield.live
+**Get API Key:** ratgeberpro@gmail.com
+
+---
+
+## ❤️ Health Check
+
+### GET /api/health
+
+Returns API status and version.
+
+```bash
+curl https://agentshield.live/api/health
+```
+
+**Response:**
+```json
+{
+  "status": "healthy",
+  "version": "v1.5.0",
+  "crl_active": true,
+  "features": [
+    "rate-limiting", "certificate-store", "verify-endpoint",
+    "trust-scoring", "registry-search", "certificate-revocation-list",
+    "crl-download", "revocation-check"
+  ],
+  "products": [
+    "token-optimizer", "code-scan", "agent-audit", "agent-registry", "crl"
+  ],
+  "revoked_count": 0,
+  "timestamp": "2026-06-03T14:00:00Z"
+}
+```
 
 ---
 
@@ -27,19 +88,20 @@ curl -H "Authorization: Bearer YOUR_API_KEY" \
 
 ### GET /api/registry/agents
 
-List all certified agents in the public registry.
+List all certified agents.
 
 **Parameters:**
-- `limit` (optional, default: 20) - Number of results per page (max 100)
-- `offset` (optional, default: 0) - Pagination offset
-- `tier` (optional) - Filter by tier: `UNVERIFIED`, `BASIC`, `VERIFIED`, `TRUSTED`
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `limit` | int | 20 | Results per page (max 100) |
+| `offset` | int | 0 | Pagination offset |
+| `tier` | string | — | Filter: `UNVERIFIED`, `BASIC`, `VERIFIED`, `TRUSTED` |
 
-**Example Request:**
 ```bash
-curl "https://agentshield.live/api/registry/agents?limit=10&offset=0"
+curl "https://agentshield.live/api/registry/agents?limit=10&tier=TRUSTED"
 ```
 
-**Example Response:**
+**Response:**
 ```json
 {
   "success": true,
@@ -57,22 +119,10 @@ curl "https://agentshield.live/api/registry/agents?limit=10&offset=0"
       "last_verified": "2026-02-26T10:15:00Z",
       "certificate_status": "valid",
       "revoked": false
-    },
-    // ... 9 more agents
+    }
   ]
 }
 ```
-
-**Response Fields:**
-- `agent_id`: Unique agent identifier
-- `public_key_hash`: Ed25519 public key hash (truncated)
-- `trust_score`: Trust score (0-100)
-- `tier`: Trust tier (UNVERIFIED/BASIC/VERIFIED/TRUSTED)
-- `verification_count`: Number of successful verifications
-- `first_verified`: First verification timestamp (ISO 8601)
-- `last_verified`: Most recent verification timestamp
-- `certificate_status`: `valid`, `expired`, or `revoked`
-- `revoked`: Boolean revocation status
 
 ---
 
@@ -80,481 +130,261 @@ curl "https://agentshield.live/api/registry/agents?limit=10&offset=0"
 
 Search agents by name, ID, or public key hash.
 
-**Parameters:**
-- `q` (required) - Search query
-- `limit` (optional, default: 20)
-- `offset` (optional, default: 0)
+**Parameters:** `q` (required), `limit`, `offset`
 
-**Example Request:**
 ```bash
-curl "https://agentshield.live/api/registry/search?q=kalle&limit=5"
+curl "https://agentshield.live/api/registry/search?q=myagent"
 ```
-
-**Example Response:**
-```json
-{
-  "success": true,
-  "query": "kalle",
-  "total": 1,
-  "agents": [
-    {
-      "agent_id": "agent_kalle_oc_2024",
-      "trust_score": 85,
-      "tier": "TRUSTED",
-      "match_reason": "agent_id"
-    }
-  ]
-}
-```
-
-**Match Reasons:**
-- `agent_id` - Matched agent identifier
-- `public_key_hash` - Matched public key hash
-- `metadata` - Matched agent metadata (if available)
 
 ---
 
 ### GET /api/verify/:agent_id
 
-Verify a specific agent's certificate status.
+Verify a specific agent's certificate.
 
-**Parameters:**
-- `agent_id` (required, in URL) - Agent identifier
-
-**Example Request:**
 ```bash
-curl "https://agentshield.live/api/verify/agent_kalle_oc_2024"
+curl https://agentshield.live/api/verify/agent_kalle_oc_2024
 ```
 
-**Example Response:**
+**Response:**
 ```json
 {
   "success": true,
   "agent_id": "agent_kalle_oc_2024",
   "verified": true,
-  "certificate": {
-    "issued": "2026-02-10T14:30:00Z",
-    "expires": "2027-02-10T14:30:00Z",
-    "public_key": "ed25519:AAAAC3NzaC1lZDI1NTE5AAAAI...",
-    "fingerprint": "SHA256:abc123def456..."
-  },
-  "trust": {
-    "score": 85,
-    "tier": "TRUSTED",
-    "verification_count": 12,
-    "first_verified": "2026-02-10T14:30:00Z",
-    "last_verified": "2026-02-26T10:15:00Z"
-  },
-  "crl_status": "valid",
-  "revoked": false
-}
-```
-
-**Response Fields:**
-- `verified`: Boolean - agent has valid certificate
-- `certificate`: Certificate metadata
-  - `issued`: Issue timestamp
-  - `expires`: Expiry timestamp
-  - `public_key`: Ed25519 public key (full)
-  - `fingerprint`: SHA256 fingerprint
-- `trust`: Trust metrics
-  - `score`: Trust score (0-100)
-  - `tier`: Trust tier
-  - `verification_count`: Number of verifications
-- `crl_status`: CRL check result (`valid`, `revoked`, `unknown`)
-- `revoked`: Boolean revocation status
-
----
-
-## 🚫 CRL (Certificate Revocation List) Endpoints
-
-### GET /api/crl/check/:id
-
-Check if a certificate is revoked.
-
-**Parameters:**
-- `id` (required, in URL) - Certificate ID or agent ID
-
-**Example Request:**
-```bash
-curl "https://agentshield.live/api/crl/check/agent_kalle_oc_2024"
-```
-
-**Example Response (Valid):**
-```json
-{
-  "success": true,
-  "id": "agent_kalle_oc_2024",
+  "trust_score": 85,
+  "tier": "TRUSTED",
+  "certificate_status": "valid",
   "revoked": false,
-  "status": "valid",
-  "checked_at": "2026-02-26T18:30:00Z"
+  "public_key_hash": "ed25519:sha256:abc123...",
+  "issued_at": "2026-02-10T14:30:00Z",
+  "expires_at": "2027-02-10T14:30:00Z"
 }
 ```
 
-**Example Response (Revoked):**
+---
+
+## 🔒 Audit Endpoints
+
+### POST /api/agent-audit/initiate
+
+Start a new security audit.
+
+```bash
+curl -X POST https://agentshield.live/api/agent-audit/initiate \
+  -H "Content-Type: application/json" \
+  -d '{
+    "agent_id": "my_agent_001",
+    "agent_name": "MyAgent",
+    "platform": "openclaw",
+    "public_key": "ed25519:BASE64_ENCODED_PUBLIC_KEY"
+  }'
+```
+
+**Response:**
 ```json
 {
   "success": true,
-  "id": "agent_compromised_123",
-  "revoked": true,
-  "status": "revoked",
-  "revoked_at": "2026-02-25T10:00:00Z",
-  "reason": "key_compromise",
-  "checked_at": "2026-02-26T18:30:00Z"
+  "session_id": "sess_abc123",
+  "challenge": "RANDOM_CHALLENGE_STRING",
+  "expires_at": "2026-06-03T14:05:00Z"
 }
 ```
 
-**Revocation Reasons:**
-- `unspecified` - No specific reason given
-- `key_compromise` - Private key was compromised
-- `ca_compromise` - Issuer compromise (rare)
-- `affiliation_changed` - Agent ownership changed
-- `superseded` - Certificate replaced by newer one
-- `cessation_of_operation` - Agent no longer operational
+### POST /api/agent-audit/submit
 
----
+Submit audit results and sign the challenge.
 
-### GET /api/crl/download
-
-Download complete Certificate Revocation List (RFC 5280 format).
-
-**Example Request:**
 ```bash
-curl "https://agentshield.live/api/crl/download" -o agentshield.crl
+curl -X POST https://agentshield.live/api/agent-audit/submit \
+  -H "Content-Type: application/json" \
+  -d '{
+    "session_id": "sess_abc123",
+    "signature": "BASE64_SIGNED_CHALLENGE",
+    "audit_score": 87,
+    "tests_passed": 74,
+    "tests_total": 77
+  }'
 ```
 
-**Response:** Binary CRL file (DER format)
-
-**Parse CRL:**
-```bash
-# View CRL contents
-openssl crl -in agentshield.crl -inform DER -text -noout
-```
-
-**CRL Fields:**
-- Issuer: AgentShield CA
-- This Update: CRL generation timestamp
-- Next Update: Next scheduled CRL update (24h)
-- Revoked Certificates: List of revoked cert serial numbers
-
----
-
-### POST /api/crl/revoke/:id
-
-**[Authenticated]** Revoke a certificate.
-
-**Parameters:**
-- `id` (required, in URL) - Certificate ID to revoke
-- `reason` (optional, in body) - Revocation reason (see list above)
-
-**Example Request:**
-```bash
-curl -X POST \
-     -H "Authorization: Bearer YOUR_API_KEY" \
-     -H "Content-Type: application/json" \
-     -d '{"reason": "key_compromise"}' \
-     "https://agentshield.live/api/crl/revoke/agent_compromised_123"
-```
-
-**Example Response:**
+**Response:**
 ```json
 {
   "success": true,
-  "revoked": true,
-  "id": "agent_compromised_123",
-  "revoked_at": "2026-02-26T18:35:00Z",
-  "reason": "key_compromise",
-  "crl_updated": true
+  "certificate_id": "cert_xyz789",
+  "trust_score": 87,
+  "tier": "TRUSTED",
+  "certificate_url": "https://agentshield.live/api/verify/my_agent_001"
 }
 ```
 
 ---
 
-## 🔑 Challenge-Response Endpoints
+## 🤝 Trust Handshake
 
-### POST /api/challenge/create
+### POST /api/trust-handshake/initiate
 
-Create a challenge for cryptographic identity verification.
+Start a Trust Handshake with another agent.
 
-**Request Body:**
-```json
-{
-  "agent_id": "agent_kalle_oc_2024"
-}
-```
-
-**Example Request:**
 ```bash
-curl -X POST \
-     -H "Content-Type: application/json" \
-     -d '{"agent_id": "agent_kalle_oc_2024"}' \
-     "https://agentshield.live/api/challenge/create"
+curl -X POST https://agentshield.live/api/trust-handshake/initiate \
+  -H "Content-Type: application/json" \
+  -d '{
+    "initiator_id": "agent_a",
+    "target_id": "agent_b"
+  }'
 ```
 
-**Example Response:**
-```json
-{
-  "success": true,
-  "challenge": {
-    "nonce": "9f3c7e21b8a4d5f0...",
-    "expires_at": "2026-02-26T18:45:00Z",
-    "agent_id": "agent_kalle_oc_2024"
-  }
-}
-```
+### POST /api/trust-handshake/verify
 
-**Challenge Properties:**
-- `nonce`: Random 32-byte hex string (challenge to sign)
-- `expires_at`: Challenge expiry (5 minutes from creation)
-- `agent_id`: Agent identifier for this challenge
+Complete the mutual verification.
 
 ---
 
-### POST /api/challenge/verify
+## 📜 Certificate Revocation List (CRL)
 
-Verify challenge signature.
+### GET /api/crl
 
-**Request Body:**
-```json
-{
-  "agent_id": "agent_kalle_oc_2024",
-  "nonce": "9f3c7e21b8a4d5f0...",
-  "signature": "ed25519_signature_hex...",
-  "public_key": "ed25519_public_key_hex..."
-}
-```
+Download the full CRL (RFC 5280 compliant).
 
-**Example Request:**
 ```bash
-curl -X POST \
-     -H "Content-Type: application/json" \
-     -d '{
-       "agent_id": "agent_kalle_oc_2024",
-       "nonce": "9f3c7e21b8a4d5f0...",
-       "signature": "a1b2c3d4...",
-       "public_key": "ed25519:AAAAC3..."
-     }' \
-     "https://agentshield.live/api/challenge/verify"
+curl https://agentshield.live/api/crl
 ```
 
-**Example Response (Success):**
-```json
-{
-  "success": true,
-  "verified": true,
-  "agent_id": "agent_kalle_oc_2024",
-  "certificate_issued": true,
-  "certificate": {
-    "id": "cert_abc123...",
-    "issued_at": "2026-02-26T18:40:00Z",
-    "expires_at": "2027-02-26T18:40:00Z",
-    "public_key_hash": "SHA256:abc123..."
-  }
-}
-```
+### GET /api/crl/check/:cert_id
 
-**Example Response (Failure):**
-```json
-{
-  "success": false,
-  "verified": false,
-  "error": "Invalid signature",
-  "details": "Signature verification failed for public key"
-}
-```
+Check if a specific certificate is revoked.
 
----
-
-## 📊 Status Endpoints
-
-### GET /api/status
-
-API health check.
-
-**Example Request:**
 ```bash
-curl "https://agentshield.live/api/status"
+curl https://agentshield.live/api/crl/check/cert_xyz789
 ```
 
-**Example Response:**
+**Response:**
 ```json
 {
-  "status": "online",
-  "version": "6.4.0",
-  "uptime": 86400,
-  "database": "connected",
-  "crl_last_update": "2026-02-26T06:00:00Z",
-  "total_certificates": 42,
-  "total_revocations": 2
+  "cert_id": "cert_xyz789",
+  "revoked": false,
+  "checked_at": "2026-06-03T14:00:00Z"
 }
 ```
-
----
-
-### GET /api/rate-limit/status
-
-Check your current rate limit status.
-
-**Example Request:**
-```bash
-curl "https://agentshield.live/api/rate-limit/status"
-```
-
-**Example Response:**
-```json
-{
-  "success": true,
-  "limit": 3,
-  "remaining": 2,
-  "reset_at": "2026-02-26T19:00:00Z",
-  "current_time": "2026-02-26T18:45:00Z"
-}
-```
-
-**Rate Limit Headers:**
-All API responses include:
-- `X-RateLimit-Limit`: Maximum requests per hour
-- `X-RateLimit-Remaining`: Remaining requests
-- `X-RateLimit-Reset`: Unix timestamp when limit resets
-
----
-
-## ⚠️ Error Responses
-
-All errors follow this format:
-
-```json
-{
-  "success": false,
-  "error": "Human-readable error message",
-  "code": "ERROR_CODE",
-  "details": "Additional error context (optional)"
-}
-```
-
-**Common Error Codes:**
-
-| Code | HTTP Status | Description |
-|------|-------------|-------------|
-| `RATE_LIMIT_EXCEEDED` | 429 | Too many requests |
-| `INVALID_AGENT_ID` | 400 | Malformed agent identifier |
-| `CERTIFICATE_NOT_FOUND` | 404 | No certificate for agent |
-| `CHALLENGE_EXPIRED` | 400 | Challenge nonce expired |
-| `SIGNATURE_INVALID` | 401 | Invalid Ed25519 signature |
-| `UNAUTHORIZED` | 401 | Missing or invalid API key |
-| `SERVER_ERROR` | 500 | Internal server error |
-
----
-
-## 📈 Rate Limits
-
-| Tier | Endpoint | Limit |
-|------|----------|-------|
-| **Free** | `/api/registry/*` | 60 req/hour |
-| **Free** | `/api/verify/*` | 60 req/hour |
-| **Free** | `/api/crl/check/*` | 100 req/hour |
-| **Free** | `/api/challenge/*` | 3 req/hour (then 1/hour) |
-| **Pro** | All endpoints | 1000 req/hour |
-
-**Upgrade:** Contact enterprise@agentshield.live
-
----
-
-## 🧪 Testing
-
-### Sandbox Environment
-
-**Base URL:** `https://sandbox.agentshield.live/api`
-
-- Test certificates issued with `test_` prefix
-- Not included in production registry
-- No rate limits
-- Resets daily
-
-**Example:**
-```bash
-curl "https://sandbox.agentshield.live/api/verify/test_agent_123"
-```
-
----
-
-## 📚 SDKs & Libraries
-
-### Python
-```python
-from agentshield import Client
-
-client = Client(api_key="YOUR_API_KEY")
-agent = client.verify("agent_kalle_oc_2024")
-print(f"Trust Score: {agent.trust_score}")
-```
-
-### JavaScript
-```javascript
-const AgentShield = require('agentshield-js');
-
-const client = new AgentShield({ apiKey: 'YOUR_API_KEY' });
-const agent = await client.verify('agent_kalle_oc_2024');
-console.log(`Trust Score: ${agent.trustScore}`);
-```
-
-### curl Examples
-See [examples/curl-examples.sh](../examples/curl-examples.sh)
-
----
-
-## 🔗 Webhooks
-
-**[Coming in v6.5]** Subscribe to events:
-- Certificate issued
-- Certificate revoked
-- Trust score updated
-
 
 ---
 
 ## 🔌 MCP Server
 
-AgentShield is available as a **Model Context Protocol (MCP) server** — no install, no API key required.
+AgentShield exposes a **Model Context Protocol (MCP)** server for direct integration with Claude Desktop, Cursor, VS Code Copilot, and any MCP-compatible tool.
 
-**Endpoint:** `https://agentshield.live/mcp`  
-**Protocol:** JSON-RPC 2.0 · Streamable HTTP
+**Endpoint:** `https://agentshield.live/mcp`
 
-### Quick Setup
+### Claude Desktop Setup
 
-Add to your client config:
+Add to `~/.config/Claude/claude_desktop_config.json`:
 
 ```json
 {
   "mcpServers": {
     "agentshield": {
-      "url": "https://agentshield.live/mcp"
+      "url": "https://agentshield.live/mcp",
+      "transport": "http"
     }
   }
 }
 ```
 
-Works with: **Claude Desktop** · **Cursor** · **VS Code (Copilot/Continue.dev)** · any MCP-compatible client.
-
-### Available Tools
+### Available MCP Tools
 
 | Tool | Description |
 |------|-------------|
-| `audit_agent` | Initiate a 77-test security audit |
-| `verify_agent` | Check an agent's trust score and certificate |
-| `search_registry` | Browse the public trust registry |
-| `check_revocation` | Check if a certificate has been revoked |
-| `agentshield_status` | API health and available features |
+| `audit_agent` | Run a full security audit |
+| `verify_agent` | Verify an agent's certificate |
+| `search_registry` | Search the trust registry |
+| `check_revocation` | Check CRL for a certificate |
+| `agentshield_status` | Get API health and version |
+
+### MCP Test
+
+```bash
+curl -X POST https://agentshield.live/mcp \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "method": "tools/call",
+    "params": {
+      "name": "agentshield_status",
+      "arguments": {}
+    },
+    "id": 1
+  }'
+```
 
 ---
 
-## Support
+## 📦 npm Package (Coming Soon)
 
-- **Documentation:** [github.com/bartelmost/agentshield](https://github.com/bartelmost/agentshield)
-- **API Status:** [status.agentshield.live](https://status.agentshield.live)
-- **Support:** security@agentshield.live
+> **Status:** In Development – [Join waitlist](mailto:ratgeberpro@gmail.com?subject=npm+waitlist)
+
+```bash
+# Coming soon:
+npm install agentshield-audit
+```
+
+```javascript
+const { AgentShield } = require('agentshield-audit');
+
+const shield = new AgentShield();
+const result = await shield.verify('agent_kalle_oc_2024');
+console.log(`Trust Score: ${result.trust_score}`);
+```
 
 ---
 
-*Last Updated: 2026-06-03*  
-*API Version: v1.5.0*
+## ⚡ Rate Limits
+
+| Tier | Audits/hour | Verifications/hour |
+|------|-------------|-------------------|
+| Free | 20 | Unlimited |
+| Pro ($9/mo) | Unlimited | Unlimited |
+| Enterprise ($199/mo) | Unlimited | Unlimited + SLA |
+
+**429 Response:**
+```json
+{
+  "error": "rate_limit_exceeded",
+  "retry_after": 3600,
+  "message": "Upgrade to Pro for unlimited audits"
+}
+```
+
+---
+
+## ❌ Error Codes
+
+| Code | Meaning |
+|------|---------|
+| `400` | Bad Request – missing or invalid parameters |
+| `401` | Unauthorized – invalid or missing API key |
+| `404` | Not Found – agent or certificate not found |
+| `429` | Rate Limit Exceeded |
+| `500` | Internal Server Error |
+
+**Error Response Format:**
+```json
+{
+  "error": "not_found",
+  "message": "Agent 'agent_xyz' not found in registry",
+  "code": 404
+}
+```
+
+---
+
+## 🔗 Resources
+
+- **Docs:** [agentshield.live/docs](https://agentshield.live/docs)
+- **GitHub:** [github.com/bartelmost/agentshield](https://github.com/bartelmost/agentshield)
+- **Support:** ratgeberpro@gmail.com
+- **Status:** [agentshield.live/api/health](https://agentshield.live/api/health)
+
+---
+
+*Last Updated: 2026-06-03 · API Version: v1.5.0*
