@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## v1.5.0 — 2026-06-03
+
+### Added
+- **MCP Server** — AgentShield now available as a Model Context Protocol server at `https://agentshield.live/mcp`
+- MCP tools: `audit_agent`, `verify_agent`, `search_registry`, `check_revocation`, `agentshield_status`
+- Works with Claude Desktop, Cursor, VS Code Copilot, Continue.dev — one config line, no install required
+- Netlify proxy route `/mcp` → backend
+- MCP documentation in `docs.html` and `api.html`
 ## [6.4.0] - 2026-02-26
 
 ### 🆕 Added - CRL + Registry Release
