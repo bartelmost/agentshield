@@ -7,5 +7,8 @@
 # Reports Proxy - PDFs vom Backend
 /reports/*  https://agentshield-api-bartel-fe94823ceeea.herokuapp.com/reports/:splat  200
 
+# MCP Server - Model Context Protocol
+/mcp  https://agentshield-api-bartel-fe94823ceeea.herokuapp.com/mcp  200
+
 # SPA fallback für alle Routen
 /*      /index.html   200
