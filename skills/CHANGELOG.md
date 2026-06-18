@@ -2,6 +2,42 @@
 
 All notable changes to AgentShield will be documented in this file.
 
+## [1.0.36] - 2026-06-18
+
+### Added
+- Early Adopter Program: new `GETTING-STARTED.md`, `WHY-AGENTSHIELD.md`, `EARLY-ADOPTER-CAMPAIGN.md`
+- New `getting-started.html` frontend page with platform compatibility table
+- Early Adopter section on homepage with benefit cards and CTA
+- Getting Started section as first entry in `docs.html`
+
+### Changed
+- Backend: `FREE_TIER_LIMIT` raised from 3 → 20 for Early Adopter phase
+- `docs.html` version badge updated to v1.5.12
+- `SKILL.md` frontmatter version updated to 1.0.36
+
+### Fixed
+- Score bug (0/100) fully resolved in backend v176 (Heroku)
+- `test_results` parsing in `complete_audit` now correctly reads `security_score`
+
+## [1.0.35] - 2026-06-03
+
+### Added — Hermes Agent Support
+- New `detect_hermes()` function: detects `~/.hermes/` directory
+- Auto-reads agent name from `~/.hermes/config.json` or `config.yaml`
+- `HERMES_AGENT_NAME` environment variable supported
+- New `HERMES.md` integration guide
+- Framework Compatibility table in `SKILL.md`
+- Detection priority: OpenClaw (0.9) → Hermes (0.85) → n8n (0.85) → fallback (0.5)
+
+## [1.0.34] - 2026-05-27
+
+### Added — MCP Server
+- AgentShield available as Model Context Protocol server at `https://agentshield.live/mcp`
+- MCP tools: `audit_agent`, `verify_agent`, `search_registry`, `check_revocation`, `agentshield_status`
+- Works with Claude Desktop, Cursor, VS Code, Continue.dev
+- MCP documentation in `docs.html` and `api.html`
+- Trust Score System: 0–100 score, tier badges, score factors documented
+
 ## [1.0.33] - 2026-05-21 - Multi-Platform Support
 
 ### Added - n8n Auto-Detection & Platform Guide 🆕

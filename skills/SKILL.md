@@ -1,6 +1,6 @@
 ---
 name: agentshield
-version: 1.0.35
+version: 1.0.36
 description: Privacy-First security audit with 77 local tests (52 live + 25 static). Works with OpenClaw, Hermes Agent, n8n (auto-detected), LangChain, and any AI agent platform. Ed25519 private keys stay local. All scripts bundled.
 triggers: ["audit my agent", "get security certificate", "verify agent", "activate AgentShield", "security audit", "trust handshake", "verify peer agent", "check agent security"]
 ---
