@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Getting Started | AgentShield</title>
+    <meta name="description" content="Get started with AgentShield — cryptographic identity and trust scores for AI agents. Works with OpenClaw, LangChain, CrewAI, AutoGen, n8n and more.">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav>
+        <div class="container nav-content">
+            <a href="index.html" class="logo"><img src="agentshield-logo.png" alt="AgentShield" style="height: 130px; width: auto; vertical-align: middle;"></a>
+            <ul class="nav-links">
+                <li><a href="index.html#products">Get Certified</a></li>
+                <li><a href="verify.html">Verify</a></li>
+                <li><a href="docs.html">Docs</a></li>
+                <li><a href="index.html#early-adopter" style="color: var(--gold, #ffd700); font-weight: 700;">⭐ Early Adopters</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header style="padding: 5rem 0 3rem; background: linear-gradient(135deg, #020617 0%, #0f172a 100%); border-bottom: 2px solid var(--primary, #00ff88);">
+        <div class="container text-center">
+            <span class="section-tag">Quick Start Guide</span>
+            <h1 style="font-size: 3rem; margin: 1rem 0;">Get Your Agent Certified</h1>
+            <p style="max-width: 650px; margin: 0 auto; color: var(--text-muted, #a0aec0); font-size: 1.15rem;">
+                Cryptographic identity + public trust score for your AI agent. Under 5 minutes. Works on any platform.
+            </p>
+        </div>
+    </header>
+
+    <main style="padding: 4rem 0;">
+        <div class="container" style="max-width: 800px;">
+
+            <!-- Step 1 -->
+            <section style="background: #0a0e1a; border-radius: 12px; padding: 2rem; margin-bottom: 2rem; border-left: 4px solid var(--primary, #00ff88);">
+                <h2 style="color: var(--primary, #00ff88); margin-top: 0;">Step 1 — Install</h2>
+
+                <h3 style="color: #48bb78; margin-bottom: 0.5rem;">OpenClaw / Hermes Agent</h3>
+                <pre style="background: #1a202c; padding: 1rem; border-radius: 6px; margin-bottom: 1.5rem; overflow-x: auto;"><code style="color: #68d391;">clawhub install agentshield</code></pre>
+
+                <h3 style="color: #48bb78; margin-bottom: 0.5rem;">All other platforms (LangChain, CrewAI, AutoGen, n8n, …)</h3>
+                <pre style="background: #1a202c; padding: 1rem; border-radius: 6px; overflow-x: auto;"><code style="color: #68d391;">pip install agentshield-audit</code></pre>
+            </section>
+
+            <!-- Step 2 -->
+            <section style="background: #0a0e1a; border-radius: 12px; padding: 2rem; margin-bottom: 2rem; border-left: 4px solid #667eea;">
+                <h2 style="color: #667eea; margin-top: 0;">Step 2 — Run your first audit</h2>
+                <pre style="background: #1a202c; padding: 1rem; border-radius: 6px; margin-bottom: 1rem; overflow-x: auto;"><code style="color: #68d391;"># Auto-detect (OpenClaw, Hermes, n8n)
+python initiate_audit.py --auto
+
+# Manual (LangChain, CrewAI, custom)
+python initiate_audit.py --name "MyAgent" --platform langchain</code></pre>
+                <p style="color: #a0aec0; font-size: 0.95rem; margin: 0;">
+                    This runs <strong style="color: #fff;">77 security tests locally</strong> (~30 seconds).
+                    Only pass/fail scores are sent to the API — no prompts, no responses, no private data.
+                    <a href="docs.html#installation" style="color: #667eea;">→ Full privacy details</a>
+                </p>
+            </section>
+
+            <!-- Step 3 -->
+            <section style="background: #0a0e1a; border-radius: 12px; padding: 2rem; margin-bottom: 2rem; border-left: 4px solid #f6ad55;">
+                <h2 style="color: #f6ad55; margin-top: 0;">Step 3 — View your certificate</h2>
+                <pre style="background: #1a202c; padding: 1rem; border-radius: 6px; margin-bottom: 1rem; overflow-x: auto;"><code style="color: #68d391;">python show_certificate.py</code></pre>
+                <p style="color: #a0aec0; font-size: 0.95rem; margin: 0;">
+                    Your Ed25519 private key stays local. The signed certificate is stored in
+                    <code style="background: #2d3748; color: #f6ad55; padding: 0.1rem 0.4rem; border-radius: 3px;">~/.agentshield/certificate.json</code>
+                </p>
+            </section>
+
+            <!-- Step 4 -->
+            <section style="background: #0a0e1a; border-radius: 12px; padding: 2rem; margin-bottom: 3rem; border-left: 4px solid #48bb78;">
+                <h2 style="color: #48bb78; margin-top: 0;">Step 4 — Public verification</h2>
+                <pre style="background: #1a202c; padding: 1rem; border-radius: 6px; margin-bottom: 1rem; overflow-x: auto;"><code style="color: #68d391;">https://agentshield.live/verify/&lt;your_agent_id&gt;</code></pre>
+                <p style="color: #a0aec0; font-size: 0.95rem; margin: 0;">
+                    Anyone can verify your agent's trust score and certificate — no account needed.
+                    <a href="verify.html" style="color: #48bb78;">→ Open Verify page</a>
+                </p>
+            </section>
+
+            <!-- Platform compat -->
+            <section style="background: #0a0e1a; border-radius: 12px; padding: 2rem; margin-bottom: 2rem;">
+                <h2 style="color: #fff; margin-top: 0;">Platform Compatibility</h2>
+                <table style="width: 100%; border-collapse: collapse; color: #a0aec0;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid #2d3748;">
+                            <th style="text-align: left; padding: 0.75rem 0.5rem; color: #fff;">Platform</th>
+                            <th style="text-align: left; padding: 0.75rem 0.5rem; color: #fff;">Status</th>
+                            <th style="text-align: left; padding: 0.75rem 0.5rem; color: #fff;">Flag</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid #1a202c;">
+                            <td style="padding: 0.75rem 0.5rem;">OpenClaw</td>
+                            <td style="padding: 0.75rem 0.5rem; color: #48bb78;">✅ Full support</td>
+                            <td style="padding: 0.75rem 0.5rem;"><code style="background: #2d3748; padding: 0.1rem 0.4rem; border-radius: 3px; font-size: 0.85rem;">--auto</code></td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #1a202c;">
+                            <td style="padding: 0.75rem 0.5rem;">Hermes Agent</td>
+                            <td style="padding: 0.75rem 0.5rem; color: #48bb78;">✅ Full support</td>
+                            <td style="padding: 0.75rem 0.5rem;"><code style="background: #2d3748; padding: 0.1rem 0.4rem; border-radius: 3px; font-size: 0.85rem;">--auto</code></td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #1a202c;">
+                            <td style="padding: 0.75rem 0.5rem;">n8n</td>
+                            <td style="padding: 0.75rem 0.5rem; color: #48bb78;">✅ Auto-detected</td>
+                            <td style="padding: 0.75rem 0.5rem;"><code style="background: #2d3748; padding: 0.1rem 0.4rem; border-radius: 3px; font-size: 0.85rem;">--auto</code></td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #1a202c;">
+                            <td style="padding: 0.75rem 0.5rem;">LangChain / LangGraph</td>
+                            <td style="padding: 0.75rem 0.5rem; color: #f6ad55;">✅ Manual</td>
+                            <td style="padding: 0.75rem 0.5rem;"><code style="background: #2d3748; padding: 0.1rem 0.4rem; border-radius: 3px; font-size: 0.85rem;">--name "X" --platform langchain</code></td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #1a202c;">
+                            <td style="padding: 0.75rem 0.5rem;">CrewAI</td>
+                            <td style="padding: 0.75rem 0.5rem; color: #f6ad55;">✅ Manual</td>
+                            <td style="padding: 0.75rem 0.5rem;"><code style="background: #2d3748; padding: 0.1rem 0.4rem; border-radius: 3px; font-size: 0.85rem;">--name "X" --platform crewai</code></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.75rem 0.5rem;">AutoGen / Custom</td>
+                            <td style="padding: 0.75rem 0.5rem; color: #f6ad55;">✅ Manual</td>
+                            <td style="padding: 0.75rem 0.5rem;"><code style="background: #2d3748; padding: 0.1rem 0.4rem; border-radius: 3px; font-size: 0.85rem;">--name "X" --platform cli</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Early Adopter CTA -->
+            <section style="background: linear-gradient(135deg, #0f1f2e 0%, #1a1a2e 100%); border: 2px solid var(--gold, #ffd700); border-radius: 12px; padding: 2rem; text-align: center;">
+                <div style="font-size: 2.5rem; margin-bottom: 1rem;">⭐</div>
+                <h2 style="color: var(--gold, #ffd700); margin-top: 0;">Early Adopter Program</h2>
+                <p style="color: #a0aec0; max-width: 550px; margin: 0 auto 1.5rem; font-size: 1rem;">
+                    We're looking for the first 25 serious agent builders. Install, run 1–2 audits, give honest feedback.
+                    You get a public Early Adopter Badge + priority feature access.
+                </p>
+                <a href="https://github.com/bartelmost/agentshield/blob/main/EARLY-ADOPTER-CAMPAIGN.md"
+                   target="_blank"
+                   style="display: inline-block; padding: 0.875rem 2rem; background: var(--gold, #ffd700); color: #000; font-weight: 700; border-radius: 8px; text-decoration: none; font-size: 1rem;">
+                    🚀 Join as Early Adopter →
+                </a>
+            </section>
+
+            <div style="margin-top: 3rem; text-align: center; color: #718096; font-size: 0.9rem;">
+                <a href="docs.html" style="color: #667eea; text-decoration: none;">Full Documentation</a>
+                &nbsp;·&nbsp;
+                <a href="https://github.com/bartelmost/agentshield" target="_blank" style="color: #667eea; text-decoration: none;">GitHub</a>
+                &nbsp;·&nbsp;
+                <a href="verify.html" style="color: #667eea; text-decoration: none;">Verify an Agent</a>
+            </div>
+        </div>
+    </main>
+
+    <footer style="background: #020617; border-top: 1px solid rgba(255,255,255,0.1); padding: 2rem 0; margin-top: 4rem;">
+        <div class="container text-center" style="color: #718096; font-size: 0.9rem;">
+            <p>AgentShield &copy; 2026 safectory GmbH &nbsp;·&nbsp;
+            <a href="privacy.html" style="color: #a0aec0; text-decoration: none;">Privacy</a> &nbsp;·&nbsp;
+            <a href="impressum.html" style="color: #a0aec0; text-decoration: none;">Impressum</a></p>
+        </div>
+    </footer>
+</body>
+</html>

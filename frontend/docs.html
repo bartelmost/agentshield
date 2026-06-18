@@ -259,13 +259,14 @@
         <div class="container">
             <h1><img src="agentshield-icon.png" alt="" style="height: 40px; width: 40px; vertical-align: middle; margin-right: 10px;">AgentShield Documentation</h1>
             <p class="subtitle">Installation, API reference, and integration guides for any AI agent platform</p>
-            <span class="version-badge">v1.5.0 — MCP Server Live</span>
+            <span class="version-badge">v1.5.12 — Score Fix + Early Adopter Program</span>
         </div>
     </header>
 
     <div class="container">
         <nav>
             <ul>
+                <li><a href="#getting-started">🚀 Getting Started</a></li>
                 <li><a href="#installation">📦 Installation</a></li>
                 <li><a href="#whats-new-v14">🚀 What's New</a></li>
                 <li><a href="#trust-handshake">Trust Handshake</a></li>
@@ -278,6 +279,34 @@
                 <li><a href="#mcp">🔌 MCP Server</a></li>
             </ul>
         </nav>
+
+        <!-- GETTING STARTED -->
+        <section id="getting-started" style="background: linear-gradient(135deg, #0a0e1a 0%, #0f1f2e 100%); color: #e2e8f0; border-radius: 8px; padding: 2rem; margin-bottom: 2rem; border-left: 4px solid var(--primary, #00ff88);">
+            <h2 style="color: #00ff88; border-bottom: 2px solid #00ff88; padding-bottom: 0.5rem; margin-bottom: 1.5rem;">🚀 Getting Started</h2>
+            <p style="color: #a0aec0; margin-bottom: 1.5rem;">AgentShield gibt deinem Agenten eine kryptografisch verifizierbare Identität + öffentlich sichtbaren Trust Score. In unter 5 Minuten startklar.</p>
+
+            <h3 style="color: #48bb78; margin-bottom: 0.8rem;">Step 1 — Install</h3>
+            <pre style="background: #1a202c; padding: 1rem; border-radius: 6px; margin-bottom: 1.5rem;"><code style="color: #68d391;"># OpenClaw / Hermes Agent
+clawhub install agentshield
+
+# All other platforms
+pip install agentshield-audit</code></pre>
+
+            <h3 style="color: #48bb78; margin-bottom: 0.8rem;">Step 2 — Run your first audit</h3>
+            <pre style="background: #1a202c; padding: 1rem; border-radius: 6px; margin-bottom: 0.5rem;"><code style="color: #68d391;">python initiate_audit.py --auto</code></pre>
+            <p style="color: #718096; font-size: 0.9rem; margin-bottom: 1.5rem;">Auto-detects your agent name &amp; platform. Runs 77 security tests locally (~30s). Only pass/fail scores are sent to the API — no prompts, no responses.</p>
+
+            <h3 style="color: #48bb78; margin-bottom: 0.8rem;">Step 3 — View your certificate</h3>
+            <pre style="background: #1a202c; padding: 1rem; border-radius: 6px; margin-bottom: 0.5rem;"><code style="color: #68d391;">python show_certificate.py</code></pre>
+
+            <h3 style="color: #48bb78; margin-bottom: 0.8rem;">Step 4 — Public verification</h3>
+            <pre style="background: #1a202c; padding: 1rem; border-radius: 6px; margin-bottom: 1.5rem;"><code style="color: #68d391;">https://agentshield.live/verify/&lt;your_agent_id&gt;</code></pre>
+
+            <div style="background: rgba(0,255,136,0.05); border: 1px solid rgba(0,255,136,0.2); border-radius: 8px; padding: 1.2rem; margin-top: 1rem;">
+                <strong style="color: #00ff88;">🎯 Early Adopter Program</strong>
+                <p style="color: #a0aec0; margin: 0.5rem 0 0; font-size: 0.95rem;">We're looking for the first 25 serious agent builders. Install AgentShield, run 1–2 audits, give honest feedback → get a public Early Adopter Badge + priority feature requests. <a href="https://github.com/bartelmost/agentshield/blob/main/EARLY-ADOPTER-CAMPAIGN.md" target="_blank" style="color: #00ff88;">Learn more →</a></p>
+            </div>
+        </section>
 
         <!-- INSTALLATION -->
         <section id="installation" style="background: #0a0e1a; color: #e2e8f0; border-radius: 8px; padding: 2rem; margin-bottom: 2rem;">
