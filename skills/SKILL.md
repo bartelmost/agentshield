@@ -1,8 +1,8 @@
 ---
 name: agentshield
-version: 1.0.31
-description: Trust Infrastructure for AI Agents - Like SSL/TLS for agent-to-agent communication. 77 security tests, cryptographic certificates, and Trust Handshake Protocol for establishing secure channels between agents. Explicit whitelist sanitization + dry-run mode for transparency.
-triggers: ["audit my agent", "get security certificate", "verify agent", "activate AgentShield", "security audit", "trust handshake", "verify peer agent"]
+version: 1.0.35
+description: Privacy-First security audit with 77 local tests (52 live + 25 static). Works with OpenClaw, Hermes Agent, n8n (auto-detected), LangChain, and any AI agent platform. Ed25519 private keys stay local. All scripts bundled.
+triggers: ["audit my agent", "get security certificate", "verify agent", "activate AgentShield", "security audit", "trust handshake", "verify peer agent", "check agent security"]
 ---
 
 # AgentShield - Trust Infrastructure for AI Agents
