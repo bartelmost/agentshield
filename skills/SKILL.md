@@ -1,6 +1,6 @@
 ---
 name: agentshield
-version: 1.0.36
+version: 1.5.13
 description: Privacy-First security audit with 77 local tests (52 live + 25 static). Works with OpenClaw, Hermes Agent, n8n (auto-detected), LangChain, and any AI agent platform. Ed25519 private keys stay local. All scripts bundled.
 triggers: ["audit my agent", "get security certificate", "verify agent", "activate AgentShield", "security audit", "trust handshake", "verify peer agent", "check agent security"]
 ---
@@ -56,10 +56,8 @@ AgentShield provides the **trust layer** for agent-to-agent communication:
 - **Public key certificates** - Signed by AgentShield
 
 ### 2. Security Audit (77 Tests)
-**52 Live Attack Vectors:**
-Tests defense against instruction manipulation, encoding schemes, and social engineering
-across 6 languages. All attack patterns are stored locally in agentshield_attack_patterns.json
-(not embedded in documentation).
+**Local pattern checks, not a live model attack:**
+The shipped tests look for attack strings in local config and prompts. They do not send those attacks to the model. A high score means the files look clean, not that the agent resisted an attack.
 
 **25 Static Security Checks:**
 - Input sanitization
@@ -83,7 +81,7 @@ python3 initiate_audit.py --auto
 python3 handshake.py --target agent_B_id
 
 # Step 3: Both agents sign challenges
-# (Automatic in v1.0.13+)
+# Not automatic. Both agents must sign. Session key only after both signatures.
 
 # Step 4: Receive shared session key
 # → Now you can communicate securely!
@@ -107,7 +105,7 @@ python3 handshake.py --target agent_B_id
 
 ### Install
 ```bash
-clawhub install agentshield
+clawhub install agentshield-audit
 
 # Install Python dependencies (required!)
 pip3 install -r requirements.txt
@@ -273,9 +271,8 @@ GET /certificate/verify/{agent_id}
   → Verify another agent's certificate
   → Output: {valid, score, tier, issued_at, expires_at}
 
-GET /api/public-key
-  → Get AgentShield's public signing key
-  → Output: {public_key (Ed25519, base64)}
+GET /api/health
+  → Registry health. There is no stable issuer public-key endpoint yet.
 ```
 
 ### 3. Trust Handshake

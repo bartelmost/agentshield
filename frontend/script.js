@@ -1,4 +1,4 @@
-// AgentShield v6.4 - Registry + CRL + Challenge-Response
+// AgentShield v1.5.13 - Registry + CRL + Challenge-Response
 
 const API_BASE = '';  // Relative URLs via Netlify proxy
 
@@ -6,7 +6,7 @@ let registryData = [];
 let filteredData = [];
 
 function initAgentShield() {
-    console.log("AgentShield v6.4 Initializing...");
+    console.log("AgentShield v1.5.13 Initializing...");
 }
 
 // ========== KOSTENLOS TESTEN SCROLL ==========

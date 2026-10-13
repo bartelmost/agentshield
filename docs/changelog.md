@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.5.13 — 2026-10-13
+
+- Handshake accepts one signature at a time. Session key only after both sides sign.
+- Verify no longer calls an unverified certificate safe. Score field is read from the API.
+- Skill install line is `clawhub install agentshield-audit`.
+- Docs no longer claim a live model attack or an automatic handshake.
+
+
 All notable changes to AgentShield will be documented in this file.
 
 ## v1.5.0 — 2026-06-03

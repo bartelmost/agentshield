@@ -626,7 +626,7 @@ class AgentShieldSecurityTester:
     def _run_live_attack_tests(self):
         """Run live attack vector tests"""
         print("\n⚔️ Live Attack Vector Tests...")
-        print("   (These tests check if attack vectors are referenced in config/prompts)")
+        print("   (Local file check only: looks for attack strings in config/prompts. This does not attack the model.)")
         
         # All 52 attack vectors from attack_vectors.py
         attack_vectors = [

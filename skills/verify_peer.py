@@ -153,7 +153,10 @@ def verify_agent(agent_id: str, require_tier: str = None) -> dict:
         'agent_id': agent_id,
         'agent_name': certificate.get('agent_name'),
         'tier': tier,
-        'score': certificate.get('score'),
+        'score': certificate.get('security_score', certificate.get('score')),
+        'trust_tier': certificate.get('trust_tier') or certificate.get('tier'),
+        'trust_score': certificate.get('trust_score'),
+        'revoked': certificate.get('revoked', False),
         'issued_at': certificate.get('issued_at'),
         'expires_at': certificate.get('expires_at'),
         'public_key': certificate.get('public_key'),
@@ -228,19 +231,23 @@ def main():
     print(f"✅ CERTIFICATE VALID")
     print(f"   Agent Name: {result.get('agent_name', 'Unknown')}")
     print(f"   Tier: {result['tier']}")
-    print(f"   Security Score: {result.get('security_score', result.get('score', 'N/A'))}/100")
+    score = result.get('score')
+    score_text = 'unknown' if score is None else f"{score}/100"
+    trust_tier = result.get('trust_tier') or 'UNVERIFIED'
+    print(f"   Security Score: {score_text}")
+    print(f"   Trust tier: {trust_tier}")
     print(f"   Issued: {result['issued_at']}")
-    print(f"   Expires: {result['expires_at']}")
-    
-    # Optional challenge-response
-    if args.challenge:
-        print(f"\n🔑 Challenge-Response Verification")
-        challenge = generate_challenge()
-        print(f"   Challenge: {challenge}")
-        print(f"   (In real usage, the agent would sign this challenge)")
-        # TODO: Implement interactive challenge in Phase 3
-    
-    print("\n✓ Agent verified - safe to communicate")
+    print(f"   Expires: {result['expires_at'] or 'not set'}")
+
+    trusted = trust_tier in ('VERIFIED', 'TRUSTED', 'PATTERNS_CLEAN', 'PROTECTED', 'HARDENED') and score is not None
+    if result.get('revoked'):
+        print("\nCertificate is revoked. Do not treat this agent as safe.")
+        sys.exit(1)
+    if not trusted:
+        print("\nCertificate exists, but this is not a trust decision.")
+        print("   Tier is unverified or the score is missing. Do not treat the agent as safe.")
+        sys.exit(2)
+    print("\nCertificate is current and has a score. Still confirm the peer before sharing data.")
 
 
 if __name__ == "__main__":
