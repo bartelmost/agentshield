@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AgentShield | Trust Infrastructure for AI Agents</title>
-    <meta name="description" content="Privacy-first trust layer for AI agents. Local security testing, Ed25519 certificates, and verified agent-to-agent communication.">
+    <meta name="description" content="Local security checks for AI agents. Ed25519 identity, a public registry, and a handshake that counts only after both sides sign.">
     <meta name="keywords" content="AI agent security, LLM prompt injection, AI safety, autonomous agent audit, token optimization, EU AI Act compliance">
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -27,7 +27,7 @@
             <div class="hero-text">
                 <span class="section-tag">Privacy-First Identity &amp; Trust</span>
                 <h1>Trust Infrastructure<br>for AI Agents</h1>
-                <p class="subtitle">The first privacy-preserving trust layer for AI agents. Test your prompts locally, prove security without exposing code, and establish verified agent-to-agent communication. Built for the Agentic Era.</p>
+                <p class="subtitle">A local check for agent files and prompts, an Ed25519 identity, and a public registry. The score says what the files look like. It does not prove the model resisted a live attack. A handshake counts only after both agents sign.</p>
                 <div class="hero-btns">
                     <a href="#products" class="btn btn-primary">Get Your Trust Certificate</a>
                     <a href="docs.html" class="btn btn-secondary">View Documentation</a>
@@ -65,9 +65,9 @@
             <div class="hero-visual">
                 <div style="background: rgba(0,255,136,0.05); border: 2px solid var(--primary); border-radius: 20px; padding: 40px; text-align: center; box-shadow: 0 0 50px rgba(0,255,136,0.1);">
                     <div style="margin-bottom: 20px;"><img src="agentshield-icon.png" alt="" style="height: 80px; width: 80px;"></div>
-                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 14px; color: var(--primary);">TRUST CERTIFICATE v1.0</div>
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 14px; color: var(--primary);">TRUST CERTIFICATE v1.5.13</div>
                     <div style="margin-top: 20px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 10px;">
-                        <div style="color: var(--gold); font-weight: 800; font-size: 1.2rem; margin-bottom: 10px;">Agent: VERIFIED</div>
+                        <div style="color: var(--gold); font-weight: 800; font-size: 1.2rem; margin-bottom: 10px;">Agent: listed, check the tier</div>
                         <div style="color: var(--primary); font-size: 0.9rem;">🔐 Ed25519 Identity</div>
                         <div style="color: var(--text-muted); font-size: 0.75rem; margin-top: 8px;">Privacy-first local testing</div>
                     </div>
@@ -80,10 +80,10 @@
     <section style="padding: 5rem 0; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-bottom: 2px solid var(--primary);">
         <div class="container">
             <div class="text-center" style="margin-bottom: 3rem;">
-                <span class="section-tag" style="background: rgba(0,255,136,0.1); color: var(--primary);">The Let's Encrypt Moment for AI</span>
-                <h2 style="font-size: 2.2rem; margin-top: 1rem;">Let's Encrypt for Agents</h2>
+                <span class="section-tag" style="background: rgba(0,255,136,0.1); color: var(--primary);">Early, not a passport</span>
+                <h2 style="font-size: 2.2rem; margin-top: 1rem;">A registry, not a universal ID</h2>
                 <p style="color: var(--text-muted); max-width: 800px; margin: 1rem auto; font-size: 1.1rem;">
-                    Free, automated security certificates for the agentic web
+                    Free local checks and a public certificate. Not yet the default trust layer for every agent.
                 </p>
             </div>
 
@@ -109,9 +109,8 @@
                     <div style="margin-bottom: 1rem;"><img src="agentshield-icon.png" alt="" style="height: 52px; width: 52px;"></div>
                     <h3 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.2rem;">2026: Agent Security for All</h3>
                     <p style="color: var(--text-muted); line-height: 1.7;">
-                        AgentShield does the same for <strong style="color: var(--primary);">AI agent security</strong>. 
-                        Free assessments, automated certificates, and a trust registry — 
-                        because every agent deserves to be verified.
+                        AgentShield records a local file check and an Ed25519 key. 
+                        The registry lists the result. It does not make an agent safe, and it does not replace your own gate before you share data.
                     </p>
                 </div>
             </div>
@@ -162,7 +161,7 @@
                     
                     <div style="margin-bottom: 2rem; padding: 1.5rem; background: rgba(0,255,136,0.1); border-left: 4px solid var(--primary); border-radius: 8px;">
                         <div style="font-size: 1rem; color: var(--primary); font-weight: 700; margin-bottom: 0.5rem;">🔒 100% Privacy-First Architecture</div>
-                        <div style="font-size: 0.9rem; color: var(--text-muted);">All 77 security tests run locally on your machine. Your prompts, code, and configurations never leave your infrastructure. Only certificate metadata is transmitted. <a href="PRIVACY_ARCHITECTURE.html" style="color: var(--primary); text-decoration: underline; font-weight: 600;">Learn how it works →</a></div>
+                        <div style="font-size: 0.9rem; color: var(--text-muted);">77 checks run locally. They look for attack strings in config and prompts. They do not attack the model. Prompts stay on your machine. The server gets the public key and the pass/fail summary. <a href="PRIVACY_ARCHITECTURE.html" style="color: var(--primary); text-decoration: underline; font-weight: 600;">Learn how it works →</a></div>
                     </div>
                     
                     <div style="margin-bottom: 2rem;">
@@ -176,17 +175,17 @@
                             <div style="padding: 1rem; background: rgba(0,0,0,0.3); border-radius: 8px; border: 1px solid rgba(0,255,136,0.2);">
                                 <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🧪</div>
                                 <div style="color: #fff; font-weight: 600; margin-bottom: 0.25rem;">77 Security Tests</div>
-                                <div style="color: var(--text-muted); font-size: 0.85rem;">Local privacy-first assessment</div>
+                                <div style="color: var(--text-muted); font-size: 0.85rem;">Local file and prompt checks, not a live model attack</div>
                             </div>
                             <div style="padding: 1rem; background: rgba(0,0,0,0.3); border-radius: 8px; border: 1px solid rgba(0,255,136,0.2);">
                                 <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🏆</div>
                                 <div style="color: #fff; font-weight: 600; margin-bottom: 0.25rem;">Trust Certificate</div>
-                                <div style="color: var(--text-muted); font-size: 0.85rem;">Tamper-proof, publicly verifiable</div>
+                                <div style="color: var(--text-muted); font-size: 0.85rem;">Listed in the registry. A score is not a safety proof.</div>
                             </div>
                             <div style="padding: 1rem; background: rgba(0,0,0,0.3); border-radius: 8px; border: 1px solid rgba(0,255,136,0.2);">
                                 <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🤝</div>
                                 <div style="color: #fff; font-weight: 600; margin-bottom: 0.25rem;">Trust Handshake</div>
-                                <div style="color: var(--text-muted); font-size: 0.85rem;">Agent-to-agent verification</div>
+                                <div style="color: var(--text-muted); font-size: 0.85rem;">Both sides must sign. No session key before that.</div>
                             </div>
                         </div>
                     </div>
@@ -223,8 +222,8 @@
                     <ul style="text-align: left; color: var(--text-muted); line-height: 1.8; list-style: none; padding: 0;">
                         <li>✓ Ed25519 key pairs for each agent</li>
                         <li>✓ Challenge-response authentication</li>
-                        <li>✓ Tamper-proof identity certificates</li>
-                        <li>✓ Public key infrastructure (PKI)</li>
+                        <li>✓ Certificate signed and stored with the registry</li>
+                        <li>✓ No claim of a global public key infrastructure</li>
                     </ul>
                 </div>
                 <div class="feature-card">
@@ -232,10 +231,10 @@
                     <h3>2. Privacy-First Testing</h3>
                     <p style="margin-bottom: 1.5rem;">Security assessment without data exposure</p>
                     <ul style="text-align: left; color: var(--text-muted); line-height: 1.8; list-style: none; padding: 0;">
-                        <li>✓ All 77 tests run locally</li>
-                        <li>✓ No prompts or code leave your machine</li>
-                        <li>✓ Only certificate metadata transmitted</li>
-                        <li>✓ Zero-knowledge architecture</li>
+                        <li>✓ 77 checks run locally on files and prompts</li>
+                        <li>✓ Prompts and private keys stay on your machine</li>
+                        <li>✓ Only the summary and public key are sent</li>
+                        <li>✓ Not zero-knowledge, and not a live attack</li>
                     </ul>
                 </div>
                 <div class="feature-card">
@@ -243,10 +242,10 @@
                     <h3>3. Trust Handshake Protocol</h3>
                     <p style="margin-bottom: 1.5rem;">Agent-to-agent verification before collaboration</p>
                     <ul style="text-align: left; color: var(--text-muted); line-height: 1.8; list-style: none; padding: 0;">
-                        <li>✓ Mutual certificate verification</li>
-                        <li>✓ Trust score exchange</li>
-                        <li>✓ Public trust registry lookup</li>
-                        <li>✓ Revocation & re-certification</li>
+                        <li>✓ Each agent signs its own challenge</li>
+                        <li>✓ Session key only after both signatures</li>
+                        <li>✓ Registry lookup is not a trust decision by itself</li>
+                        <li>✓ Revocation exists. UNVERIFIED is not safe.</li>
                     </ul>
                 </div>
             </div>
@@ -303,7 +302,7 @@
                 <div class="feature-card" style="border-top: 3px solid #ff6b6b;">
                     <span class="icon" style="font-size: 3rem;">🧪</span>
                     <h3 style="color: #ff6b6b;">2. Local Deep Scan</h3>
-                    <p>Your agent activates a security sub-agent that performs 77 privacy-first tests locally. Nothing leaves your infrastructure.</p>
+                    <p>The skill runs 77 local checks against files and prompts. It does not send those attacks to the model. Prompts stay local.</p>
                 </div>
                 <div class="feature-card" style="border-top: 3px solid #ff6b6b;">
                     <span class="icon"><img src="agentshield-icon.png" alt="" style="height: 52px; width: 52px;"></span>
@@ -313,7 +312,7 @@
                 <div class="feature-card" style="border-top: 3px solid #ff6b6b;">
                     <span class="icon" style="font-size: 3rem;">📜</span>
                     <h3 style="color: #ff6b6b;">4. Get Certified</h3>
-                    <p>Receive a tamper-proof certificate, join the public Registry, and show your Trust Score.</p>
+                    <p>You get a registry entry and a score for that local check. Read the tier. UNVERIFIED means do not treat the agent as safe.</p>
                 </div>
             </div>
         </div>
