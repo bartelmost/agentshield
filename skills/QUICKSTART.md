@@ -145,7 +145,7 @@ Dieser Tester basiert auf den echten Security-Modulen aus:
 ## 📞 Support
 
 - **GitHub**: https://github.com/bartelmost/agentshield
-- **Email**: ratgeberpro@gmail.com
+- **Email**: support@agentshield.live
 
 ---
 

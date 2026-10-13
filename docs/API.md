@@ -49,7 +49,7 @@ curl -H "Authorization: Bearer YOUR_API_KEY" \
      https://agentshield.live/api/crl/revoke/cert_xyz
 ```
 
-**Get API Key:** ratgeberpro@gmail.com
+**Get API Key:** support@agentshield.live
 
 ---
 
@@ -321,7 +321,7 @@ curl -X POST https://agentshield.live/mcp \
 
 ## 📦 npm Package (Coming Soon)
 
-> **Status:** In Development – [Join waitlist](mailto:ratgeberpro@gmail.com?subject=npm+waitlist)
+> **Status:** In Development – [Join waitlist](mailto:support@agentshield.live?subject=npm+waitlist)
 
 ```bash
 # Coming soon:
@@ -382,7 +382,7 @@ console.log(`Trust Score: ${result.trust_score}`);
 
 - **Docs:** [agentshield.live/docs](https://agentshield.live/docs)
 - **GitHub:** [github.com/bartelmost/agentshield](https://github.com/bartelmost/agentshield)
-- **Support:** ratgeberpro@gmail.com
+- **Support:** support@agentshield.live
 - **Status:** [agentshield.live/api/health](https://agentshield.live/api/health)
 
 ---

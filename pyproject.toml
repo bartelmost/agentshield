@@ -9,7 +9,7 @@ description = "Trust Infrastructure for AI Agents – Security audits, cryptogra
 readme = "skill/README.md"
 license = {text = "MIT"}
 authors = [
-    {name = "bartelmost", email = "ratgeberpro@gmail.com"}
+    {name = "bartelmost", email = "support@agentshield.live"}
 ]
 keywords = ["ai", "agent", "security", "audit", "trust", "certificates", "cryptography", "langchain", "n8n"]
 classifiers = [

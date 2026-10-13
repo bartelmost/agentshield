@@ -270,7 +270,7 @@ This is part of the AgentShield project.
 
 For issues or improvements:
 - GitHub: https://github.com/bartelmost/agentshield
-- Email: ratgeberpro@gmail.com
+- Email: support@agentshield.live
 
 ---
 

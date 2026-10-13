@@ -274,7 +274,7 @@ agentshield-audit --auto --yes
 
 **None reported yet.**
 
-For responsible disclosure: ratgeberpro@gmail.com
+For responsible disclosure: support@agentshield.live
 
 **Bug Bounty:** See [SECURITY.md](./SECURITY.md#bug-bounty)
 

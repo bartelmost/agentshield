@@ -67,6 +67,6 @@ This disables all IDENTITY.md/SOUL.md reading.
 
 ## Questions?
 
-Review the [source code](https://github.com/bartelmost/agentshield) or contact ratgeberpro@gmail.com.
+Review the [source code](https://github.com/bartelmost/agentshield) or contact support@agentshield.live.
 
 **Secure yourself. Verify others. Trust nothing by default.** 🛡️
