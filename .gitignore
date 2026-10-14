@@ -1,8 +1,6 @@
-# Deployment configs (sensitive infrastructure)
-frontend/_redirects
+# Deployment configs
 frontend/netlify.toml
 **/netlify.toml
-**/_redirects
 
 # Python artifacts
 __pycache__/
